@@ -1,0 +1,149 @@
+#!/usr/bin/env python
+
+from psana import *
+import subprocess
+import numpy as np
+import sys
+
+def array_calc(arr):
+    flat = np.ravel(arr)
+    return np.sum(flat)/(len(flat)-1)-flat[0]
+
+def find_time(time):
+    for i,t in enumerate(times):
+        if t.time()==time:
+            return i
+    print 'time not found:',time
+
+def process(evt,eventoffset,results):
+    for k in evt.keys():
+        strtype = str(k.type())
+        strsrc = str(k.src())
+        #if 'BldDataPhaseCavity' not in strtype and 'BldDataFEEGasDetEnergy' not in strtype:
+        #    continue
+        if 'BldDataEBeam' in strtype:
+            data = evt.get(k.type(),k.src()).ebeamCharge()
+        elif 'BldDataSpectrometerV1' in strtype:
+            data = evt.get(k.type(),k.src()).integral()
+        elif 'BldDataFEEGasDetEnergy' in strtype:
+            data = evt.get(k.type(),k.src()).f_11_ENRC()
+        elif 'Acqiris' in strtype:
+            # use channel 0 for the acqiris for now.  final "0" is segment.
+            # LCLS has always only used segment 0.
+            chan = 0
+            data = array_calc(evt.get(k.type(),k.src()).data(chan).waveforms()[0])
+        elif 'PNCCD.FullFrame' in strtype:
+            data = array_calc(evt.get(k.type(),k.src()).data())
+        elif 'Camera.Frame' in strtype:
+            data = array_calc(evt.get(k.type(),k.src()).data16())
+        elif 'BldDataPhaseCavity' in strtype:
+            data = evt.get(k.type(),k.src()).charge1()
+        elif 'IpmFex' in strtype:
+            data = np.sum(evt.get(k.type(),k.src()).channel())
+        else:
+            continue
+        if strsrc not in results:
+            results[strsrc] = {}
+        if eventoffset not in results[strsrc]:
+            results[strsrc][eventoffset] = []
+        results[strsrc][eventoffset].append(data)
+
+def chisquare(points,**kwargs):
+    wtdMeanVar = 1./np.sum([1/v[1] for v in points])
+    wtdMean = np.sum([v[0]/v[1] for v in points])*wtdMeanVar
+    chisq = np.sum([(v[0]-wtdMean)**2/v[1] for v in points])
+    dof = len(points)-1
+    if 'debug' in kwargs.keys():
+        print wtdMean,wtdMeanVar,points
+    return chisq/dof
+
+def chisq(det,dropGuess,**kwargs):
+    points = []
+    for eventoffset in iter(results[det]):
+        if eventoffset==dropGuess: continue
+        vals = results[det][eventoffset]
+        if len(vals)<5: continue
+        points.append([np.mean(vals),np.var(vals)/len(vals)])
+    if len(points)>1:
+        return chisquare(points,**kwargs)
+    else:
+        return sys.float_info.max
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import math
+from matplotlib.backends.backend_pdf import PdfPages
+
+def plot(results):
+    with PdfPages(args.exprun+'.pdf') as pdf:
+        for i,det in enumerate(iter(results)):
+            subplotnum=i%9
+            if subplotnum==0:
+                plt.figure('Off By One')
+            plt.subplot(3,3,subplotnum)
+            plt.tick_params(axis='both', which='major', labelsize=6)
+            plt.tick_params(axis='both', which='minor', labelsize=6)
+            plt.title(det, fontsize=8)
+            axes = plt.gca()
+            axes.set_xlim([-shotrange-0.5,shotrange+0.5])
+            for eventoffset in iter(results[det]):
+                y = results[det][eventoffset]
+                x = [eventoffset]*len(y)
+                plt.plot(x,y,'ro')
+            if subplotnum==8 or i==len(results.keys())-1:
+                pdf.savefig()
+                #plt.show()
+                plt.close()
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("exprun", help="psana experiment/run string (e.g. exp=xppd7114:run=43)")
+args = parser.parse_args()
+print '*** analyzing',args.exprun
+
+ds = DataSource(args.exprun+':idx')
+run = ds.runs().next()
+exp = ds.env().experiment()
+times = run.times()
+
+times162 = subprocess.check_output('bykikEvents %s'%args.exprun, shell=True)
+results = {}
+
+lines = times162.split('\n')
+if len(lines) <= 1:
+    print 'No bykik events found for',args.exprun
+    sys.exit()
+print 'Found',len(lines),'dropped shots'
+
+shotrange = 4
+
+for line in lines:
+    if len(line)==0: continue
+    fields = line.split()
+    idx = find_time(int(fields[0]))
+    #et = EventTime(int(fields[0]),int(fields[1]))
+    for i in range(-shotrange,shotrange+1):
+        if idx+i<0 or idx+i>=len(times):
+            continue
+        evt = run.event(times[idx+i])
+        process(evt,i,results)
+
+offByOne = False
+for det in iter(results):
+    chisqmin = sys.float_info.max
+    index = 0 # default to "success", i.e. not off-by-one
+    for i in range(-shotrange,shotrange+1):
+        val = chisq(det,i)
+        if val<chisqmin:
+            chisqmin=val
+            index = i
+    if index==0: continue    # min chisq when we exclude 0, so we're OK
+    if chisqmin>10: continue # to avoid false positives, require that these shots look statistically consistent
+    csq = chisq(det,99999)   # min chisq not at 0! compute chisq with all points to see if we have a significant deviation
+    if csq>5:
+        print args.exprun,det,'off by',index,'with chisq',csq
+        offByOne = True
+
+if offByOne:
+    plot(results)

@@ -1,0 +1,18 @@
+from RegDB import experiment_info
+f = open('junk.out')
+lines = f.read().split('\n')
+
+import datetime
+import time
+
+for l in lines[:-1]:
+    chisq = float(l.split()[-1])
+    if chisq>25:
+        exp=l.split()[0].split(':')[1][4:12]
+        run=int(l.split()[0].split(':')[2][4:])
+        hutch = exp[0:3].upper()
+        dbruns = experiment_info.experiment_runs(hutch,exp)
+        for dbr in dbruns:
+            if dbr['num']==run:
+                print l, datetime.datetime.fromtimestamp(
+                    dbr['begin_time_unix']).strftime('%Y-%m-%d')

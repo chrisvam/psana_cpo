@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import subprocess
+
+f = open('expts.dat')
+i=0
+print '#!/bin/tcsh'
+for line in f:
+    exp = line[:8]
+    dir = '/reg/d/psdm/'+exp[:3]+'/'+exp+'/xtc/'
+    largestFile = subprocess.check_output('ls -rS %s | tail -1'%dir, shell=True)
+    if '-r' not in largestFile: continue
+    idx = largestFile.index('-r')
+    print 'evtBuildCheck exp='+exp+':run='+str(int(largestFile[idx+2:idx+6]))

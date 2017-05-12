@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+from psana import *
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("exprun", help="psana experiment/run string (e.g. exp=xppd7114:run=43)")
+args = parser.parse_args()
+
+events = DataSource(args.exprun+':smd').events()
+
+num162=0
+nevent =0
+printkeys = False
+for evt in events:
+    evr = evt.get(EvrData.DataV4, Source('DetInfo(NoDetector.0:Evr.0)'))
+    if evr is None: continue
+    nevent+=1
+    if printkeys:
+        print evt.keys()
+        printkeys = False
+    for fifoEvent in evr.fifoEvents():
+        if fifoEvent.eventCode()==162:
+            id = evt.get(EventId)
+            print int(id.time()[0]<<32|id.time()[1]),id.fiducials()
+            num162+=1

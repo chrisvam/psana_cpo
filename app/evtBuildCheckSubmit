@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+import subprocess
+import sys
+import os
+import glob
+import stat
+
+hutches = ['amo','cxi','mec','sxr','xcs','xpp']
+datapath = '/reg/d/psdm/'
+
+def getExpts():
+    expts = []
+    for h in hutches:
+        tmp = glob.glob(datapath+h+'/*')
+        tmp1 = [t.split('/')[-1] for t in tmp]
+        for t in tmp1:
+            if t[0:3] in hutches: expts.append(t)
+    return expts
+
+def getRuns(expt):
+    files = glob.glob(datapath+expt[0:3]+'/'+expt+'/xtc/*.xtc')
+    runs = []
+    for f in files:
+        fname = f.split('/')[-1]
+        run = fname[6:10]
+        try:
+            runnum = int(run)
+            if runnum not in runs:
+                runs.append(runnum)
+        except ValueError:
+            pass
+    return runs
+
+def submitJob(expt,runs):
+    runs.sort()
+    fname = expt+'.csh'
+    f = open(fname,'w')
+    f.write('#!/bin/tcsh\n')
+    for r in runs:
+        f.write('evtBuildCheck exp='+expt+':run='+str(r)+'\n')
+    f.close()
+    st = os.stat(fname)
+    os.chmod(fname, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    os.system('bsub -q psnehq -o %J.log ./'+fname)
+
+expts = getExpts()
+nruns = 0
+for expt in expts:
+    runs = getRuns(expt)
+    nruns += len(runs)
+    if len(runs)>0:
+        submitJob(expt,runs)
+print 'Found',nruns,'runs in',len(expts),'experiments'
+
