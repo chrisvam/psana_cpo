@@ -22,7 +22,7 @@ for dset in [epix,cspad]:
     det = Detector(dset['dname'])
     run = ds.runs().next()
     times = run.times() 
-    mylength = 20
+    mylength = 80
     mytimes= times[rank*mylength:(rank+1)*mylength]
 
     tcalib = 0
@@ -40,7 +40,6 @@ for dset in [epix,cspad]:
             t1 = time.time()
             tcalib += t1-t0
         peaks = alg.peak_finder_v4r2(calib,**dset['v4r2pars'])
-        print len(peaks)
         if nevent>0: 
             tpeak += time.time()-t1
             
