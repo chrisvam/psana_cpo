@@ -114,7 +114,8 @@ exptlist = []
 #exptlist.append(exptruns('cxi12016',[24],30))
 #exptlist.append(exptruns('amo06516',[10,15,19],340))
 #exptlist.append(exptruns('amo01616',[125],350))
-exptlist.append(exptruns('amo01616',[20],360))
+#exptlist.append(exptruns('amo01616',[20],360))
+exptlist.append(exptruns('cxilp7315',[21],370))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
@@ -135,6 +136,7 @@ for e in exptlist:
                 print '*** No input files found for exp=%s:run=%d'%(expt,rin),'in directory',dd
             for inf in infs:
                 _,outf = os.path.split(inf)
-                outf = os.path.join(outdir,'e665-r'+ ('%4.4d'%rout) + outf[10:])
+                end = outf.split('-')
+                outf = os.path.join(outdir,'e665-r'+ ('%4.4d'%rout) + '-' + end[2] + '-' + end[3])
                 safecopy(inf,outf)
                 if outf.endswith('.xtc'): fixRunNumber(outf)
