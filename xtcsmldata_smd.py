@@ -27,6 +27,5 @@ for file in files:
     smdfile = smddir+basename+'.smd.xtc'
     if os.path.isfile(smdfile):  # skip existing files
         continue
-    cmd = 'smldata -f '+file+' -o ' + smdfile + ' >& /dev/null'
-    print cmd
+    cmd = 'bsub -q psanaq -o ~/logs/%J.log smldata -f '+file+' -o ' + smdfile + ' >& /dev/null'
     os.system(cmd)
