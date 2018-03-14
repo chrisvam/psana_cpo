@@ -120,7 +120,7 @@ exptlist = []
 #exptlist.append(exptruns('amod3814',[85],390))
 #exptlist.append(exptruns('sxri0215',[155],400))
 #exptlist.append(exptruns('mfx11116',[691,694],410))
-exptlist.append(exptruns('sxrx2416',[22:25],420))
+exptlist.append(exptruns('sxrx24615',[22,23,24],420))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
