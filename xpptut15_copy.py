@@ -127,8 +127,9 @@ exptlist = []
 #exptlist.append(exptruns('mec70013',[454],460))
 #exptlist.append(exptruns('meco1416',[250,256],470))
 #exptlist.append(exptruns('mecls3115',range(157,169),480)) #more than 10 runs!
-exptlist.append(exptruns('mecdaq115',[71,72],500))
-exptlist.append(exptruns('mecx24215',[72,121],510))
+#exptlist.append(exptruns('mecdaq115',[71,72],500))
+#exptlist.append(exptruns('mecx24215',[72,121],510))
+exptlist.append(exptruns('sxrx21715',[191],520))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
