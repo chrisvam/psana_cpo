@@ -18,6 +18,7 @@ class Dgram:
     def tslow(self): return self._header[2]&0xffffff
     def transitionId(self): return (self._header[2]>>24)&0x1f
     def tshigh(self): return self._header[3]
+    def fiducials(self): return self.tshigh()&0x1ffff
     def env(self): return self._header[4]
     def dmg(self): return self._header[5]
     def srclog(self): return self._header[6]
@@ -34,7 +35,7 @@ infile = open('/reg/d/psdm/xpp/xpptut15/xtc/e665-r0151-s00-c00.xtc','r')
 outfile = open('junk.xtc','w')
 for i in range(6):
     dg = Dgram(infile)
-    print dg.transitionId(),dg.clocklow(),dg.clockhigh()
+    print dg.transitionId(),dg.clocklow(),dg.clockhigh(),dg.fiducials()
     dg.write(outfile)
 infile.close()
 outfile.close()
