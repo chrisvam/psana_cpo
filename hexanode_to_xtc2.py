@@ -36,10 +36,3 @@ for nevt,(wfs,times) in enumerate(zip(waveforms,times)):
     xtc_bytes = cydgram.get(timestamp,pulseid,transitionid)
     f.write(xtc_bytes)
 f.close()
-
-from psana import DataSource
-ds = DataSource(files=fname)
-myrun = next(ds.runs())
-for nevt,evt in enumerate(myrun.events()):
-    raw = evt._dgrams[0].tmo_hexanode[0].raw
-    print(raw.times.shape,raw.waveforms.shape)
