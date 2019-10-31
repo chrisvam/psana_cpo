@@ -4,14 +4,14 @@ import os
 runs = range(95,115)
 
 # settings for demo smalldata 
-#merge_chunks = False
-#oldpath='/reg/d/psdm/cxi/cxid9114/demo/xtc/smalldata/newsmd_withepics'
-#newpath='/reg/d/psdm/cxi/cxid9114/demo/xtc/smalldata'
+merge_chunks = False
+oldpath='/reg/d/psdm/cxi/cxid9114/demo/xtc/smalldata/newsmd_withepics'
+newpath='/reg/d/psdm/cxi/cxid9114/demo/xtc/smalldata'
 
 # for legion tests removing epics from smalldata
-merge_chunks = False
-oldpath='/reg/d/psdm/cxi/cxid9114/xtc/smalldata'
-newpath='/reg/d/psdm/cxi/cxid9114/demo/legion/xtc/smalldata'
+#merge_chunks = False
+#oldpath='/reg/d/psdm/cxi/cxid9114/xtc/smalldata'
+#newpath='/reg/d/psdm/cxi/cxid9114/demo/legion/xtc/smalldata'
 
 for r in runs:
     files = glob(os.path.join(oldpath,'*r'+('%4.4d*'%r)))
