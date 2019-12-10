@@ -1,16 +1,13 @@
 from psana import DataSource
 import numbers
 import numpy as np
-ds = DataSource(files='data.xtc2')
-myrun = next(ds.runs())
-
-fundamental_types = [np.ndarray,numbers.Number,str]
 
 def iter(myitem,name):
-    if (isinstance(myitem,np.ndarray) or isinstance(myitem,numbers.Number) or isinstance(myitem,str) or isinstance(myitem,dict)):
-        if not isinstance(myitem,dict): # ignore the meta-data for enum's.
-            print(name,':\n',myitem)
-            name = '.'.join(name.split('.')[:-1])
+    if (isinstance(myitem,dict)):
+        pass # ignore the meta-data for enum's.
+    elif (isinstance(myitem,np.ndarray) or isinstance(myitem,numbers.Number) or isinstance(myitem,str)):
+        print(name,':\n',myitem)
+        name = '.'.join(name.split('.')[:-1])
     else:
         attrs = [a for a in dir(myitem) if not a.startswith('_')]
         assert len(attrs)>0,myitem
@@ -26,6 +23,9 @@ def dump(dg):
         if isinstance(det,dict):
             for segment,myitem in det.items():
                 iter(myitem,attr+'.'+str(segment))
+
+ds = DataSource(files='data.xtc2')
+myrun = next(ds.runs())
 
 print('******** configure')
 dump(myrun.configs[0])
