@@ -1,0 +1,86 @@
+* haoyuan, cctbx, /tmp size, cores?, new-style psana1 jungfrau, phil nersc, 3 hsd's, prometheus, preemption, psana-live, run hsd
+  o add -E to hsd134PVs
+  o increase timeout from 3.05->8.05 in psdaq/configdb
+  o comment out resets for digitizer
+  o cat /proc/datadev* in cfg phase1 (caused disable failure?)
+* nersc jid:
+  o example for murali
+  o crystfel shifter image
+  o 700TB disk space
+  o permissions with docker mounting
+  o global calib-dir (defer?)
+* prometheus python
+* shifter mounting permissions (mona, johannes)
+* problems on failure-modes confluence page
+* lcls2 ffb permissions failing (wilko)
+* small h5 ebeam/gasdet storage
+* progress bar debugging (caf)
+* slowupdate after disable (caf)
+* test daq sequences (caf)
+* active-det improvements (caf)
+* psana1 MTRX:V2 geometry (mikhail)
+* update procServ (caf)
+* scan the configdb (caf)
+* slow updates need to obey deadtime (matt)
+* put the hsd p4p servers in base.cnf (make them long-lived)
+* setting msgdelay in timing system? (matt)
+* xpm deadtime showed up for all hsd's even though only one was dead (matt)
+* syslog print throttling
+* get the daq .cnf to do "conda activate"
+* error on inconsistency between conda release used to build and .cnf (caf)
+* move to use official conda rogue/epics (matt)
+* use GIT_DESCRIBE_TAG in recipes
+* kerberos tickets at nersc
+* off-by-one (psana1/2)
+* units support in det xface
+* put psana2 (and psana1?) on conda-forge
+* remote visualization/control
+* calibdb dns issue (in travis macos build)
+* psana hutch/exp specific algs (mona, silke, dan, seshu)
+* in psana SRV callback only persist some fields to h5?
+* improve cydgram (caf?)
+* once we have real data, work more on timetool calc in firmware
+* dlopen for reduction alg
+* test calibman/geo (mikhail)
+* nersc calib-dir sync (wilko)
+* psana1: test py3 branches with py2 release
+* run daq from release (matt)
+* configdb history
+* algorithms (drp/ana, e.g. beam-center finding)
+* psana startup slope, smd0 performance with small batch size, end-job poor behavior (mona)
+* psana live-mode test (mona, matt, ric)
+* psana mem leaks (mona)
+* singularity at slac (mona)
+* support more python versions
+** python DRP? (matt)
+* monitoring for psana (mona, johannes)
+* slurm and correcting problems with lsf
+* psana monitoring system (like vmon)
+* conda compilers for psana1
+* andor
+** io performance (20GB/s)
+* det-specific config editors?
+* 1MHz operation
+* fix conda base env
+** consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
+* timetool: sometimes 1020, sometimes 1024 bytes (matt)
+* reentrant rdma issue (ric)
+* timetool
+  - toeplitz
+  - adding IIR epics stream
+  - test multiple epics segments
+** canary: rack 11: 10G switch, IB, Rack 12: 2 IB switches (no 10G) 2 dell nodes (onsite)
+** test power outages (ric, onsite)
+* fiber power readings everywhere (matt, tid)
+* last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
+* peaknet
+* ami: scans, projection along curve, silke/timbvd xpp analysis, docs, run on cmd line without json?, change plot symbols, image zoom, angular integration, slow box dragging, per-hutch/expt algs, image flip/rotate?, epics export, epics import, CI, xarray reading, mpi offline
+* timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
+** bluesky (caf)
+** error-handling when running bluesky (caf)
+** converting bluesky epics info to xtc2 (caf)
+** check multiple readout groups and epicsarch in daq/ami/psana
+** procmgr scaling to full system (onsite)
+** move tmo.cnf to use hutch "tmo" (ric)
+* simpler interface for controlling teb/meb?
+* xtcav daq recording epics variables as well (and also bld values?) (matt)
