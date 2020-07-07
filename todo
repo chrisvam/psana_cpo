@@ -1,4 +1,4 @@
-* haoyuan, cctbx, /tmp size, cores?, new-style psana1 jungfrau, phil nersc, 3 hsd's, prometheus, preemption, psana-live, run hsd
+* move cores to /u1?, run hsd (cores), prometheus, silke epics/segfault, preemption, nersc arp, phil@nersc
   o add -E to hsd134PVs
   o increase timeout from 3.05->8.05 in psdaq/configdb
   o comment out resets for digitizer
@@ -10,6 +10,7 @@
   o permissions with docker mounting
   o global calib-dir (defer?)
 * prometheus python
+* move psana1 to mysql8
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
 * lcls2 ffb permissions failing (wilko)
