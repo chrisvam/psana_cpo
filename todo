@@ -15,8 +15,7 @@
 * problems on failure-modes confluence page
 * lcls2 ffb permissions failing (wilko)
 * small h5 ebeam/gasdet storage
-* progress bar debugging (caf)
-* slowupdate after disable (caf)
+* control_gui authenticate with configDB using --user and --password (mikhail)
 * test daq sequences (caf)
 * active-det improvements (caf)
 * psana1 MTRX:V2 geometry (mikhail)
