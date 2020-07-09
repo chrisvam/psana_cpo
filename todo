@@ -24,6 +24,7 @@
 * slow updates need to obey deadtime (matt)
 * put the hsd p4p servers in base.cnf (make them long-lived)
 * setting msgdelay in timing system? (matt)
+* right now procmgr sets PATH to conda_rel.  could it "conda activate"?
 * xpm deadtime showed up for all hsd's even though only one was dead (matt)
 * syslog print throttling
 * get the daq .cnf to do "conda activate"
