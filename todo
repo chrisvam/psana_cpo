@@ -1,4 +1,4 @@
-* move cores to /u1?, run hsd (cores), prometheus, silke epics/segfault, preemption, nersc arp, phil@nersc
+* releases: setuptools(travis)/rogue, run hsd (cores), prometheus, preemption, phil@nersc
   o add -E to hsd134PVs
   o increase timeout from 3.05->8.05 in psdaq/configdb
   o comment out resets for digitizer
@@ -74,7 +74,7 @@
 * fiber power readings everywhere (matt, tid)
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: scans, projection along curve, silke/timbvd xpp analysis, docs, run on cmd line without json?, change plot symbols, image zoom, angular integration, slow box dragging, per-hutch/expt algs, image flip/rotate?, epics export, epics import, CI, xarray reading, mpi offline
+* ami: projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 ** bluesky (caf)
 ** error-handling when running bluesky (caf)
