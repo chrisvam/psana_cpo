@@ -9,12 +9,14 @@
   o 700TB disk space
   o permissions with docker mounting
   o global calib-dir (defer?)
-* prometheus python
+* prometheus python (eventually daq2 prometheus gui)
+* jupyter for lcls2 and new-style psana1
 * move psana1 to mysql8
+* fix failing new-style psana1 tests
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
 * lcls2 ffb permissions failing (wilko)
-* small h5 ebeam/gasdet storage
+* small h5 ebeam/gasdet automatic storage
 * control_gui authenticate with configDB using --user and --password (mikhail)
 * test daq sequences (caf)
 * active-det improvements (caf)
@@ -57,7 +59,6 @@
 * monitoring for psana (mona, johannes)
 * slurm and correcting problems with lsf
 * psana monitoring system (like vmon)
-* conda compilers for psana1
 * andor
 ** io performance (20GB/s)
 * det-specific config editors?
