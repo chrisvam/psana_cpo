@@ -1,4 +1,4 @@
-* ami travis, releases: setuptools(travis)/rogue, run hsd (cores), prometheus, preemption, phil@nersc
+* duplicate pva servers, core dump, lane locking, amo64913, prometheus, preemption, phil@nersc
   o add -E to hsd134PVs
   o increase timeout from 3.05->8.05 in psdaq/configdb
   o comment out resets for digitizer
@@ -10,6 +10,7 @@
   o permissions with docker mounting
   o global calib-dir (defer?)
 * prometheus python (eventually daq2 prometheus gui)
+* create more platforms for procmgr
 * jupyter for lcls2 and new-style psana1
 * move psana1 to mysql8
 * fix failing new-style psana1 tests
@@ -76,7 +77,7 @@
 * fiber power readings everywhere (matt, tid)
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 ** bluesky (caf)
 ** error-handling when running bluesky (caf)
