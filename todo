@@ -1,4 +1,4 @@
-* duplicate pva servers, core dump, lane locking, amo64913, prometheus, preemption, phil@nersc
+* scs escalation, duplicate pva servers, core dump, lane locking, amo64913, prometheus, preemption, phil@nersc
   o add -E to hsd134PVs
   o increase timeout from 3.05->8.05 in psdaq/configdb
   o comment out resets for digitizer
@@ -11,6 +11,7 @@
   o global calib-dir (defer?)
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
+* why don't we get a c++ exception when we receive a configdb timeout?
 * jupyter for lcls2 and new-style psana1
 * move psana1 to mysql8
 * fix failing new-style psana1 tests
