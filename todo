@@ -1,4 +1,4 @@
-* scs escalation, duplicate pva servers, core dump, lane locking, amo64913, prometheus, preemption, phil@nersc
+* daq alarms, configdb timeout, amo64913, prometheus, preemption
   o add -E to hsd134PVs
   o increase timeout from 3.05->8.05 in psdaq/configdb
   o comment out resets for digitizer
@@ -13,6 +13,7 @@
 * create more platforms for procmgr
 * why don't we get a c++ exception when we receive a configdb timeout?
 * jupyter for lcls2 and new-style psana1
+* unified/integrated timetool calibration
 * move psana1 to mysql8
 * fix failing new-style psana1 tests
 * shifter mounting permissions (mona, johannes)
@@ -78,7 +79,7 @@
 * fiber power readings everywhere (matt, tid)
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 ** bluesky (caf)
 ** error-handling when running bluesky (caf)
