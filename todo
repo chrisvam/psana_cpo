@@ -1,8 +1,4 @@
-* daq alarms, configdb timeout, amo64913, prometheus, preemption
-  o add -E to hsd134PVs
-  o increase timeout from 3.05->8.05 in psdaq/configdb
-  o comment out resets for digitizer
-  o cat /proc/datadev* in cfg phase1 (caused disable failure?)
+* jupyter kernel, daq alarms, amo64913, prometheus, preemption
 * nersc jid:
   o example for murali
   o crystfel shifter image
@@ -11,6 +7,8 @@
   o global calib-dir (defer?)
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
+* daq2 chunking
+* manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
 * jupyter for lcls2 and new-style psana1
 * unified/integrated timetool calibration
@@ -80,12 +78,16 @@
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
 * ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing
+  - rix: josh: free-form scan
+  - alex: step scan bin size
+  - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
+    export results to ACR
+  - josh: xpcs photon counting, working with chuck: accumulate statistics
+    and then fit, number of photons per shot in histogram (talk to chuck
+    and silke sxrm23)
+  - manta camera (allied vision):  project, fitting a peak (gaussian),
+    plot vs. other variable,  integrating over events. 30Hz.  run
+    in mode with only a single shot per image.
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
-** bluesky (caf)
-** error-handling when running bluesky (caf)
-** converting bluesky epics info to xtc2 (caf)
-** check multiple readout groups and epicsarch in daq/ami/psana
-** procmgr scaling to full system (onsite)
-** move tmo.cnf to use hutch "tmo" (ric)
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
