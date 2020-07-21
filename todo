@@ -1,4 +1,4 @@
-* rix ami, jupyter kernel, daq alarms, amo64913, prometheus, preemption
+* jana new-psana/slurmjob/oips, power cycling, daq alarms, amo64913, prometheus, preemption
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
@@ -6,7 +6,7 @@
 * why don't we get a c++ exception when we receive a configdb timeout?
 * jupyter for lcls2 and new-style psana1
 * unified/integrated timetool calibration
-* move psana1 to mysql8
+* move psana1 to mysql8 (not necessary since eliminating mysql?)
 * fix failing new-style psana1 tests
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
@@ -28,7 +28,7 @@
 * error on inconsistency between conda release used to build and .cnf (caf)
 * move to use official conda rogue/epics (matt)
 * use GIT_DESCRIBE_TAG in recipes
-* kerberos tickets at nersc
+* expt/run number in control gui (mikhail)
 * off-by-one (psana1/2)
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
@@ -36,42 +36,32 @@
 * calibdb dns issue (in travis macos build)
 * psana hutch/exp specific algs (mona, silke, dan, seshu)
 * in psana SRV callback only persist some fields to h5?
-* improve cydgram (caf?)
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
 * test calibman/geo (mikhail)
 * nersc calib-dir sync (wilko)
 * psana1: test py3 branches with py2 release
-* run daq from release (matt)
 * configdb history
 * algorithms (drp/ana, e.g. beam-center finding)
 * psana startup slope, smd0 performance with small batch size, end-job poor behavior (mona)
-* psana live-mode test (mona, matt, ric)
-* psana mem leaks (mona)
 * singularity at slac (mona)
 * support more python versions
 ** python DRP? (matt)
 * monitoring for psana (mona, johannes)
 * slurm and correcting problems with lsf
-* psana monitoring system (like vmon)
+* psana monitoring system (like vmon) with prometheus?
 * andor
 ** io performance (20GB/s)
 * det-specific config editors?
 * 1MHz operation
-* fix conda base env
 ** consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
 * timetool: sometimes 1020, sometimes 1024 bytes (matt)
-* reentrant rdma issue (ric)
-* timetool
-  - toeplitz
-  - adding IIR epics stream
-  - test multiple epics segments
 ** canary: rack 11: 10G switch, IB, Rack 12: 2 IB switches (no 10G) 2 dell nodes (onsite)
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
