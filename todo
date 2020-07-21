@@ -1,10 +1,4 @@
-* jupyter kernel, daq alarms, amo64913, prometheus, preemption
-* nersc jid:
-  o example for murali
-  o crystfel shifter image
-  o 700TB disk space
-  o permissions with docker mounting
-  o global calib-dir (defer?)
+* rix ami, jupyter kernel, daq alarms, amo64913, prometheus, preemption
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
@@ -78,16 +72,16 @@
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
 * ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing
-  - rix: josh: free-form scan
-  - alex: step scan bin size
+  - josh: free-form scan (no steps)
+  - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
     export results to ACR
   - josh: xpcs photon counting, working with chuck: accumulate statistics
     and then fit, number of photons per shot in histogram (talk to chuck
     and silke sxrm23)
-  - manta camera (allied vision):  project, fitting a peak (gaussian),
-    plot vs. other variable,  integrating over events. 30Hz.  run
-    in mode with only a single shot per image.
+  - alex: manta camera (allied vision):  project, fit a peak (gaussian),
+    plot vs. other variable,  ideally integrate over events, but
+    difficult for ami. 30Hz.  run in mode with only a single shot per image.
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
