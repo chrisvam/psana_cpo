@@ -1,4 +1,4 @@
-* jana new-psana/slurmjob/oips, power cycling, daq alarms, amo64913, prometheus, preemption
+* push new-psana1, activedet, slurm groups, power cycling, daq alarms, prometheus, preemption
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
@@ -49,6 +49,7 @@
 ** python DRP? (matt)
 * monitoring for psana (mona, johannes)
 * slurm and correcting problems with lsf
+* slurm support in calibman (mikhail)
 * psana monitoring system (like vmon) with prometheus?
 * andor
 ** io performance (20GB/s)
