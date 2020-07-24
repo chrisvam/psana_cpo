@@ -11,6 +11,7 @@
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
 * lcls2 ffb permissions failing (wilko)
+* send multiple copy of events to shmem like lcls1
 * small h5 ebeam/gasdet automatic storage
 * control_gui authenticate with configDB using --user and --password (mikhail)
 * test daq sequences (caf)
