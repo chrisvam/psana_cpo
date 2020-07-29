@@ -1,7 +1,8 @@
-* opal, conda_setup, push new-psana1, activedet, slurm groups, power cycling, daq alarms, prometheus, preemption
+* new rogue, conda_setup, push new-psana1, activedet, power cycling, daq alarms
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
+* encoder for rix
 * manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
 * jupyter for lcls2 and new-style psana1
@@ -63,7 +64,7 @@
 * fiber power readings everywhere (matt, tid)
 * last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
