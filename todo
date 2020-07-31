@@ -1,35 +1,30 @@
-* new rogue, conda_setup, push new-psana1, activedet, power cycling, daq alarms
+* /reg/g/cctbx, ~tstopr, xtcav, new rogue, new-psana1, activedet, power cycling, daq alarms
+* for new-psana1:
+  o slow conda activate (set PATH?) (valerio)
+  o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
 * encoder for rix
 * manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
-* jupyter for lcls2 and new-style psana1
 * unified/integrated timetool calibration
-* move psana1 to mysql8 (not necessary since eliminating mysql?)
-* fix failing new-style psana1 tests
+* move psana1 to mysql8 (not necessary since eliminating mysql?) (valerio)
+* fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
-* lcls2 ffb permissions failing (wilko)
 * send multiple copy of events to shmem like lcls1
 * small h5 ebeam/gasdet automatic storage
-* control_gui authenticate with configDB using --user and --password (mikhail)
 * test daq sequences (caf)
 * active-det improvements (caf)
 * psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
 * scan the configdb (caf)
 * slow updates need to obey deadtime (matt)
-* put the hsd p4p servers in base.cnf (make them long-lived)
 * setting msgdelay in timing system? (matt)
 * right now procmgr sets PATH to conda_rel.  could it "conda activate"?
-* xpm deadtime showed up for all hsd's even though only one was dead (matt)
 * syslog print throttling
-* get the daq .cnf to do "conda activate"
-* error on inconsistency between conda release used to build and .cnf (caf)
 * move to use official conda rogue/epics (matt)
-* use GIT_DESCRIBE_TAG in recipes
 * expt/run number in control gui (mikhail)
 * off-by-one (psana1/2)
 * units support in det xface
@@ -42,29 +37,23 @@
 * dlopen for reduction alg
 * test calibman/geo (mikhail)
 * nersc calib-dir sync (wilko)
-* psana1: test py3 branches with py2 release
+* psana1: continuous integration of py3 (jenkins)
 * configdb history
 * algorithms (drp/ana, e.g. beam-center finding)
 * psana startup slope, smd0 performance with small batch size, end-job poor behavior (mona)
 * singularity at slac (mona)
 * support more python versions
 ** python DRP? (matt)
-* monitoring for psana (mona, johannes)
 * slurm and correcting problems with lsf
 * slurm support in calibman (mikhail)
-* psana monitoring system (like vmon) with prometheus?
 * andor
-** io performance (20GB/s)
-* det-specific config editors?
-* 1MHz operation
 ** consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
 * timetool: sometimes 1020, sometimes 1024 bytes (matt)
 ** canary: rack 11: 10G switch, IB, Rack 12: 2 IB switches (no 10G) 2 dell nodes (onsite)
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
-* last mile cabling (transceivers, quad transceivers, fibers, quad-fibers, trigger cables, power cables)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
@@ -78,3 +67,4 @@
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
+* lcls2 areadetector (valerio+mikhail)
