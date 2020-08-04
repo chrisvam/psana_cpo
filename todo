@@ -1,4 +1,5 @@
-* /reg/g/cctbx, ~tstopr, xtcav, new rogue, new-psana1, activedet, power cycling, daq alarms
+* epix xtc2, new rogue, new-psana1, power cycling, daq alarms
+* detectors: manta, encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
   o generic mpi (wait for slurm)
