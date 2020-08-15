@@ -1,3 +1,4 @@
+from __future__ import print_function
 from psana import *
 import numpy as np
 import sys
