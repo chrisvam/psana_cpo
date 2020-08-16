@@ -1,11 +1,13 @@
-* epix xtc2, new rogue, new-psana1, power cycling, daq alarms
-* detectors: manta, encoder, andor, epix, xtcav1, xtcav2
+* w8/cfgdiff/om, mfx onda node, epix constants/ffb/psana15/opal, amirel, cxi lysozyme, mfx om, phil requests, lv96 translation, usb extenders (andor/encoder), epix xtc2, new-psana1, power cycling, daq alarms
+* xtc files visible from mon, det.calib from shmem
+* detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * create more platforms for procmgr
 * daq2 chunking
+* private calibdir (mikhail)
 * encoder for rix
 * manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
@@ -54,7 +56,7 @@
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation, josh requests
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
