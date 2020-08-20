@@ -1,10 +1,10 @@
-* w8/cfgdiff/om, mfx onda node, epix constants/ffb/psana15/opal, amirel, cxi lysozyme, mfx om, phil requests, lv96 translation, usb extenders (andor/encoder), epix xtc2, new-psana1, power cycling, daq alarms
-* xtc files visible from mon, det.calib from shmem
+* ami xpcs, sdf, regen epix ped conflict?, xtcav, lv96 translation, usb extenders (andor/encoder), epix xtc2, power cycling, daq alarms
 * detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
+* MTRX:V2 (mikhail)
 * create more platforms for procmgr
 * daq2 chunking
 * private calibdir (mikhail)
@@ -63,7 +63,7 @@
     export results to ACR
   - josh: xpcs photon counting, working with chuck: accumulate statistics
     and then fit, number of photons per shot in histogram (talk to chuck
-    and silke sxrm23)
+    and silke sxrm23). nicholas burdet (shared postdoc)
   - alex: manta camera (allied vision):  project, fit a peak (gaussian),
     plot vs. other variable,  ideally integrate over events, but
     difficult for ami. 30Hz.  run in mode with only a single shot per image.
