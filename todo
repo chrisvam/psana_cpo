@@ -1,14 +1,19 @@
-* ami xpcs, sdf, regen epix ped conflict?, xtcav, lv96 translation, usb extenders (andor/encoder), epix xtc2, power cycling, daq alarms
+* usbusd, epix xtc2, xtcav, manta, ami xpcs, lv96 translation, power cycling, daq alarms
 * detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * MTRX:V2 (mikhail)
+* move to gcc9 (valerio)
+* xpplr8116 geom calib const access for py3
+* protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
+* parallel jupyterhub with visualization
 * daq2 chunking
-* private calibdir (mikhail)
+* lcls2 private calibdir (mikhail)
 * encoder for rix
+* deploy releases everywhere (nersc, sdf, new/old psana1)
 * manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
@@ -19,7 +24,6 @@
 * send multiple copy of events to shmem like lcls1
 * small h5 ebeam/gasdet automatic storage
 * test daq sequences (caf)
-* active-det improvements (caf)
 * psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
 * scan the configdb (caf)
@@ -56,7 +60,7 @@
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation, josh requests
+* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation, josh requests, hsd time axis
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
