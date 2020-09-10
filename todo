@@ -1,10 +1,12 @@
-* usbusd, epix xtc2, xtcav, manta, ami xpcs, lv96 translation, power cycling, daq alarms
+rix, uniqueid per panel, ami annotations, xcs
+* xcs, epix xtc2 peak, xtcav (sxr/hxr), manta, ami xpcs, lv96 translation, power cycling, daq alarms
 * detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * MTRX:V2 (mikhail)
+* shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
@@ -13,6 +15,7 @@
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
 * encoder for rix
+* portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere (nersc, sdf, new/old psana1)
 * manta camera for rix
 * why don't we get a c++ exception when we receive a configdb timeout?
@@ -44,6 +47,7 @@
 * dlopen for reduction alg
 * test calibman/geo (mikhail)
 * nersc calib-dir sync (wilko)
+* in-line documentation tools for lcls2
 * psana1: continuous integration of py3 (jenkins)
 * configdb history
 * algorithms (drp/ana, e.g. beam-center finding)
