@@ -1,4 +1,24 @@
-* tmo/rix opr, hsd peaks, weka, manta, xtcav, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms
+* doc, sdf, slides, tmo daq, mod6, chuck crash, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* new-style psana1:
+
+ PHASE1:
+ - (switch default to new-style: change /reg/g/psdm/etc/psconda.sh to new-style)
+   o py2 by default
+   o py3 if users choose (add -py3 option to psconda.sh)
+ - do at same time that we move to new nfs ("/cds")
+ - keep the old style available if users desperately need it (old /reg/g/psdm/etc/psconda.sh becomes /reg/g/psdm/etc/psconda_old.sh)
+ - calibman working (dark runs most important)
+ - advertise reduced features to users: no psana modules, no old-style translator, no mpi-h5 mpi-pytables
+ - move old-style/new-style to /cds
+ - jenkins release (and nightly?) into new conda area
+
+ PHASE2:
+ - (freezing old-style psana1-py2, and merging branches)
+ - merge py3->master and tag
+ - merge anarel-manage (removing py3 hacks)
+ - make a new branch master->old_style_master (could work off this)
+ - judgment call: how much to increase test coverage?  testing is currently minimal.
+
 * detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
 * for new-psana1:
   o slow conda activate (set PATH?) (valerio)
@@ -18,6 +38,7 @@
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere (nersc, sdf, new/old psana1)
 * manta camera for rix
+* have psana automatically detector which detectors are requested and only use those streams (mona)
 * why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
 * move psana1 to mysql8 (not necessary since eliminating mysql?) (valerio)
@@ -64,7 +85,7 @@
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * peaknet
-* ami: timetool correction example, projection along curve, run on cmd line without json?, angular integration, slow box dragging, per-hutch/expt algs, epics import, CI, xarray reading, mpi offline, subgraphs, gui regression, web xface, hsd peaks, combine coarse+fine(timetool) timing, epics front-end?, handle hsd peaks, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, error cases (e.g. failed fits), two axes pub/sub drop out of sync, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?
+* ami: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
