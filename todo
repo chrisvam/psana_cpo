@@ -1,10 +1,19 @@
-* doc, sdf, slides, tmo daq, mod6, chuck crash, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* wilko: ffb01 issues
+  procmgr cmp005 issue
+  matt: hsd's, pyxpm crashes
+  ric: opal (after cpo fix?), single hsd, bld, epicsarch, meb double free
+  cpo: opal, pvadetector?, ibdiagnet, fee.cnf
+  shmem multiple runs (mona)
+  5 stations (fee, amo, cpo, ric, matt)
+  omar: hsd nodes (ok?) 100Mb connections
+* muammar, asserts, zeromq, photonenergy, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
  - (switch default to new-style: change /reg/g/psdm/etc/psconda.sh to new-style)
    o py2 by default
    o py3 if users choose (add -py3 option to psconda.sh)
+ - understand new mpi? (e.g. IB segfaults) but cheetah suggests maybe OK
  - do at same time that we move to new nfs ("/cds")
  - keep the old style available if users desperately need it (old /reg/g/psdm/etc/psconda.sh becomes /reg/g/psdm/etc/psconda_old.sh)
  - calibman working (dark runs most important)
@@ -25,6 +34,9 @@
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * MTRX:V2 (mikhail)
+* reduction algorithms (ric)
+* allocation of readout groups and devices, lanes
+* Detector interface for filter_function and destination (mona)
 * shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
@@ -45,6 +57,7 @@
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
+* disable IB in mpi until we understand intermittent crashes/warnings
 * send multiple copy of events to shmem like lcls1
 * small h5 ebeam/gasdet automatic storage
 * test daq sequences (caf)
@@ -85,7 +98,11 @@
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * peaknet
-* ami: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large
+* ami bugs:
+    - reloading graph caused projection to stop updating
+    - reducing number of points in the line plot didn't take
+    - wrong hsd scale by factor 10
+* ami features: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami, plot vs readable time, average box.
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
