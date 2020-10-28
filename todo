@@ -1,12 +1,28 @@
-* wilko: ffb01 issues
-  procmgr cmp005 issue
-  matt: hsd's, pyxpm crashes
-  ric: opal (after cpo fix?), single hsd, bld, epicsarch, meb double free
-  cpo: opal, pvadetector?, ibdiagnet, fee.cnf
-  shmem multiple runs (mona)
-  5 stations (fee, amo, cpo, ric, matt)
-  omar: hsd nodes (ok?) 100Mb connections
-* muammar, asserts, zeromq, photonenergy, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* issues:
+  - event code 136 glitching bld daq hang (matt fixed?)
+  - hsd config race condition (matt)
+  - ami issues: window-average, red-box display, fix missing-data handling (lower priority), angular integration (lower priority)
+  - state machine confusing (ric email) lower priority?
+  - timetool? (lower priority)
+  - no run 0 in control-gui
+  - andor (medium) (integrate for 10 minutes?)
+  - mona multirun
+  - psana/ami survive "reset" (lower priority)
+  - mona no endrun transition
+  - ts det xface (high) (valerio)
+  - 30s ami load could be a scaling problem?
+  - ebeam bld
+  - eventcode conditionals
+  - official names
+  - switch to valerio conda2
+  - grafana page didn't load on tmo-daq (can't as tmoopr?)
+  - grafana page cleaner?
+  - use the system to debug
+  - seaberg/heimann commissioning
+  - set all hsd configs to be identical
+  - RIX
+  - UED
+* ts det xface, ued example, muammar, asserts, zeromq, photonenergy, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -102,7 +118,7 @@
     - reloading graph caused projection to stop updating
     - reducing number of points in the line plot didn't take
     - wrong hsd scale by factor 10
-* ami features: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami, plot vs readable time, average box.
+* ami features: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
