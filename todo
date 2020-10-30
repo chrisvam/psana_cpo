@@ -1,7 +1,9 @@
+mikhail config, ts xface, ami, detector list in logbook
 * issues:
-  - event code 136 glitching bld daq hang (matt fixed?)
+  - (done) event code 136 glitching bld daq hang (matt fixed?)
   - hsd config race condition (matt)
-  - ami issues: window-average, red-box display, fix missing-data handling (lower priority), angular integration (lower priority)
+  - *ami issues: window-average, time history, red-box display, time-history, fix missing-data handling (lower priority), angular integration (lower priority)
+  - (done)shmem copy l1accepts
   - state machine confusing (ric email) lower priority?
   - timetool? (lower priority)
   - no run 0 in control-gui
@@ -9,17 +11,17 @@
   - mona multirun
   - psana/ami survive "reset" (lower priority)
   - mona no endrun transition
-  - ts det xface (high) (valerio)
+  - ts det xface (high)
   - 30s ami load could be a scaling problem?
-  - ebeam bld
-  - eventcode conditionals
+  - (done)ebeam bld
+  - (done)eventcode conditionals
   - official names
-  - switch to valerio conda2
+  - *switch to valerio conda2
   - grafana page didn't load on tmo-daq (can't as tmoopr?)
   - grafana page cleaner?
   - use the system to debug
   - seaberg/heimann commissioning
-  - set all hsd configs to be identical
+  - *set all hsd configs to be identical
   - RIX
   - UED
 * ts det xface, ued example, muammar, asserts, zeromq, photonenergy, epix xtc2 peak, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
@@ -59,6 +61,7 @@
 * MHz with real tmo analysis (mona)
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
+* practice power outage
 * parallel jupyterhub with visualization
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
@@ -70,12 +73,14 @@
 * why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
 * move psana1 to mysql8 (not necessary since eliminating mysql?) (valerio)
+* understand why we get corrupt pickN data if we don't copy l1accepts
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
 * disable IB in mpi until we understand intermittent crashes/warnings
 * send multiple copy of events to shmem like lcls1
 * small h5 ebeam/gasdet automatic storage
+* small h5 ragged arrays
 * test daq sequences (caf)
 * psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
@@ -133,3 +138,7 @@
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
 * lcls2 areadetector (valerio+mikhail)
+
+wire transfer inquiry: 866 540 0763
+move money 877 337 6703 7am-7pm central
+trn2020100200108226
