@@ -9,7 +9,7 @@ for myrun in ds.runs():
     threshold = 2.0
     smallh5 = ds.smalldata(filename='blobs.h5')
     max_blobs=50
-    for evt in myrun.events():
+    for nevt,evt in enumerate(myrun.events()):
         image = det.raw.image(evt)
         if image is None: continue # check for missing data
         nblobs, x_blobs, y_blobs, energy_blobs = find_blobs_2d(image,threshold,2.0)
@@ -24,6 +24,6 @@ for myrun in ds.runs():
         y[:nblobs]     = y_blobs
         energy[:nblobs]= energy_blobs
         smallh5.event(evt, nblobs=nblobs, x=x, y=y, energy=energy)
-        print(nblobs)
+        print('Event',nevt,'found',nblobs,'blobs')
     smallh5.done()
     
