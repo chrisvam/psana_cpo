@@ -1,35 +1,16 @@
-mikhail config, ts xface, ami, detector list in logbook
+andor: 120Hz, standalone in hutch, pvs, cabling
 * issues:
-  - (done) event code 136 glitching bld daq hang (matt fixed?)
-  - *hsd config race condition (matt)
-  - *hsd training pattern
-  - *ami issues: window-average, time history, red-box display, time-history, fix missing-data handling (lower priority), angular integration (lower priority)
-  - (done)shmem copy l1accepts
+  - *mikhail: roentdek with quadanode
+  - *dan: timehistory
+  - *seshu: fix missing-data handling
   - state machine confusing (ric email) lower priority?
   - timetool? (lower priority)
-  - no run 0 in control-gui
-  - andor (medium) (integrate for 10 minutes?)
-  - mona multirun
+  - *andor (medium)
   - psana/ami survive "reset" (lower priority)
-  - mona no endrun transition
-  - ts det xface (high)
-  - 30s ami load could be a scaling problem?
-  - (done)ebeam bld
-  - (done)eventcode conditionals
+  - *mpids hang on break? (like no endrun)
   - official names
-  - *switch to valerio conda2
-  - grafana page didn't load on tmo-daq (can't as tmoopr?)
-  - grafana page cleaner?
-  - use the system to debug
-  - seaberg/heimann commissioning
-  - *eventcode jumping
-  - *set all hsd configs to be identical
-  - *setting up user kernels
-  - RIX
-  - UED
-  - monday: 5 quadanode + 1 kstov ued, wednesday: accelerator
-    andor: variable line spectrometer (vls) 2 weeks
-* debug shmem, epix cfg xtc2, ued example, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+  - *cpo: shmem corruption
+* andor, oips, kafka trig live, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -43,6 +24,7 @@ mikhail config, ts xface, ami, detector list in logbook
  - advertise reduced features to users: no psana modules, no old-style translator, no mpi-h5 mpi-pytables
  - move old-style/new-style to /cds
  - jenkins release (and nightly?) into new conda area
+ - need mpi hp5 for silke
 
  PHASE2:
  - (freezing old-style psana1-py2, and merging branches)
@@ -58,6 +40,7 @@ mikhail config, ts xface, ami, detector list in logbook
 * prometheus python (eventually daq2 prometheus gui)
 * MTRX:V2 (mikhail)
 * reduction algorithms (ric)
+* lcls2 equivalent of xpptut15
 * allocation of readout groups and devices, lanes
 * Detector interface for filter_function and destination (mona)
 * shared drp node allocation mechanism
@@ -145,3 +128,4 @@ mikhail config, ts xface, ami, detector list in logbook
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
 * lcls2 areadetector (valerio+mikhail)
+* xtcav/psocake py3 compatible
