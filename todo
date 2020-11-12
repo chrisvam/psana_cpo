@@ -1,4 +1,3 @@
-andor: 120Hz, standalone in hutch, pvs, cabling
 * issues:
   - *mikhail: roentdek with quadanode
   - *dan: timehistory
@@ -10,7 +9,7 @@ andor: 120Hz, standalone in hutch, pvs, cabling
   - *mpids hang on break? (like no endrun)
   - official names
   - *cpo: shmem corruption
-* andor, oips, kafka trig live, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* debugging (1MHz), andor, oips, kafka trig live, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -39,6 +38,7 @@ andor: 120Hz, standalone in hutch, pvs, cabling
   o generic mpi (wait for slurm)
 * prometheus python (eventually daq2 prometheus gui)
 * MTRX:V2 (mikhail)
+* monitor deadtime per-lane (matt)
 * reduction algorithms (ric)
 * lcls2 equivalent of xpptut15
 * allocation of readout groups and devices, lanes
