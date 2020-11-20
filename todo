@@ -1,4 +1,4 @@
-* shmem corrupt, andor, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* andor, opal, psana1 email, shmem corrupt, andor, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -23,6 +23,7 @@
 
 * xtcav recorder for mcc
 * 20GB/s filesystem
+* lcls2 epix charge injection daq/ana
 * mikhail: roentdek with quadanode
 * daq window placement
 * dan: timehistory
