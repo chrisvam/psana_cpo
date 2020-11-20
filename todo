@@ -1,15 +1,4 @@
-* issues:
-  - *mikhail: roentdek with quadanode
-  - *dan: timehistory
-  - *seshu: fix missing-data handling
-  - state machine confusing (ric email) lower priority?
-  - timetool? (lower priority)
-  - *andor (medium)
-  - psana/ami survive "reset" (lower priority)
-  - *mpids hang on break? (like no endrun)
-  - official names
-  - *cpo: shmem corruption
-* debugging (1MHz), andor, oips, kafka trig live, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* shmem corrupt, andor, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -32,55 +21,58 @@
  - make a new branch master->old_style_master (could work off this)
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
-* detectors: manta (rix exit slit), encoder, andor, epix, xtcav1, xtcav2
-* for new-psana1:
-  o slow conda activate (set PATH?) (valerio)
-  o generic mpi (wait for slurm)
+* xtcav recorder for mcc
+* 20GB/s filesystem
+* mikhail: roentdek with quadanode
+* daq window placement
+* dan: timehistory
+* seshu: fix missing-data handling
+* state machine confusing (ric email) lower priority?
+* timetool? (lower priority)
+* psana/ami survive "reset" (lower priority)
+* official names for tmo
+*cpo: shmem corruption
 * prometheus python (eventually daq2 prometheus gui)
-* MTRX:V2 (mikhail)
 * monitor deadtime per-lane (matt)
+* improved grafana (like ganglia)
 * reduction algorithms (ric)
-* lcls2 equivalent of xpptut15
+* move other hutches to lcls2
+** lcls2 equivalent of xpptut15
 * allocation of readout groups and devices, lanes
-* Detector interface for filter_function and destination (mona)
+** Detector interface for filter_function and destination (mona)
 * shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
 * MHz with real tmo analysis (mona)
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
-* practice power outage
+** practice power outage
 * debug shmem long-lived data corruption (pickN)
-* detnames/detnames-minus-e within python
+** detnames/detnames-minus-e within python
 * parallel jupyterhub with visualization
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
 * encoder for rix
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere (nersc, sdf, new/old psana1)
-* manta camera for rix
-* have psana automatically detector which detectors are requested and only use those streams (mona)
+* have psana automatically detect which detectors are requested and only use those streams (mona)
 * why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
-* move psana1 to mysql8 (not necessary since eliminating mysql?) (valerio)
 * understand why we get corrupt pickN data if we don't copy l1accepts
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
 * disable IB in mpi until we understand intermittent crashes/warnings
 * send multiple copy of events to shmem like lcls1
-* small h5 ebeam/gasdet automatic storage
+** small h5 ebeam/gasdet automatic storage
 * small h5 ragged arrays
 * test daq sequences (caf)
 * psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
-* scan the configdb (caf)
 * slow updates need to obey deadtime (matt)
 * setting msgdelay in timing system? (matt)
 * right now procmgr sets PATH to conda_rel.  could it "conda activate"?
 * syslog print throttling
-* move to use official conda rogue/epics (matt)
-* expt/run number in control gui (mikhail)
 * off-by-one (psana1/2)
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
@@ -94,26 +86,21 @@
 * nersc calib-dir sync (wilko)
 * in-line documentation tools for lcls2
 * psana1: continuous integration of py3 (jenkins)
-* configdb history
+** lcls2 configdb tools: history, copying
 * algorithms (drp/ana, e.g. beam-center finding)
 * psana startup slope, smd0 performance with small batch size, end-job poor behavior (mona)
 * singularity at slac (mona)
 * support more python versions
+** SDF support including ARP
 ** python DRP? (matt)
 * slurm and correcting problems with lsf
 * slurm support in calibman (mikhail)
-* andor
-** consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
+* consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
 * timetool: sometimes 1020, sometimes 1024 bytes (matt)
-** canary: rack 11: 10G switch, IB, Rack 12: 2 IB switches (no 10G) 2 dell nodes (onsite)
 ** test power outages (ric, onsite)
 * fiber power readings everywhere (matt, tid)
 * peaknet
-* ami bugs:
-    - reloading graph caused projection to stop updating
-    - reducing number of points in the line plot didn't take
-    - wrong hsd scale by factor 10
-* ami features: projection along curve, run on cmd line without json?, per-expt alg directory, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
+* ami features: projection along curve, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
@@ -128,4 +115,4 @@
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
 * lcls2 areadetector (valerio+mikhail)
-* xtcav/psocake py3 compatible
+** xtcav/psocake py3 compatible
