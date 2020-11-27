@@ -1,0 +1,26 @@
+all the files are currently in ~cpo/ipsana/xcs
+
+login to daq-xcs-mon07
+setup ana environment: "source /reg/g/psdm/etc/psconda.sh"
+cd ~cpo/ipsana/xcs
+
+start the plots:
+psplot SPECTRUM_ON SPECTRUM_OFF SPECTRUM_DIFF RECENT_SPECTRUM EPIX_ROI &
+
+start the analysis on daq-xcs-mon07: (NOTE: TWO control-C's to kill!)
+`which mpirun` --oversubscribe -n 9 -H daq-xcs-mon07,daq-xcs-mon05,daq-xcs-mon06 ./mpi_driver.sh
+
+two files to modify: user-adjustable parameters are at the top
+mymaster.py
+myclient.py
+
+**********************************************************************
+
+You won’t be able to edit the files in my directory to edit the
+parameters.  If you copy all the files to your own directory I believe
+it should all just work, EXCEPT you have to edit this line in
+mpi_driver.sh:
+
+cd /reg/neh/home/cpo/ipsana/xcs/
+
+Change the “cd” to your own directory.
