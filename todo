@@ -1,4 +1,4 @@
-* andor, opal, psana1 email, shmem corrupt, andor, shmem corruption, xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+* andor, ttool (weights), rix, non per-seg configdata, spares, psana1 email, sxr xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
 * new-style psana1:
 
  PHASE1:
@@ -21,6 +21,8 @@
  - make a new branch master->old_style_master (could work off this)
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
+* what data goes in to smd? (mona)
+* move readout group config info from segment levels to ts
 * xtcav recorder for mcc
 * 20GB/s filesystem
 * lcls2 epix charge injection daq/ana
@@ -33,6 +35,7 @@
 * psana/ami survive "reset" (lower priority)
 * official names for tmo
 *cpo: shmem corruption
+* spares
 * prometheus python (eventually daq2 prometheus gui)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
@@ -44,6 +47,7 @@
 * shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
+* make hsdioc short-lived? (matt)
 * MHz with real tmo analysis (mona)
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
