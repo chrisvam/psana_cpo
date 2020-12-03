@@ -26,8 +26,7 @@ class EdgeFinder(object):
         convolved = np.convolve(image-background, self.kernel)
         convolved /= np.max(convolved)
         # avoid convolution edge effects
-        convolved[:len(self.kernel)]=0
-        convolved[-len(self.kernel):]=0
+        convolved = convolved[len(self.kernel):-len(self.kernel)]
 
         # get first peak and its fwhm
         first_peak = np.argmax(convolved)
