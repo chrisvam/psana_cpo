@@ -71,15 +71,17 @@ for nevt,evt in enumerate(myrun.events()):
     # if codes is None: continue
     if image is None: continue
 
-    #if 162 in codes: # background shot? subtract, for example, etalon effect
+    #if 162 in codes: # background shot. subtract, for example, etalon effect
+    #    bkgd = np.sum(image[myroi],axis=1)
     #    if background is None:
-    #        background = image[myroi]
+    #        background = bkgd
     #    else:
-    #        background = 0.9*background+0.1*image[myroi]
+    #        background = 0.9*background+0.1*bkgd
     #    continue
 
-    # daq "ttfex" results: see https://confluence.slac.stanford.edu/display/PSDM/TimeTool
+    # daq "ttfex" results (see https://confluence.slac.stanford.edu/display/PSDM/TimeTool):
     # ampl, amplnxt, fltpos, fltpos_ps, fltposfwhm, proj_ref, proj_sig, refampl
+    # one can also look at the daq's background/signal using prof_ref/proj_sig
     # only valid if it's not a background shot (e.g. BYKIK)
     daq_edge = opal2.ttfex.fltpos(evt)
 
