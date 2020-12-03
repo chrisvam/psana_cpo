@@ -81,7 +81,7 @@ for nevt,evt in enumerate(myrun.events()):
     # daq "ttfex" results: see https://confluence.slac.stanford.edu/display/PSDM/TimeTool
     # ampl, amplnxt, fltpos, fltpos_ps, fltposfwhm, proj_ref, proj_sig, refampl
     # only valid if it's not a background shot (e.g. BYKIK)
-    daq_edge = opal2.ttfex.fltpos
+    daq_edge = opal2.ttfex.fltpos(evt)
 
     # take ROI and project
     image = np.sum(image[myroi],axis=1)
