@@ -71,7 +71,7 @@ for nevt,evt in enumerate(myrun.events()):
     # if codes is None: continue
     if image is None: continue
 
-    #if 162 in codes: # background shot. subtract, for example, etalon effect
+    #if codes[161]: # BYKIKs background shot. subtract, for example, etalon effect
     #    bkgd = np.sum(image[myroi],axis=1)
     #    if background is None:
     #        background = bkgd
