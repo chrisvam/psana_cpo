@@ -1,4 +1,5 @@
-* andor, ttool (weights), rix, non per-seg configdata, spares, psana1 email, sxr xtcav, asserts, zeromq, ami xpcs, lv96 translation, power cycling, daq alarms (boss, fibers 208-to-tmo, procmgr)
+ipmi, caf, sdf permissions
+* networkfox, tmo rel, crystfel perm, tmo.cnf names, mikhail ued step info, rix scans, dark opal, seaberg opal, ami-client permission, ttool zeros, spares, sxr xtcav, asserts
 * new-style psana1:
 
  PHASE1:
@@ -12,7 +13,7 @@
  - advertise reduced features to users: no psana modules, no old-style translator, no mpi-h5 mpi-pytables
  - move old-style/new-style to /cds
  - jenkins release (and nightly?) into new conda area
- - need mpi hp5 for silke
+ - need mpi h5 for silke
 
  PHASE2:
  - (freezing old-style psana1-py2, and merging branches)
@@ -21,12 +22,16 @@
  - make a new branch master->old_style_master (could work off this)
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
+* teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
 * what data goes in to smd? (mona)
+* make everything work with Debug instead of RelWithDebInfo (valerio, ric)
+* support large  non-broadcast epics data (mona)
 * move readout group config info from segment levels to ts
 * xtcav recorder for mcc
 * 20GB/s filesystem
 * lcls2 epix charge injection daq/ana
 * mikhail: roentdek with quadanode
+* fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
 * dan: timehistory
 * seshu: fix missing-data handling
@@ -34,8 +39,8 @@
 * timetool? (lower priority)
 * psana/ami survive "reset" (lower priority)
 * official names for tmo
-*cpo: shmem corruption
 * spares
+* truncation damage keeps xtc iterable (ric)
 * prometheus python (eventually daq2 prometheus gui)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
@@ -52,7 +57,6 @@
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
 ** practice power outage
-* debug shmem long-lived data corruption (pickN)
 ** detnames/detnames-minus-e within python
 * parallel jupyterhub with visualization
 * daq2 chunking
