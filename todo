@@ -53,7 +53,7 @@
 * shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
-* make hsdioc short-lived? (matt)
+* make restart of hsdioc easier? (matt)
 * MHz with real tmo analysis (mona)
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
