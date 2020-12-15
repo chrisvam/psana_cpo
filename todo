@@ -1,5 +1,4 @@
-ipmi, caf, sdf permissions
-* networkfox, tmo rel, crystfel perm, tmo.cnf names, mikhail ued step info, rix scans, dark opal, seaberg opal, ami-client permission, ttool zeros, spares, sxr xtcav, asserts
+* subnet pva/ca, epicsarch issue, py3 rel, srcf, step crash, seaberg opal, ami-client permission, ttool zeros, spares, sxr xtcav, asserts
 * new-style psana1:
 
  PHASE1:
@@ -23,6 +22,8 @@ ipmi, caf, sdf permissions
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* pvadetector no timestamp matching "mode 0" (ric)
+* cross-subnet pva/ca
 * what data goes in to smd? (mona)
 * make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * support large  non-broadcast epics data (mona)
