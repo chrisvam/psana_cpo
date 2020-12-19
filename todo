@@ -1,4 +1,4 @@
-* subnet pva/ca, epicsarch issue, py3 rel, srcf, step crash, seaberg opal, ami-client permission, ttool zeros, spares, sxr xtcav, asserts
+* lcls1 opal, subnet pva/ca (worked between cmp015/016 not to dev008), sxrxtcav B940, seaberg opal, ami-client permission, xtcdata throws
 * new-style psana1:
 
  PHASE1:
@@ -22,11 +22,13 @@
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* multiseg epics (kwargs or collection segids?)
 * pvadetector no timestamp matching "mode 0" (ric)
+* xtcdata duplicate names throw
 * cross-subnet pva/ca
+* spares
 * what data goes in to smd? (mona)
 * make everything work with Debug instead of RelWithDebInfo (valerio, ric)
-* support large  non-broadcast epics data (mona)
 * move readout group config info from segment levels to ts
 * xtcav recorder for mcc
 * 20GB/s filesystem
