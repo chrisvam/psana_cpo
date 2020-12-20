@@ -36,6 +36,7 @@
 * mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
+* parallelized calibrations (mikhail)
 * dan: timehistory
 * seshu: fix missing-data handling
 * state machine confusing (ric email) lower priority?
