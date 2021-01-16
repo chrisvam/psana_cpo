@@ -1,4 +1,4 @@
-* lcls1 opal, subnet pva/ca (worked between cmp015/016 not to dev008), sxrxtcav B940, seaberg opal, ami-client permission, xtcdata throws
+* xtcav, vm_max_mapcount err, opal exposure, psocake, calibman, cross subnet pva/ca, sxrxtcav B940, seaberg opal, more ami/shmem cores, xtcdata throws
 * new-style psana1:
 
  PHASE1:
@@ -22,13 +22,16 @@
  - judgment call: how much to increase test coverage?  testing is currently minimal.
 
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
-* multiseg epics (kwargs or collection segids?)
+* remove git passwords for relmanage
+* multiseg epics (kwargs or collection segids?) (mona)
+* general test that all public detector attributes are method taking event with return type
 * pvadetector no timestamp matching "mode 0" (ric)
 * xtcdata duplicate names throw
 * cross-subnet pva/ca
 * spares
 * what data goes in to smd? (mona)
 * make everything work with Debug instead of RelWithDebInfo (valerio, ric)
+* split off control package for reuse by hutch python (caf)
 * move readout group config info from segment levels to ts
 * xtcav recorder for mcc
 * 20GB/s filesystem
@@ -37,15 +40,12 @@
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
 * parallelized calibrations (mikhail)
-* dan: timehistory
+* dan: ami timehistory
 * seshu: fix missing-data handling
 * state machine confusing (ric email) lower priority?
-* timetool? (lower priority)
 * psana/ami survive "reset" (lower priority)
-* official names for tmo
 * spares
 * truncation damage keeps xtc iterable (ric)
-* prometheus python (eventually daq2 prometheus gui)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
 * reduction algorithms (ric)
@@ -71,7 +71,6 @@
 * have psana automatically detect which detectors are requested and only use those streams (mona)
 * why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
-* understand why we get corrupt pickN data if we don't copy l1accepts
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
 * problems on failure-modes confluence page
@@ -79,12 +78,13 @@
 * send multiple copy of events to shmem like lcls1
 ** small h5 ebeam/gasdet automatic storage
 * small h5 ragged arrays
+* meb (or later layer) broadcasts events to all clients (ami, python) (ric)
+* read-while-write smallh5
 * test daq sequences (caf)
 * psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
 * slow updates need to obey deadtime (matt)
 * setting msgdelay in timing system? (matt)
-* right now procmgr sets PATH to conda_rel.  could it "conda activate"?
 * syslog print throttling
 * off-by-one (psana1/2)
 * units support in det xface
@@ -99,9 +99,8 @@
 * nersc calib-dir sync (wilko)
 * in-line documentation tools for lcls2
 * psana1: continuous integration of py3 (jenkins)
-** lcls2 configdb tools: history, copying
+** lcls2 configdb tools: history
 * algorithms (drp/ana, e.g. beam-center finding)
-* psana startup slope, smd0 performance with small batch size, end-job poor behavior (mona)
 * singularity at slac (mona)
 * support more python versions
 ** SDF support including ARP
@@ -127,5 +126,4 @@
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?) (matt)
-* lcls2 areadetector (valerio+mikhail)
 ** xtcav/psocake py3 compatible
