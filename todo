@@ -1,4 +1,4 @@
-* xtcav, vm_max_mapcount err, opal exposure, psocake, calibman, cross subnet pva/ca, sxrxtcav B940, seaberg opal, more ami/shmem cores, xtcdata throws
+* dose, xtcav, vm_max_mapcount err, opal exposure, psocake, calibman, cross subnet pva/ca, sxrxtcav B940, seaberg opal, more ami/shmem cores, xtcdata throws
 * new-style psana1:
 
  PHASE1:
@@ -26,6 +26,7 @@
 * multiseg epics (kwargs or collection segids?) (mona)
 * general test that all public detector attributes are method taking event with return type
 * pvadetector no timestamp matching "mode 0" (ric)
+* support multiple cameras on one drp node
 * xtcdata duplicate names throw
 * cross-subnet pva/ca
 * spares
