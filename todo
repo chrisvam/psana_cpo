@@ -1,59 +1,36 @@
-* dose, xtcav, vm_max_mapcount err, opal exposure, psocake, calibman, cross subnet pva/ca, sxrxtcav B940, seaberg opal, more ami/shmem cores, xtcdata throws
-* new-style psana1:
+* ric, psana crash, xtcav sw, opal exposure, calibman, cross subnet pva/ca, seaberg opal, more ami/shmem cores, xtcdata throws, pubdata confluence
 
- PHASE1:
- - (switch default to new-style: change /reg/g/psdm/etc/psconda.sh to new-style)
-   o py2 by default
-   o py3 if users choose (add -py3 option to psconda.sh)
- - understand new mpi? (e.g. IB segfaults) but cheetah suggests maybe OK
- - do at same time that we move to new nfs ("/cds")
- - keep the old style available if users desperately need it (old /reg/g/psdm/etc/psconda.sh becomes /reg/g/psdm/etc/psconda_old.sh)
- - calibman working (dark runs most important)
- - advertise reduced features to users: no psana modules, no old-style translator, no mpi-h5 mpi-pytables
- - move old-style/new-style to /cds
- - jenkins release (and nightly?) into new conda area
- - need mpi h5 for silke
-
- PHASE2:
- - (freezing old-style psana1-py2, and merging branches)
- - merge py3->master and tag
- - merge anarel-manage (removing py3 hacks)
- - make a new branch master->old_style_master (could work off this)
- - judgment call: how much to increase test coverage?  testing is currently minimal.
-
-* teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+** teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
 * remove git passwords for relmanage
+* eliminate opal lcls1->lcls2 timing toggling (larry, ben)
 * multiseg epics (kwargs or collection segids?) (mona)
+* jungfrau/epix dark shot pedestals
 * general test that all public detector attributes are method taking event with return type
 * pvadetector no timestamp matching "mode 0" (ric)
-* support multiple cameras on one drp node
-* xtcdata duplicate names throw
-* cross-subnet pva/ca
+** support multiple cameras on one drp node
+** one exe writing multiple files to improve performance
+* move batch tests to slurm
+** xtcdata duplicate names throw
+* move away from afs (mv pdsdata/psalg repo)
 * spares
-* what data goes in to smd? (mona)
-* make everything work with Debug instead of RelWithDebInfo (valerio, ric)
+** make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * split off control package for reuse by hutch python (caf)
 * move readout group config info from segment levels to ts
-* xtcav recorder for mcc
+** xtcav recorder for mcc
 * 20GB/s filesystem
-* lcls2 epix charge injection daq/ana
 * mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
 * parallelized calibrations (mikhail)
 * dan: ami timehistory
-* seshu: fix missing-data handling
-* state machine confusing (ric email) lower priority?
-* psana/ami survive "reset" (lower priority)
-* spares
-* truncation damage keeps xtc iterable (ric)
+** state machine confusing (ric email) lower priority?
+** psana/ami survive "reset" (lower priority)
+** truncation damage keeps xtc iterable (ric)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
 * reduction algorithms (ric)
 * move other hutches to lcls2
-** lcls2 equivalent of xpptut15
 * allocation of readout groups and devices, lanes
-** Detector interface for filter_function and destination (mona)
 * shared drp node allocation mechanism
 * move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
@@ -61,16 +38,15 @@
 * MHz with real tmo analysis (mona)
 * protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
-** practice power outage
+* practice power outage
 ** detnames/detnames-minus-e within python
 * parallel jupyterhub with visualization
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
-* encoder for rix
+* encoder for rix (caf)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere (nersc, sdf, new/old psana1)
 * have psana automatically detect which detectors are requested and only use those streams (mona)
-* why don't we get a c++ exception when we receive a configdb timeout?
 * unified/integrated timetool calibration
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
@@ -92,26 +68,20 @@
 * put psana2 (and psana1?) on conda-forge
 * remote visualization/control
 * calibdb dns issue (in travis macos build)
-* psana hutch/exp specific algs (mona, silke, dan, seshu)
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
 * test calibman/geo (mikhail)
-* nersc calib-dir sync (wilko)
-* in-line documentation tools for lcls2
+* sdf/nersc calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
-** lcls2 configdb tools: history
+* lcls2 configdb tools: history
 * algorithms (drp/ana, e.g. beam-center finding)
 * singularity at slac (mona)
 * support more python versions
 ** SDF support including ARP
-** python DRP? (matt)
-* slurm and correcting problems with lsf
-* slurm support in calibman (mikhail)
-* consistent data format for opal/fakecam/xtcav.  Maybe not timetool since it's 1D.
-* timetool: sometimes 1020, sometimes 1024 bytes (matt)
-** test power outages (ric, onsite)
+** python DRP? (ric, matt)
 * fiber power readings everywhere (matt, tid)
+* too many open files (mona)
 * peaknet
 * ami features: projection along curve, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
   - josh: free-form scan (no steps)
@@ -126,5 +96,5 @@
     difficult for ami. 30Hz.  run in mode with only a single shot per image.
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 * simpler interface for controlling teb/meb?
-* xtcav daq recording epics variables as well (and also bld values?) (matt)
-** xtcav/psocake py3 compatible
+* xtcav daq recording epics variables as well (and also bld values?)
+* xtcav/psocake py3 compatible
