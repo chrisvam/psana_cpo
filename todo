@@ -1,10 +1,17 @@
-* ric, psana crash, xtcav sw, opal exposure, calibman, cross subnet pva/ca, seaberg opal, more ami/shmem cores, xtcdata throws, pubdata confluence
+3D area detector
+* psana crash, xtcav sw, opal exposure, calibman, cross subnet pva/ca, more ami/shmem cores, xtcdata throws, pubdata confluence
 
 ** teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* update rogue
+* send clearreadout to pvadetectors
+* support uniform 3D arrays in areadetector interface
 * remove git passwords for relmanage
 * eliminate opal lcls1->lcls2 timing toggling (larry, ben)
 * multiseg epics (kwargs or collection segids?) (mona)
 * jungfrau/epix dark shot pedestals
+* psana1: implement idx using smd
+* psana1: add epix firmware id in epix id's for phil
+* upgrade jupyterhub or use on-demand?
 * general test that all public detector attributes are method taking event with return type
 * pvadetector no timestamp matching "mode 0" (ric)
 ** support multiple cameras on one drp node
@@ -17,6 +24,7 @@
 * split off control package for reuse by hutch python (caf)
 * move readout group config info from segment levels to ts
 ** xtcav recorder for mcc
+* optionally don't record selected detectors to disk
 * 20GB/s filesystem
 * mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
@@ -24,7 +32,7 @@
 * parallelized calibrations (mikhail)
 * dan: ami timehistory
 ** state machine confusing (ric email) lower priority?
-** psana/ami survive "reset" (lower priority)
+** psana/ami survive "reset"
 ** truncation damage keeps xtc iterable (ric)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
@@ -83,6 +91,7 @@
 * fiber power readings everywhere (matt, tid)
 * too many open files (mona)
 * peaknet
+* web xface for ami
 * ami features: projection along curve, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
