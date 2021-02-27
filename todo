@@ -1,8 +1,13 @@
-3D area detector
-* psana crash, xtcav sw, opal exposure, calibman, cross subnet pva/ca, more ami/shmem cores, xtcdata throws, pubdata confluence
+* dia, im2k0, batchtest, bluesky_lab3, xtcav sw, opal exposure, more ami/shmem cores, xtcdata throws
 
 ** teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* improved psana1 tests
 * update rogue
+* segment-level errors also go to control-gui
+* mpi jobs not exiting if one core crashes
+* put procstat in prometheus
+* how to deal with pickle in the calibdb?
+* protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
 * remove git passwords for relmanage
@@ -13,6 +18,7 @@
 * psana1: add epix firmware id in epix id's for phil
 * upgrade jupyterhub or use on-demand?
 * general test that all public detector attributes are method taking event with return type
+* script to translate everything to h5
 * pvadetector no timestamp matching "mode 0" (ric)
 ** support multiple cameras on one drp node
 ** one exe writing multiple files to improve performance
@@ -23,7 +29,7 @@
 ** make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * split off control package for reuse by hutch python (caf)
 * move readout group config info from segment levels to ts
-** xtcav recorder for mcc
+** xtcav recorder for mcc/acr (like running drp)
 * optionally don't record selected detectors to disk
 * 20GB/s filesystem
 * mikhail: roentdek with quadanode
@@ -107,3 +113,20 @@
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?)
 * xtcav/psocake py3 compatible
+
+**********************************************************************
+
+remote support
+
+* containers
+  - additional layer of complexity
+  - singularity support @psana
+  - onDemand makes it simpler to activate containers
+  - permissions
+  - size/quotas
+  - jupyter onDemand support (copy sdf, kubernetes?)
+  - user-generated containers? (complexity)
+  - release goal: oip, make a container, use it @lcls and sdf in batch/interactively
+* need to work on syncing permissions/acls/groups
+* identical directory structure problem solved by using containers
+* support both user ad-hoc envs and lcls official envs
