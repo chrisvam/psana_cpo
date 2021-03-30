@@ -1,9 +1,29 @@
-* dia, im2k0, batchtest, bluesky_lab3, xtcav sw, opal exposure, more ami/shmem cores, xtcdata throws
+* ric tmo points, scan graph, ued, hutch-python, encoder detxface, ffb crashes, dia, srcf batchtest, xtcav sxr/hxr(py3), opal exposure, xtcdata aborts
+
+rix problems:
+- monreq -q/-n
+- intermittent step-scan ami messed up plots
+- empirically long latency (2 minutes) @1Hz even when ami claims 2s latency
+  120Hz may have helped
+- multiple ami workers scatter plot points disappearing
+
+sebastien priorities:
+
+New data analysis system (SDF) (long time)
+AMI-2 to HXU instruments (no)
+Python3 for XTCAV and psocake (6 weeks)
+Parallelize Offline AMI2 (done)
+Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
 ** teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
-* improved psana1 tests
+* for phil: configdb_readxtc and compare configs
+* archon for rix
+* 10Gb drp
+* improved psana1 tests (ro)
+* lcls2 common-mode for panels in different gain ranges (mikhail)
 * update rogue
-* segment-level errors also go to control-gui
+* segment-level errors also go to control-gui (caf)
+* plims for lcls2
 * mpi jobs not exiting if one core crashes
 * put procstat in prometheus
 * how to deal with pickle in the calibdb?
@@ -15,11 +35,11 @@
 * multiseg epics (kwargs or collection segids?) (mona)
 * jungfrau/epix dark shot pedestals
 * psana1: implement idx using smd
+* correct setting for hyperthreading? (ric says important for MHz)
+* psana2 idx mode
 * psana1: add epix firmware id in epix id's for phil
 * upgrade jupyterhub or use on-demand?
-* general test that all public detector attributes are method taking event with return type
-* script to translate everything to h5
-* pvadetector no timestamp matching "mode 0" (ric)
+* general test that all public detector attributes are method taking event with return type (ro)
 ** support multiple cameras on one drp node
 ** one exe writing multiple files to improve performance
 * move batch tests to slurm
@@ -29,17 +49,13 @@
 ** make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * split off control package for reuse by hutch python (caf)
 * move readout group config info from segment levels to ts
-** xtcav recorder for mcc/acr (like running drp)
 * optionally don't record selected detectors to disk
-* 20GB/s filesystem
 * mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
 * parallelized calibrations (mikhail)
 * dan: ami timehistory
 ** state machine confusing (ric email) lower priority?
-** psana/ami survive "reset"
-** truncation damage keeps xtc iterable (ric)
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
 * reduction algorithms (ric)
@@ -50,24 +66,19 @@
 * xpplr8116 geom calib const access for py3
 * make restart of hsdioc easier? (matt)
 * MHz with real tmo analysis (mona)
-* protect against illegal python names in dotted-hierarchy (e.g. ClinkFeb[0])
 * create more platforms for procmgr
 * practice power outage
-** detnames/detnames-minus-e within python
 * parallel jupyterhub with visualization
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
 * encoder for rix (caf)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
-* deploy releases everywhere (nersc, sdf, new/old psana1)
-* have psana automatically detect which detectors are requested and only use those streams (mona)
+* deploy releases everywhere, containers? (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
-* problems on failure-modes confluence page
-* disable IB in mpi until we understand intermittent crashes/warnings
 * send multiple copy of events to shmem like lcls1
-** small h5 ebeam/gasdet automatic storage
+** small h5 ebeam/gasdet automatic storage (ro)
 * small h5 ragged arrays
 * meb (or later layer) broadcasts events to all clients (ami, python) (ric)
 * read-while-write smallh5
@@ -77,10 +88,9 @@
 * slow updates need to obey deadtime (matt)
 * setting msgdelay in timing system? (matt)
 * syslog print throttling
-* off-by-one (psana1/2)
+* off-by-one (psana1/2) (ro)
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
-* remote visualization/control
 * calibdb dns issue (in travis macos build)
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
@@ -88,9 +98,9 @@
 * test calibman/geo (mikhail)
 * sdf/nersc calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
-* lcls2 configdb tools: history
+* lcls2 configdb tools: history (ro)
 * algorithms (drp/ana, e.g. beam-center finding)
-* singularity at slac (mona)
+* singularity at slac
 * support more python versions
 ** SDF support including ARP
 ** python DRP? (ric, matt)
@@ -98,6 +108,8 @@
 * too many open files (mona)
 * peaknet
 * web xface for ami
+* ami calib parameters (like common mode) in red box?
+* ami timeplot doesn't accept changing numbers of points
 * ami features: projection along curve, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
   - josh: free-form scan (no steps)
   - alex: set scan bin size limits (is histogram ok?)
@@ -130,3 +142,4 @@ remote support
 * need to work on syncing permissions/acls/groups
 * identical directory structure problem solved by using containers
 * support both user ad-hoc envs and lcls official envs
+
