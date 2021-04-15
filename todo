@@ -1,11 +1,6 @@
-* ric tmo points, scan graph, ued, hutch-python, encoder detxface, ffb crashes, dia, srcf batchtest, xtcav sxr/hxr(py3), opal exposure, xtcdata aborts
-
-rix problems:
-- monreq -q/-n
-- intermittent step-scan ami messed up plots
-- empirically long latency (2 minutes) @1Hz even when ami claims 2s latency
-  120Hz may have helped
-- multiple ami workers scatter plot points disappearing
+* feedstocks, 2 ffb live issues, ami ipc, srcf batchtest, xtcav sxr/hxr(py3), opal exposure, xtcdata aborts
+* downtime: neh lustre, 1MHz, tmo srcf, update rogue, bos
+* longterm: mona mpi
 
 sebastien priorities:
 
@@ -15,8 +10,17 @@ Python3 for XTCAV and psocake (6 weeks)
 Parallelize Offline AMI2 (done)
 Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
-** teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
-* for phil: configdb_readxtc and compare configs
+* avoid deselecting meb in daq alloc gui
+* code/results migration to/from nersc/sdf
+* fix psana1 test release LD_PRELOAD hack caused by removal of
+  ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
+  in SConsTools/psdm_cplusplus.py for gcc48.
+* avoid deselecting meb? (caf)
+* psana dbase access for live mode list of files
+* generic detector calibration constants (e.g. manta)
+* yves acremann detector
+* teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* for phil: configdb_readxtc and compare configs (ro)
 * archon for rix
 * 10Gb drp
 * improved psana1 tests (ro)
@@ -54,15 +58,13 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window placement
 * parallelized calibrations (mikhail)
-* dan: ami timehistory
-** state machine confusing (ric email) lower priority?
+* state machine confusing (ric email) lower priority?
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
 * reduction algorithms (ric)
 * move other hutches to lcls2
 * allocation of readout groups and devices, lanes
 * shared drp node allocation mechanism
-* move to gcc9 (valerio)
 * xpplr8116 geom calib const access for py3
 * make restart of hsdioc easier? (matt)
 * MHz with real tmo analysis (mona)
@@ -102,25 +104,17 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * algorithms (drp/ana, e.g. beam-center finding)
 * singularity at slac
 * support more python versions
-** SDF support including ARP
-** python DRP? (ric, matt)
+* SDF support including ARP
+* python DRP? (ric, matt)
 * fiber power readings everywhere (matt, tid)
 * too many open files (mona)
 * peaknet
-* web xface for ami
-* ami calib parameters (like common mode) in red box?
-* ami timeplot doesn't accept changing numbers of points
-* ami features: projection along curve, angular integration, epics import + looping, travis, xarray reading, mpi offline/evt-jumping, subgraphs, gui regression (run graphs), web xface, combine coarse+fine(timetool) timing, edge case: graph surgery global operation (worker/collector1and2) disconnect/reconnect, mask generation, josh requests, hsd time axis, hover to get docstrings, performance monitoring (prometheus)?, reopen displays on graph load, default size larger, default symbol, scatter plot number of points too large, hide "configure" menu running online, make "apply" more obvious/easy, reset kills ami (likely psana), plot vs readable time, hover over plot to get point (1D, 2D)
-  - josh: free-form scan (no steps)
-  - alex: set scan bin size limits (is histogram ok?)
+* ami:
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
     export results to ACR
   - josh: xpcs photon counting, working with chuck: accumulate statistics
     and then fit, number of photons per shot in histogram (talk to chuck
     and silke sxrm23). nicholas burdet (shared postdoc)
-  - alex: manta camera (allied vision):  project, fit a peak (gaussian),
-    plot vs. other variable,  ideally integrate over events, but
-    difficult for ami. 30Hz.  run in mode with only a single shot per image.
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
 * simpler interface for controlling teb/meb?
 * xtcav daq recording epics variables as well (and also bld values?)
