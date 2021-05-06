@@ -1,7 +1,7 @@
-tmo: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
-idea brainstorming
+log epics, vis
+tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
 rayonix: silke/mikhail: ped runs for bad pix (mfxlv4618 run 438) all zero peds for psana want status mask, mikhail: geometry (static default), psgeom (detector center) support mtrxv2
-* xtcdata, latency, srcf batchtest, qrix/dream, inprogress, new opal, 2 ffb live issues, ami ipc, xtcav sxr/hxr(py3), opal exposure
+* ipympl, matlab, multiopal, hutch-python, opal exposure, rogue, multiami, rix (fim/hsd (june), ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3)
 * downtime: neh lustre, 1MHz, tmo srcf, update rogue, bos, fims, hsd configs, timing system per hutch, bos
 * starts 4/21, 4/22-23 cooling outage, 4/26 nfs, end 5/3
 * longterm: mona mpi
@@ -14,12 +14,18 @@ Python3 for XTCAV and psocake (6 weeks)
 Parallelize Offline AMI2 (done)
 Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
+* configure andor with configdb?
 * code/results migration to/from nersc/sdf
+* hsdioc needing restart (matt)
+* hsd test pattern mode (matt)
+* hsd fex overflow damage (matt)
+* opals for different daq's on same machine (larry+pcds)
 * fix psana1 test release LD_PRELOAD hack caused by removal of
   ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
   in SConsTools/psdm_cplusplus.py for gcc48.
 ** avoid deselecting meb? (caf)
 * psana dbase access for live mode list of files
+* deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
 * yves acremann detector
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
@@ -65,9 +71,9 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * reduction algorithms (ric)
 * move other hutches to lcls2
 * allocation of readout groups and devices, lanes
-* shared drp node allocation mechanism
+** shared drp node allocation mechanism (caf)
 * xpplr8116 geom calib const access for py3
-* make restart of hsdioc easier? (matt)
+* make hsd's more robust, e.g. timing dropouts (matt)
 * MHz with real tmo analysis (mona)
 * create more platforms for procmgr
 * practice power outage
@@ -75,7 +81,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * daq2 chunking
 * lcls2 private calibdir (mikhail)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
-* deploy releases everywhere, containers? (nersc, sdf, new/old psana1)
+* deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
 * fix failing new-style psana1 tests (valerio)
 * shifter mounting permissions (mona, johannes)
@@ -89,7 +95,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * update procServ (caf)
 * slow updates need to obey deadtime (matt)
 * setting msgdelay in timing system? (matt)
-* syslog print throttling
+* syslog print throttling (caf)
 * off-by-one (psana1/2) (ro)
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
