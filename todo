@@ -1,10 +1,7 @@
-log epics, vis
+MHz, opal exposure, update rogue
 tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
 rayonix: silke/mikhail: ped runs for bad pix (mfxlv4618 run 438) all zero peds for psana want status mask, mikhail: geometry (static default), psgeom (detector center) support mtrxv2
-* ipympl, matlab, multiopal, hutch-python, opal exposure, rogue, multiami, rix (fim/hsd (june), ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3)
-* downtime: neh lustre, 1MHz, tmo srcf, update rogue, bos, fims, hsd configs, timing system per hutch, bos
-* starts 4/21, 4/22-23 cooling outage, 4/26 nfs, end 5/3
-* longterm: mona mpi
+* ami port conflict, vincent, tstopr, multiopal, update rogue, matlab, opal exposure, rix (fim/hsd (june), ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3), dld
 
 sebastien priorities:
 
@@ -18,12 +15,12 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * code/results migration to/from nersc/sdf
 * hsdioc needing restart (matt)
 * hsd test pattern mode (matt)
+* makepeds/calibrun regression tests and simplification or freeze? (mikhail)
 * hsd fex overflow damage (matt)
 * opals for different daq's on same machine (larry+pcds)
 * fix psana1 test release LD_PRELOAD hack caused by removal of
   ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
   in SConsTools/psdm_cplusplus.py for gcc48.
-** avoid deselecting meb? (caf)
 * psana dbase access for live mode list of files
 * deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
@@ -34,7 +31,6 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * improved psana1 tests (ro)
 * lcls2 common-mode for panels in different gain ranges (mikhail)
 * update rogue
-* mechanism for segment-level errors also go to control-gui (caf)
 * plims for lcls2
 * mpi jobs not exiting if one core crashes
 * put procstat in prometheus (or hard to duplicate all functionality?)
@@ -100,6 +96,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
 * calibdb dns issue (in travis macos build)
+* replace travis
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
