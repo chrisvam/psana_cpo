@@ -1,7 +1,7 @@
 MHz, opal exposure, update rogue
 tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
 rayonix: silke/mikhail: ped runs for bad pix (mfxlv4618 run 438) all zero peds for psana want status mask, mikhail: geometry (static default), psgeom (detector center) support mtrxv2
-* ami port conflict, vincent, tstopr, multiopal, update rogue, matlab, opal exposure, rix (fim/hsd (june), ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3), dld
+* ami port conflict, multiopal, update rogue, matlab, opal exposure, rix (ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3), dld, tstopr
 
 sebastien priorities:
 
@@ -12,6 +12,7 @@ Parallelize Offline AMI2 (done)
 Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
 * configure andor with configdb?
+* fim link to xpm not locking (matt)
 * code/results migration to/from nersc/sdf
 * hsdioc needing restart (matt)
 * hsd test pattern mode (matt)
