@@ -1,8 +1,17 @@
-MHz, opal exposure, update rogue
 tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
 rayonix: silke/mikhail: ped runs for bad pix (mfxlv4618 run 438) all zero peds for psana want status mask, mikhail: geometry (static default), psgeom (detector center) support mtrxv2
-* ami port conflict, multiopal, update rogue, matlab, opal exposure, rix (ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3), dld, tstopr
+* epicsarch strings (462), fiber order, manta, andor, rix opal, two-pulse acr, posix_ipc, tmo fim0, fim clearreadout, evtcode mgt, encoder trig, ami port conflict, multiopal, update rogue (june 24th), matlab, opal exposure, rix (ttopal (july), andor (may)), qrix/dream purchase, live db access, xtcav sxr/hxr(py3), dld, tstopr
 
+phil ami requests:
+pausing (online and offline? straightforward?)
+event jumping (significant work)
+rms (straightforward)
+threshold, counting number of times pixel is above the threshold, either rolling buffer every 100 events or infinite (straightforward)
+across or within runs: saving a static reference (XYPlot/Histogram/2DImage) and can be used as a red box (straightforward)
+for ami to be able to control detector params need uniform xface for this (significant work)
+reduce verbosity
+an example for each of the above
+update documentation (a video showing basic ami setup/running plus in-line documentation)
 sebastien priorities:
 
 New data analysis system (SDF) (long time)
@@ -12,8 +21,13 @@ Parallelize Offline AMI2 (done)
 Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
 * configure andor with configdb?
+* dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
+* avoid missing 1 second of epicsarch data at beginning of run
+* twocanary (toucan) in srcf
 * code/results migration to/from nersc/sdf
+* selectable detectors in psana RunSerial mode (mona)
+* xface for ami controlling detector params
 * hsdioc needing restart (matt)
 * hsd test pattern mode (matt)
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
@@ -36,6 +50,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * mpi jobs not exiting if one core crashes
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb?
+* epicsarch support for strings (claus) or at least fail more clearly
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
