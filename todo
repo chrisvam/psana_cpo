@@ -1,6 +1,8 @@
-update jupyter, offline eb
 tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
-* matt opal fex hang, mungo, hsd acr, psmon ex, pv's in lcls2, smd list of strings, rix run280, fim clearreadout, encoder trig, ami port conflict, multiopal, matlab, opal exposure, live db access, dld, tstopr, new off-by-one, new rogue (july 13)
+* live mode, acr env, rix deadtime, fiber powers, new rogue (aug 4 or 15), grafana no rix deadtime (epics to grafana for neh-base rix), matt opal fex hang, psmon ex, pv's in lcls2, smd list of strings, rix run280, fim clearreadout, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
+
+on drp-neh-ctl002:
+epics_exporter -H rix -M /cds/group/psdm/psdatmgr/etc/config/prom -P DAQ:NEH:XPM:3 RunTime Run NumL0Acc L0AccRate NumL0Inp L0InpRate DeadFrac
 
 phil ami requests:
 pausing (online and offline? straightforward?)
@@ -16,13 +18,20 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 
 sebastien priorities:
 
+new bos (matt)
 New data analysis system (SDF) (long time)
 AMI-2 to HXU instruments (no)
 Python3 for XTCAV and psocake (6 weeks)
 Parallelize Offline AMI2 (done)
 Derive pedestals from dropped shots (3 months for jungfrau/epix)
 
+* managing sharing: readout groups, drp nodes, cnf files, timing system connections
+ - Chris Ford is working on a shared-DAQ resource allocation manager
+ - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
+ - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
+ - make drp nodes more uniform?
 * configure andor with configdb?
+* explore object stores for psana (ceph?)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
 * analyze mhz hsd data (mona)
@@ -36,7 +45,6 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * hsdioc needing restart (matt)
 * hsd test pattern mode (matt)
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
-* hsd fex overflow damage (matt)
 * opals for different daq's on same machine (larry+pcds)
 * fix psana1 test release LD_PRELOAD hack caused by removal of
   ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
@@ -55,7 +63,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * mpi jobs not exiting if one core crashes
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb?
-* epicsarch support for strings (claus) or at least fail more clearly
+* epicsarch support for strings (ric says it's hard)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
@@ -115,6 +123,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * setting msgdelay in timing system? (matt)
 * syslog print throttling (caf)
 * off-by-one (psana1/2) (ro)
+* off-by-one support for low-rate devices
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
 * calibdb dns issue (in travis macos build)
