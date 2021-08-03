@@ -31,7 +31,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * configure andor with configdb?
-* explore object stores for psana (ceph?)
+* explore object stores for psana like ceph (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
 * analyze mhz hsd data (mona)
