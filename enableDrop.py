@@ -5,6 +5,15 @@ import datetime
 from IPython import embed
 import os.path
 
+date = time.strftime('%Y_%m')
+now  = time.strftime('%Y-%m-%d %H:%M:%S')
+logfile = open('log/'+date,'a')
+
+import sys
+sys.stderr = logfile
+sys.stdout = logfile
+print('---------------')
+
 rightnaow=datetime.datetime.now()
 filename='stopperstate.pkl'
 minvalue=10000
