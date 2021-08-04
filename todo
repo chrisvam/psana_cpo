@@ -1,5 +1,5 @@
 tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
-* live mode, acr env, rix deadtime, fiber powers, new rogue (aug 4 or 15), grafana no rix deadtime (epics to grafana for neh-base rix), matt opal fex hang, psmon ex, pv's in lcls2, smd list of strings, rix run280, fim clearreadout, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
+* lv39 validation (new rel), acr env, rix grafana deadtime, fiber powers, new rogue (aug 4 or 15), matt opal fex hang, psmon ex, pv's in lcls2, smd list of strings, rix run280, fim clearreadout, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
 
 on drp-neh-ctl002:
 epics_exporter -H rix -M /cds/group/psdm/psdatmgr/etc/config/prom -P DAQ:NEH:XPM:3 RunTime Run NumL0Acc L0AccRate NumL0Inp L0InpRate DeadFrac
@@ -31,6 +31,7 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * configure andor with configdb?
+* move TMO to xpm:2 (like RIX)
 * explore object stores for psana like ceph (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
