@@ -2,8 +2,7 @@ import pickle
 from epics import caget, caput, cainfo
 import time
 import datetime
-from IPython import embed
-import os.path
+import os
 
 date = time.strftime('%Y_%m')
 now  = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -49,7 +48,7 @@ totallist=zip(variablelist, openedlist, newlist, savinglist, hutch)
 for stopper, openstatus, newstate, savedstate, hutches   in totallist:
     print(hutches, "Stopper opens on",  openstatus, "Stopper status is",  newstate, "Stopper status was previously",  savedstate)
     if newstate==openstatus and savedstate!=openstatus:
-        print(hutch+" opened")
+        print(hutch," opened")
         if stopper in softxray:
             if softxrayabtact.value == 0 or softxrayabtprd.value>minvalue:
                 caput(softxrayabtprdName, minvalue)
