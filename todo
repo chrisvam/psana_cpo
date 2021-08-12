@@ -1,13 +1,8 @@
-tmo live mode: srcf ffb, arp triggers, drp-lustre, psana-live with chunking in-progress
-* lv39 validation (new rel), acr env, rix grafana deadtime, fiber powers, new rogue (aug 4 or 15), matt opal fex hang, psmon ex, pv's in lcls2, smd list of strings, rix run280, fim clearreadout, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
-
-on drp-neh-ctl002:
-epics_exporter -H rix -M /cds/group/psdm/psdatmgr/etc/config/prom -P DAQ:NEH:XPM:3 RunTime Run NumL0Acc L0AccRate NumL0Inp L0InpRate DeadFrac
+* test live mode, mom scans, lv45(atmopal,movers,ami), monreq -q 15, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, pv limit in lcls2, smd list of strings, rix run280, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
 
 phil ami requests:
 pausing (online and offline? straightforward?)
 event jumping (significant work)
-can procmgr use /u1 or /var to avoid filling up /tmp? or cronjob cleanup (caf)
 rms (straightforward)
 threshold, counting number of times pixel is above the threshold, either rolling buffer every 100 events or infinite (straightforward)
 across or within runs: saving a static reference (XYPlot/Histogram/2DImage) and can be used as a red box (straightforward)
@@ -16,15 +11,6 @@ reduce verbosity
 an example for each of the above
 update documentation (a video showing basic ami setup/running plus in-line documentation)
 
-sebastien priorities:
-
-new bos (matt)
-New data analysis system (SDF) (long time)
-AMI-2 to HXU instruments (no)
-Python3 for XTCAV and psocake (6 weeks)
-Parallelize Offline AMI2 (done)
-Derive pedestals from dropped shots (3 months for jungfrau/epix)
-
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
@@ -32,14 +18,19 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
  - make drp nodes more uniform?
 * configure andor with configdb?
 * move TMO to xpm:2 (like RIX)
+* reduction algorithms
 * explore object stores for psana like ceph (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
 * analyze mhz hsd data (mona)
 * avoid missing 1 second of epicsarch data at beginning of run
 * multisegment epicsinfo in pvadetector
+* ami controlling DRP ROI via configdb? (seshu)
 * twocanary (toucan) in srcf
 * code/results migration to/from nersc/sdf
+* psmon only update one of multiplot (ddamiani)
+* psmon XYPlot format list of one item breaks multiple lines silently (ddamiani)
+* access epics variables with full name (mona)
 * selectable detectors in psana RunSerial mode (mona)
 * off-by-one enabling automation (stoppers)
 * xface for ami controlling detector params
@@ -132,7 +123,6 @@ Derive pedestals from dropped shots (3 months for jungfrau/epix)
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
-* test calibman/geo (mikhail)
 * sdf/nersc calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
 * lcls2 configdb tools: history (ro)
@@ -171,4 +161,3 @@ remote support
 * need to work on syncing permissions/acls/groups
 * identical directory structure problem solved by using containers
 * support both user ad-hoc envs and lcls official envs
-
