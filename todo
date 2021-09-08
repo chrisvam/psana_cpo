@@ -1,4 +1,4 @@
-* test live mode, mom scans, lv45(atmopal,movers,ami), monreq -q 15, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, pv limit in lcls2, smd list of strings, rix run280, multiopal, opal exposure, tstopr, new off-by-one, rack cooling, more drp nodes
+* part select bug, mona, pgp4 xpm link problem?, second rix andor (end of sept), timepix, batchtest/zhaoheng, hsd fex xface, multi-opal, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
 
 phil ami requests:
 pausing (online and offline? straightforward?)
@@ -20,18 +20,18 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * explore object stores for psana like ceph (mona)
+* psana datasource for drp (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
-* analyze mhz hsd data (mona)
 * avoid missing 1 second of epicsarch data at beginning of run
 * multisegment epicsinfo in pvadetector
 * ami controlling DRP ROI via configdb? (seshu)
 * twocanary (toucan) in srcf
 * code/results migration to/from nersc/sdf
 * psmon only update one of multiplot (ddamiani)
+* psana test to verify that all detector interfaces follow the rules
 * psmon XYPlot format list of one item breaks multiple lines silently (ddamiani)
-* access epics variables with full name (mona)
-* selectable detectors in psana RunSerial mode (mona)
+* consider adding "safe" Xtc::alloc with max-size argument to avoid fixed-buf overruns (or maybe in higher layer)
 * off-by-one enabling automation (stoppers)
 * xface for ami controlling detector params
 * hsdioc needing restart (matt)
@@ -47,14 +47,14 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * yves acremann detector
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
 ** for phil: configdb_readxtc and compare configs (ro, caf)
-* archon for rix
+* archon for rix (dan)
 * improved psana1 tests (ro)
 * lcls2 common-mode for panels in different gain ranges (mikhail)
 * update rogue
 * plims for lcls2
 * mpi jobs not exiting if one core crashes
 * put procstat in prometheus (or hard to duplicate all functionality?)
-* how to deal with pickle in the calibdb?
+* how to deal with pickle in the calibdb? (mikhail)
 * epicsarch support for strings (ric says it's hard)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
@@ -96,7 +96,7 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * create more platforms for procmgr
 * practice power outage
 * parallel jupyterhub with visualization
-* daq2 chunking
+* daq2 chunking (dan)
 * lcls2 private calibdir (mikhail)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
@@ -123,6 +123,7 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
+* scalable calib-fetch solution for shmem/drp
 * sdf/nersc calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
 * lcls2 configdb tools: history (ro)
@@ -132,7 +133,6 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * SDF support including ARP
 * python DRP? (ric, matt)
 * fiber power readings everywhere (matt, tid)
-* too many open files (mona)
 * peaknet
 * ami:
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
@@ -161,3 +161,32 @@ remote support
 * need to work on syncing permissions/acls/groups
 * identical directory structure problem solved by using containers
 * support both user ad-hoc envs and lcls official envs
+
+**********************************************************************
+
+quynh issues:
+
+New
+
+quynh_l._nguyen  10:24 AM
+It is Run 89 in LV45
+10:25
+below is the script for a time scan that did not save all the data Timescan= RE(continuous_scan(dets, lxt, -5.521973e-6,-5.521958e-6, step_value, -5.521973e-6,-5.521958e-6, num=101, duration=1200, sawtooth=True))
+10:25
+All the theta scans had the exact same slowness with initialization so I'll give you one of the script: Theta scan: RE(bp.scan(dets, a.crix_cryo_ry, 80, 117, step_value, 80, 117, 38))
+
+christopher o'grady  10:28 AM
+Cool # I will look at run 89 and Jyoti and I will look at the slowness.  It will take some time because of the various computing outages.  Thanks!
+
+quynh_l._nguyen  10:28 AM
+Do you want the run numbers for some of the theta scan?
+
+christopher o'grady  10:29 AM
+Sure, it may be useful if it's not too much trouble.
+
+quynh_l._nguyen  10:29 AM
+Run 96-99
+10:30
+Run 72, 73
+10:30
+Run 66, 67
