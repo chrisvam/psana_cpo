@@ -1,4 +1,5 @@
-* part select bug, mona, pgp4 xpm link problem?, second rix andor (end of sept), timepix, batchtest/zhaoheng, hsd fex xface, multi-opal, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
+mona
+* andor, rix, multiopal, toucan, ib, im5k4, frantzen, multiseg in one drp, pgp4 xpm link problem?, hsd fex xface, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
 
 phil ami requests:
 pausing (online and offline? straightforward?)
@@ -42,6 +43,9 @@ update documentation (a video showing basic ami setup/running plus in-line docum
   ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
   in SConsTools/psdm_cplusplus.py for gcc48.
 * psana dbase access for live mode list of files
+* ipmi support for psmetric (omar/it)
+* clean up powercycling of xpm's: (some are fru_deactivate commands, others are different) (matt)
+* handle bad external timing better? (matt)
 * deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
 * yves acremann detector
