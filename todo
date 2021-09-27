@@ -1,5 +1,5 @@
-mona
-* andor, rix, multiopal, toucan, ib, im5k4, frantzen, multiseg in one drp, pgp4 xpm link problem?, hsd fex xface, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, new rogue, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
+tj/clemens/xiang, ami/om
+* drpneh, fim epics vars and bad transition, usdusb, rix atm fex, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, hsd fex xface, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
 
 phil ami requests:
 pausing (online and offline? straightforward?)
@@ -18,12 +18,14 @@ update documentation (a video showing basic ami setup/running plus in-line docum
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * configure andor with configdb?
+* understand why atm opal det.raw.image() doesn't work with fex enabled (matt, cpo)
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * explore object stores for psana like ceph (mona)
 * psana datasource for drp (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
+* teb having memory allocation problem after too many deallocate's (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
 * multisegment epicsinfo in pvadetector
 * ami controlling DRP ROI via configdb? (seshu)
@@ -32,10 +34,12 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * psmon only update one of multiplot (ddamiani)
 * psana test to verify that all detector interfaces follow the rules
 * psmon XYPlot format list of one item breaks multiple lines silently (ddamiani)
+* more psmon examples for andy (ddamiani)
 * consider adding "safe" Xtc::alloc with max-size argument to avoid fixed-buf overruns (or maybe in higher layer)
 * off-by-one enabling automation (stoppers)
 * xface for ami controlling detector params
 * hsdioc needing restart (matt)
+* automatically push releases for lcls1/lcls2 to nersc/sdf/other
 * hsd test pattern mode (matt)
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
 * opals for different daq's on same machine (larry+pcds)
@@ -44,12 +48,12 @@ update documentation (a video showing basic ami setup/running plus in-line docum
   in SConsTools/psdm_cplusplus.py for gcc48.
 * psana dbase access for live mode list of files
 * ipmi support for psmetric (omar/it)
-* clean up powercycling of xpm's: (some are fru_deactivate commands, others are different) (matt)
 * handle bad external timing better? (matt)
 * deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
 * yves acremann detector
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
+* make swmr work with small-h5
 ** for phil: configdb_readxtc and compare configs (ro, caf)
 * archon for rix (dan)
 * improved psana1 tests (ro)
