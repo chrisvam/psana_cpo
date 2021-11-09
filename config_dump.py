@@ -1,63 +1,38 @@
 from psana import DataSource
 from psana import container
+from psana.psexp.utils import DataSourceFromString
 import numpy as np
 import argparse
-parser.add_argument("Experiment", help="Stick the detector name and number here (rixx43518)")
-parser.add_argument("Runnumber", help="Run number goes here (341)")
-parser.add_argument("Detector",)
-parser.add_argument("--Segment", help="Enter the specific... segments you want to run in this format: x,y,z,etc,etc")
-args=parser.parse_args()
-experiment=str(args.Experiment)
-runnum=int(args.runnumber)
-ds = DataSource(exp=experiment,run=runnum)
-myrun = next(ds.runs())
-timing = myrun.Detector(args.Detector)
-cfgs = timing.raw._seg_configs()
-segmentrawlist=args.Segment
-segmentlist=segmentrawlist.split(",")
-print(cfgs)
-result=cfgs
-# goal: have a routine that print_config('timing')
-# discussed here: https://confluence.slac.stanford.edu/display/PSDMInternal/Raw+Data+Python+Interface
-# in particular this part: detname[nSegment].drpClassName.attr1.attr2...
-def recursivechecks(obj, attrlist):
+
+def dump(obj, attrlist):
     allattrs = dir(obj)
-    usefulattrs=[]
-    for item in allattrs:
-        if "_" not in item:
-            usefulattrs.append(item)
-    #alternativeattrs=obj.__dict__
-    #print(alternativeattrs, "alternativeattrs")
+    usefulattrs=[attr for attr in allattrs if not attr.startswith('_')]
     for attr in usefulattrs:
         val = getattr(obj, attr)
         attrlist.append(attr)
-        #If attr is int, float, or array, print. If it's a container, recurse, otherwise, sit around
-        #Look up how to check types of objects, especially a numpy array
         if type(val) in [int, float, np.ndarray, str]:
-            printhere=joiner.join(attrlist)
-            print(printhere, val)
+            print('.'.join(attrlist)+':', val)
         elif type(val) is container.Container:
-            recursivechecks(val, attrlist)
+            dump(val, attrlist)
         attrlist.pop(-1)
-"""
-for myobj in cfgs.values():
-    print(myobj)
+
+def config_dump():
+
+    parser = argparse.ArgumentParser(description='LCLS2 Configuration Dump Utility')
+    parser.add_argument("dsname", help="psana datasource experiment/run (e.g. exp=xppd7114,run=43) or xtc2 filename or shmem='my_shmem_identifier'")
+    parser.add_argument("det", help="Detector name selected from output of 'detnames' command")
+    parser.add_argument("datatype", help="Data type selected from output of 'detnames' command")
+    parser.add_argument("-s","--segments", nargs='*', help="space-separated list of segment numbers from 'detnames -i' command (e.g. 4 6 7)", type=int, default=[])
+    args=parser.parse_args()
+    ds = DataSourceFromString(args.dsname)
+    myrun = next(ds.runs())
+    det = myrun.Detector(args.det)
+    cfgs = getattr(det,args.datatype)._seg_configs()
+
     attrlist=[]
-    if type(args.Segment) is list:
-        for seg in args.Segment:
-            for key in cfgs:
-                if segmentvalue==key:
-                    recursivechecks(myobj, attrlist)
+    if len(args.segments)>0:
+        for seg in args.segments:
+            dump(cfgs[seg], attrlist)
     else:
-        for key in cfgs:
-            recursivechecks(myobj, attrlist)
-"""
-if type(segmentlist) is list and segmentlist!=None:
-    for seg in segmentlist:
-        attrlist=[]
-        recursivechecks(cfgs[seg], attrlist)
-else:
-    for myobj in cfgs.values():
-        attrlist=[]
-        recursivechecks(myobj, attrlist)
-    
+        for myobj in cfgs.values():
+            dump(myobj, attrlist)
