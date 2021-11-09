@@ -1,16 +1,6 @@
-tj/clemens/xiang, ami/om
-* drpneh, fim epics vars and bad transition, usdusb, rix atm fex, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, hsd fex xface, papers, ami roi (epixhr), test live mode, check enabledrop, arp, procmgrd, fiber powers, psmon ex, multiopal, opal exposure, new off-by-one, rack cooling, more drp nodes, x471 fex
+* calient, epixhr2m photons, mona segv, epix100, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, papers, ami roi (epixhr), check enabledrop, arp, psmon ex, opal exposure, new off-by-one
 
-phil ami requests:
-pausing (online and offline? straightforward?)
-event jumping (significant work)
-rms (straightforward)
-threshold, counting number of times pixel is above the threshold, either rolling buffer every 100 events or infinite (straightforward)
-across or within runs: saving a static reference (XYPlot/Histogram/2DImage) and can be used as a red box (straightforward)
-for ami to be able to control detector params need uniform xface for this (significant work)
-reduce verbosity
-an example for each of the above
-update documentation (a video showing basic ami setup/running plus in-line documentation)
+seshu: browser interface, pyarrow, configdb, github issues, dan knowledge xfer
 
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
@@ -18,15 +8,20 @@ update documentation (a video showing basic ami setup/running plus in-line docum
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * configure andor with configdb?
+* move encoder to tcp (caf)
+* crystfel to psana geom (mikhail)
 * understand why atm opal det.raw.image() doesn't work with fex enabled (matt, cpo)
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * explore object stores for psana like ceph (mona)
+* alias not in xtc file so more flexible
 * psana datasource for drp (mona)
 * dump out all lcls2 config objects with psana (ro)
 * fim link to xpm not locking (matt)
 * teb having memory allocation problem after too many deallocate's (ric)
+* select monitoring destination for particular events (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
+* small daq teststand for automated continuous-integration tests?
 * multisegment epicsinfo in pvadetector
 * ami controlling DRP ROI via configdb? (seshu)
 * twocanary (toucan) in srcf
@@ -38,7 +33,10 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * consider adding "safe" Xtc::alloc with max-size argument to avoid fixed-buf overruns (or maybe in higher layer)
 * off-by-one enabling automation (stoppers)
 * xface for ami controlling detector params
+* web display of ami plots
+* mhz bld (matt)
 * hsdioc needing restart (matt)
+* uniform (epics?) interface to detector config registers for config scans
 * automatically push releases for lcls1/lcls2 to nersc/sdf/other
 * hsd test pattern mode (matt)
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
@@ -47,7 +45,6 @@ update documentation (a video showing basic ami setup/running plus in-line docum
   ' -Wl,--copy-dt-needed-entries -Wl,--enable-new-dtags'
   in SConsTools/psdm_cplusplus.py for gcc48.
 * psana dbase access for live mode list of files
-* ipmi support for psmetric (omar/it)
 * handle bad external timing better? (matt)
 * deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
@@ -64,6 +61,7 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb? (mikhail)
 * epicsarch support for strings (ric says it's hard)
+* support damage in psana
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
@@ -105,7 +103,6 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 * practice power outage
 * parallel jupyterhub with visualization
 * daq2 chunking (dan)
-* lcls2 private calibdir (mikhail)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
@@ -155,46 +152,12 @@ update documentation (a video showing basic ami setup/running plus in-line docum
 
 **********************************************************************
 
-remote support
+ray tracing:
+few thousand rays
+24 surfaces
+few dozen configurations (max 200x200, angles/heights)
 
-* containers
-  - additional layer of complexity
-  - singularity support @psana
-  - onDemand makes it simpler to activate containers
-  - permissions
-  - size/quotas
-  - jupyter onDemand support (copy sdf, kubernetes?)
-  - user-generated containers? (complexity)
-  - release goal: oip, make a container, use it @lcls and sdf in batch/interactively
-* need to work on syncing permissions/acls/groups
-* identical directory structure problem solved by using containers
-* support both user ad-hoc envs and lcls official envs
+few thousand rays, 1 surface, 200 configurations: takes about 1 day
 
-**********************************************************************
-
-quynh issues:
-
-New
-
-quynh_l._nguyen  10:24 AM
-It is Run 89 in LV45
-10:25
-below is the script for a time scan that did not save all the data Timescan= RE(continuous_scan(dets, lxt, -5.521973e-6,-5.521958e-6, step_value, -5.521973e-6,-5.521958e-6, num=101, duration=1200, sawtooth=True))
-10:25
-All the theta scans had the exact same slowness with initialization so I'll give you one of the script: Theta scan: RE(bp.scan(dets, a.crix_cryo_ry, 80, 117, step_value, 80, 117, 38))
-
-christopher o'grady  10:28 AM
-Cool # I will look at run 89 and Jyoti and I will look at the slowness.  It will take some time because of the various computing outages.  Thanks!
-
-quynh_l._nguyen  10:28 AM
-Do you want the run numbers for some of the theta scan?
-
-christopher o'grady  10:29 AM
-Sure, it may be useful if it's not too much trouble.
-
-quynh_l._nguyen  10:29 AM
-Run 96-99
-10:30
-Run 72, 73
-10:30
-Run 66, 67
+batch ray trace only stores results to one surface
+max/min of few thousand floating point
