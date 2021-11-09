@@ -1,4 +1,4 @@
-* calient, epixhr2m photons, mona segv, epix100, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, papers, ami roi (epixhr), check enabledrop, arp, psmon ex, opal exposure, new off-by-one
+* roberto, calient, epixhr2m photons, mona segv, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, papers, ami roi (epixhr), check enabledrop, arp, psmon ex, opal exposure, new off-by-one
 
 seshu: browser interface, pyarrow, configdb, github issues, dan knowledge xfer
 
@@ -136,6 +136,7 @@ seshu: browser interface, pyarrow, configdb, github issues, dan knowledge xfer
 * singularity at slac
 * support more python versions
 * SDF support including ARP
+* automatic users add to sdf lcls queue (wilko, valerio)
 * python DRP? (ric, matt)
 * fiber power readings everywhere (matt, tid)
 * peaknet
