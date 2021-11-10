@@ -341,6 +341,7 @@ public:
             ShapesData& shapesdata = *(ShapesData*)xtc;
             _shapesdata = &shapesdata;
             _data = &(shapesdata.data());
+            _shapes = &(shapesdata.shapes());
             // lookup the index of the names we are supposed to use
             NamesId namesId = shapesdata.namesId();
             // protect against the fact that this namesid
@@ -375,6 +376,7 @@ public:
     Array<uint8_t> _hsddata;
     Xtc* _shapesdata;
     Xtc* _data;
+    Xtc* _shapes;
     StreamHeader* _sh_raw;
     StreamHeader* _sh_fex;
 };
@@ -445,6 +447,9 @@ int main(int argc, char* argv[])
             memcpy(dbgiter._sh_raw,dbgiter._sh_fex,sizeofpeaks);
             dbgiter._shapesdata->extent-=sizeofwf;
             dbgiter._data->extent-=sizeofwf;
+            uint32_t* shapes = (uint32_t*)(dbgiter._shapes->payload());
+            //printf("shape %d %d %d\n",shapes[0],shapes[5],shapes[10]);
+            shapes[5]-=sizeofwf; // kludge: hsd array seems to be second one (each shape has 5 entries)
             dg->xtc.extent-=sizeofwf;
         }
         if (fwrite(dg, sizeof(*dg) + dg->xtc.sizeofPayload(), 1, outfile) != 1) {
