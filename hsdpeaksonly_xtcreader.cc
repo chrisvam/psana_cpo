@@ -171,7 +171,11 @@ public:
     void get_value(int i, Name& name, DescData& descdata){
         int data_rank = name.rank();
         int data_type = name.type();
-        if (strcmp(name.name(),"eventHeader")==0) _hsdheader = descdata.get_array<uint32_t>(i);
+        if (strcmp(name.name(),"eventHeader")==0) {
+            _hsdheader = descdata.get_array<uint32_t>(i);
+            // fixup the event header to remove the "raw-waveform" bit
+            _hsdheader.data()[0]&=0xffefffff;
+        }
         if (strcmp(name.name(),"chan00")==0) {
             _hsddata = descdata.get_array<uint8_t>(i);
             ChannelPython chanpy(_hsdheader.data(),_hsddata.data());
@@ -436,6 +440,7 @@ int main(int argc, char* argv[])
     DebugIter dbgiter(numWords);
     uint64_t counting_timestamp=0;
     while ((dg = iter.next())) {
+        if (dg->service()==TransitionId::SlowUpdate) continue;
         if (nevent>=neventreq) break;
         nevent++;
         dbgiter.iterate(&(dg->xtc));
@@ -443,13 +448,16 @@ int main(int argc, char* argv[])
         if (dg->service()==TransitionId::L1Accept) {
             // patch up the xtc with only the peak info
             unsigned sizeofwf = (char*)dbgiter._sh_fex-(char*)dbgiter._sh_raw;
-            unsigned sizeofpeaks = dbgiter._data->sizeofPayload()-sizeofwf;
+            // make sure we remove the event header size from the payload
+            // size of the Data xtc payload is hsdevtheader+rawwf+fex where
+            // the latter two have an hsdstreamheader
+            unsigned sizeofpeaks = dbgiter._data->sizeofPayload()-sizeofwf-dbgiter._hsdheader.shape()[0]*sizeof(uint32_t);
             memcpy(dbgiter._sh_raw,dbgiter._sh_fex,sizeofpeaks);
             dbgiter._shapesdata->extent-=sizeofwf;
             dbgiter._data->extent-=sizeofwf;
             uint32_t* shapes = (uint32_t*)(dbgiter._shapes->payload());
             //printf("shape %d %d %d\n",shapes[0],shapes[5],shapes[10]);
-            shapes[5]-=sizeofwf; // kludge: hsd array seems to be second one (each shape has 5 entries)
+            shapes[5]-=sizeofwf; // hsd array is second one (each shape has 5 entries). first array is hsd eventheader (8 bytes)
             dg->xtc.extent-=sizeofwf;
         }
         if (fwrite(dg, sizeof(*dg) + dg->xtc.sizeofPayload(), 1, outfile) != 1) {
