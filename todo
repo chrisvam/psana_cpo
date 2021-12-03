@@ -1,18 +1,35 @@
-* roberto, calient, epixhr2m photons, mona segv, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, papers, ami roi (epixhr), check enabledrop, arp, psmon ex, opal exposure, new off-by-one
+ami2 latency 12:20-12:26 sunday, 10:36 monday (georgi), lxt evening of 20th
 
-seshu: browser interface, pyarrow, configdb, github issues, dan knowledge xfer
+So to summarize the status, we have (1) the sum() problem which I think I know how to fix (2) the run 69 problem (3) the run 94 missing EndRun problem (4) the various problems Silke is seeing which are not understood.
+
+drp-srcf-cmp001-ipmi, F6-9 F7 fibers
+
+review issues: integrating detectors (deadtime/psana), deadtime is per-readout-group, sz raw gain-range data, 
+
+mona, ric eb, pvadet env
+* rix ami, 10gev, srcf, mona run 94, prometheus cleanup/permissions, ami latency (run 83 of lv15), epix100, ipmi, kirian psf, epixhr2m perf, multiopal, toucan, frantzen, multiseg in one drp, pgp4 xpm link problem?, papers, ami roi (epixhr), check enabledrop, arp, psmon ex, opal exposure, new off-by-one
 
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
+* per stream and per run event/dmg counts (caf)
+** psana handling integrating detectors
 * configure andor with configdb?
+* support epix100
+** benchmark SZ and other reduction for real expt data (mikhail)
+  - can SZ handle gain-range detectors?
+* put .cnf.running and .cnf.last in same dir as .cnf (caf)
+* make it harder to leave out timing system
+* broadcasting non-epics slowupdate data (e.g. ttool bkdg)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
 * understand why atm opal det.raw.image() doesn't work with fex enabled (matt, cpo)
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
+* turning low rate data into per-shot high rate (e.g. ttool background) ami+psana (mona)
+* procmgr with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
 * alias not in xtc file so more flexible
 * psana datasource for drp (mona)
@@ -162,3 +179,28 @@ few thousand rays, 1 surface, 200 configurations: takes about 1 day
 
 batch ray trace only stores results to one surface
 max/min of few thousand floating point
+
+**********************************************************************
+
+1 rack of computing for ffb
+ - 1000 cores 8 nodes in 4u
+ffb from 0.5PB to 1 or 2
+sdf storage 6 jbods 1.5PB in 1 jbod in 4u for 50k + $overhead
+enlarge sdf compute ?
+switching to new srcf-sdf in april
+
+**********************************************************************
+
+went through xpp/dxs so far:
+
+increased best case pie-slice by 2x (float vs. int)
+decreased ttool to 100kHz
+hsd best case 10x for peaks?
+agree with "most likely"
+increased sparkpix worst and most-likely by 2x for pixel index info?
+  - left best-case alone to give idea of large error bars
+fixed dxs sparkpix 2M didn't respect the DR reduction factor column
+
+fixed comment: no pie-slicing in cxi
+cxi: fixed epix best-case DR factor from 0.25 to .05
+fixed cxi sums (missing top two rows)
