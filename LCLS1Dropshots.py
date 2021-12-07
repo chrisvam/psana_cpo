@@ -28,7 +28,7 @@ class LCLS1_chi_group:
         self.eventtime=deque("", window)
         self.eventcode=deque("", window)
         self.supported_dets = ['Epix10ka2M','Wave8','Epix100a','Opal1000','pnCCD','Cspad','EBeam', 'FEEGasDetEnergy', 'PhaseCavity','Jungfrau']
-        self.wildcard_dets = ['Pim', 'Ipm']
+        self.wildcard_dets = ['Pim', 'Ipm', 'BMMON']
         self.bigeventtimelist=[] #Used to store a bunch of event times
 
     def timestampgatherer(self):
@@ -108,6 +108,11 @@ class LCLS1_chi_group:
                 if phase is None:
                     continue
                 result=phase.charge1()
+            elif "BMMON" in det.name.dev:
+                bmmon=det.get(event)
+                if bmmon is None:
+                    continue
+                result=bmmon.TotalIntensity()
             elif "Ipm" in det.name.dev or "Pim" in det.name.dev:
                 val=det.channel(event)
                 if val is None:
