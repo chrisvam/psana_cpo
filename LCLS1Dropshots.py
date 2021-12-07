@@ -1,3 +1,4 @@
+from __future__ import print_function
 from psana import *
 import numpy as np
 import sys
@@ -22,7 +23,7 @@ class LCLS1_chi_group:
         self.mean={}
         self.standdev={} #A bunch of empty dictionaries. Keywords are the detectors.
         self.meanerr={}
-        self.dropshotcount=99
+        self.maxdropshotcount=10
         self.window=window
         self.eventtime=deque("", window)
         self.eventcode=deque("", window)
@@ -47,13 +48,14 @@ class LCLS1_chi_group:
             if 162 in self.eventcode[(window//2)]: #162 is the event code for a dropped shot. So if the middle of the dequeue is a dropped shot, it sticks the information in the dequeue into a list.
                 self.bigeventtimelist.append(list(self.eventtime))
                 continue
-            #if len(bigeventtimelist)==dropshotcount:
-                #break
+            if len(self.bigeventtimelist)==self.maxdropshotcount:
+                print('Reached max drop shot count:',self.maxdropshotcount)
+                break
 
     def detresultgetter(self):
         ds=DataSource(expstring+':idx') #Switches the idx mode. More data or somethin'
         good_det_name=myslotvars.good_detectors() #Run the good_detectors function near the top. Returns a list.
-        print(good_det_name) #Just a personal thing, where it spits out a list of detectors it's gonna go through.
+        print('Supported detectors:',good_det_name) #Just a personal thing, where it spits out a list of detectors it's gonna go through.
         self.detlist=[Detector(detname) for detname in good_det_name]
         run = next(ds.runs())
         for det in self.detlist:
@@ -86,7 +88,7 @@ class LCLS1_chi_group:
 
     def detresult(self, event, detlist, islot): #Detresults translates the events into workable arrays and numbers
         for det in detlist:
-            if "pnCCD" == det.name.dev or "Cspad" == det.name.dev or "Epix10ka2M"==det.name.dev or "Epix100a"==det.name.dev or "Jungfrau"==det.name.dev:
+            if "pnCCD" == det.name.dev or "Cspad" == det.name.dev or "Epix10ka2M"==det.name.dev or "Epix100a"==det.name.dev or "Jungfrau"==det.name.dev or "Opal1000"==det.name.dev:
                 calib=det.calib(event)
                 if calib is None:
                     continue
@@ -96,11 +98,6 @@ class LCLS1_chi_group:
                 if ebeam is None:
                     continue
                 result=ebeam.ebeamCharge()
-            elif "Opal" == det.name.dev:
-                opal=det.calib(event)
-                if opal is None:
-                    continue
-                result=np.sum(calib)
             elif "FEEGasDetEnergy" == det.name.dev:
                 feeg=det.get(event)
                 if feeg is None:
@@ -111,16 +108,11 @@ class LCLS1_chi_group:
                 if phase is None:
                     continue
                 result=phase.charge1()
-            elif "Ipm" in det.name.dev:
-                ipm=det.channel(event)
-                if ipm is None:
+            elif "Ipm" in det.name.dev or "Pim" in det.name.dev:
+                val=det.channel(event)
+                if val is None:
                     continue
-                result=np.sum(ipm)
-            elif "Pim" in det.name.dev:
-                pim=det.channel(event)
-                if pim is None:
-                    continue
-                    result=np.sum(pim)
+                result=np.sum(val)
             elif "Wave8" in det.name.dev:
                 wave=det.raw(event)
                 if wave is None:
@@ -129,6 +121,9 @@ class LCLS1_chi_group:
                 for i in range(1,8):
                     wavesum+=wave[i]
                 result=np.sum(wavesum)
+            else:
+                print('Did not find detector:',det.name)
+                continue
             self.detslots[det.name][islot].append(result)
             #print(self.detslots)
     def good_detectors(self):
@@ -145,6 +140,12 @@ class LCLS1_chi_group:
 
 myslotvars=LCLS1_chi_group(window)
 myslotvars.timestampgatherer()
+ndrop = len(myslotvars.bigeventtimelist)
+if ndrop>5:
+    print('Found',ndrop,'dropped shots.')
+else:
+    print('Too few dropped shots:',ndrop)
+    sys.exit(-1)
 myslotvars.detresultgetter()
 from dropshotcalculations import calculations
 emailarg=args.email
@@ -152,7 +153,7 @@ pdfarg=args.pdf
 calculationvar=calculations(myslotvars.detslots, window, emailarg, pdfarg)
 calculationvar.calculations()
 if args.pdf==True:
-    calculationvar.graph()
+    calculationvar.graph(expstring)
 calculationvar.chideterminer()
 if args.email==True:
     calculationvar.mailer()

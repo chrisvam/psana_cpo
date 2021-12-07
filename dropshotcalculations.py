@@ -1,5 +1,7 @@
+from __future__ import print_function
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.pyplot as plt
 class calculations:
     def __init__(self, detslots, window, emailarg, pdfarg):
         self.pdf=pdfarg
@@ -48,13 +50,16 @@ class calculations:
                     #continue
                 chisquares=[]
                 dropshots=[]
-                minimum=931059
+                minchisq=931059 # a large number
                 dropslot=90
                 sets=[]
                 maxpoint=[]
                 for i in range(self.window):
                     maxpoint.append([self.mean[detname][i], self.standdev[detname][i]**2])
                 chimax=self.chisquare(maxpoint)
+                if chimax<1: # all points statistically agree with each other
+                    print("No result for:",detname,'with chisquare %5.2f:'%chimax)
+                    continue
                 for drop in range(self.window):
                     points=[]
                     for i in range(self.window):
@@ -62,30 +67,29 @@ class calculations:
                     dropshots.append(drop)
                     points.pop(drop)
                     chisq=self.chisquare(points)
-                    print(chisq, drop, detname)
-                    if chisq<minimum:
-                        minimum=chisq
+                    #print(chisq, drop, detname)
+                    if chisq<minchisq:
+                        minchisq=chisq
                         dropslot=drop
                     #print(set)
-                if minimum<.08 and chimax>3:
-                    print("Probably correct")
-                    print("Drop shot in slot no. "+str(dropslot))
-                elif dropslot!=2:
-                    print("That ain't right")
-                    if self.email==True:
-                        self.msg+="\n The dropped slot for "+str(detname)+" is "+str(dropslot)+"  out of "+str(self.window)+ " dropped shots, while the chimax was "+str(chimax)+" and the chiminimum was "+str(minimum)
+                if minchisq<.2 and dropslot==2: # shouldn't hardwire 2 here
+                    print("Correct dropped shot for:",detname)
                 else:
-                    print("Not sure")
-    def graph(self):
+                    print("Probably incorrect:",detname,'dropped shot in slot',dropslot,'with overall chisquare %5.2f'%chimax,'and minimum chisq',minchisq)
+                    if self.email==True:
+                        self.msg+="\n The dropped slot for "+str(detname)+" is "+str(dropslot)+"  out of "+str(self.window)+ " dropped shots, while the chimax was "+str(chimax)+" and the chiminimum was "+str(minchisq)
+    def graph(self,expstring):
         for detname in self.detslots:
-            mp.clf()
-            with PdfPages(str(detname)+".pdf") as pp:
+            plt.clf()
+            fname = expstring+'_'+str(detname)+'.pdf'
+            fname = fname.replace(':','_')
+            with PdfPages(fname) as pp:
                 xcount=np.array([])
                 xcount=np.arange(self.window)
                 #print(mean[detname])
                 #print(xcount)
-                mp.errorbar(xcount, self.mean[detname], yerr=self.meanerr[detname], fmt="bo")
-                pp.savefig(mp.gcf())
+                plt.errorbar(xcount, self.mean[detname], yerr=self.meanerr[detname], fmt="bo")
+                pp.savefig(plt.gcf())
 
     def mailer(self):
         from email.mime.text import MIMEText
