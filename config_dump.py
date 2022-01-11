@@ -36,3 +36,6 @@ def config_dump():
     else:
         for myobj in cfgs.values():
             dump(myobj, attrlist)
+
+if __name__ == '__main__':
+    config_dump()

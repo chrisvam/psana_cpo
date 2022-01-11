@@ -67,6 +67,7 @@ def copyconstants(hutch,expt,inruns,outruns):
     cdir = os.path.join('/reg/d/psdm',hutch,expt,'calib')
     groupdirs = glob.glob(os.path.join(cdir,'*'))
     for groupdir in groupdirs:
+        if ':' not in groupdir: continue # heuristic to avoid random dirs in calib/
         group = os.path.basename(groupdir)
         sourcedirs = glob.glob(os.path.join(groupdir,'*'))
         for sourcedir in sourcedirs:
@@ -131,7 +132,10 @@ exptlist = []
 #exptlist.append(exptruns('mecx24215',[72,121],510))
 #exptlist.append(exptruns('sxrx21715',[191],520))
 #exptlist.append(exptruns('detdaq17',[256],530))
-exptlist.append(exptruns('xcsx35617',[421],540))
+#exptlist.append(exptruns('xcsx35617',[421],540))
+#exptlist.append(exptruns('mfxx45919',list(range(9,19)),550))
+#exptlist.append(exptruns('mfxx45919',list(range(80,86)),570))
+exptlist.append(exptruns('cxilw5019',list(range(248,251)),580))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
