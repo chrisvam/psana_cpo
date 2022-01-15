@@ -1,35 +1,59 @@
-* rixccd, epix100, fiber tx/rx (mpo), prometheus cleanup/permissions, ami latency (run 83 of lv15), epixhr2m perf, multiopal, papers, ami roi (epixhr)
+* epix100, fiber tx/rx (mpo), epixhr2m perf, multiopal, papers, ami roi (epixhr)
+
+tmo mtg:
+- epix100
+  - timing scan
+- roentdek
+- mhz psana h5
 
 srcf:
 - bos/fiber handling
-- mhz dets
+- move the pyxpm processes/network to SRCF
+  - could also have local connections from e.g. rix nodes to the rix atca crate
+  - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8
+    goes in the gateway RW
+- high rate dets
   - piranha
-  - hsd
   - bld
+  - hsd
   - wave8
+  - epixhr
+- low rate det
+  - epicsarch
+  - pvadet
 - roentdek
-- epicsarch
-- pvadet
-- epixhr
+- chunking
 - python drp
+- ami settable roi's
 - rixccd
 - psana
-- parallel movers
-- chunking
+  - live-mode
 - resource mgmt
+- off by one
 
 epix100:
-- tasks: timing scan, calib, run trigger, monitoring stream
+- tasks: timing scan, calib, run trigger, monitoring stream, takepeds
+  o run trigger: l0, accept trigger: l1, main reason: uniform temp
   o run executable, make it work (first-order) with simple config
 - questions:
   o (matt) yaml file converter
-  o what registers are important (set to non-default vals) for our usage
-  o data format (4 asic subframes or monolithic?)
-  o data shuffling?
+  o (matt) timing scan: ~rixopr/scripts/epixhr/
+  o (matt) how do you handle different submodules (surf) for kcu/epixhr
+  o (matt) why different patterns for kcu/epixhr rogue device instantiation?
+  o (matt) how to ensure deadtime handled correctly
+    o partitiondelay/triggerdelay/pausethreshold (trigdelay was 42
+      and pausethreshold was 16 for epixhr)
   o running events
+    - look at acceptframe here: ~/git/epix-100a-gen2/software/python/ePixViewer/_epixViewer.py
+  o what registers are important (set to non-default vals) for our usage
+  o data format (4 asic subframes or monolithic?): only 1 subframe
+    o data shuffling? same as lcls1: likely not shuffled
+  o how close is epix100 to epixhr? (config/data)
+  o same version of submodules for kcu1500 and epix100
+  o need setup.py to get submodules in conda
+    o same version of submodules for kcu1500 and epix100
   o SlowAdcRegisters crashes gui
   o run gui with lcls2 timing and groupca
-  o how close is epix100 to epixhr? (config/data)
 
 ami jenkins, mona, epics_pva_addr_list, procmgr fix
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
@@ -99,6 +123,7 @@ ami jenkins, mona, epics_pva_addr_list, procmgr fix
 * update rogue
 * plims for lcls2 (mikhail)
 * mpi jobs not exiting if one core crashes
+* managing prometheus files in promdir
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb? (mikhail)
 * epicsarch support for strings (ric says it's hard)
