@@ -1,17 +1,19 @@
-* epix100, fiber tx/rx (mpo), epixhr2m perf, multiopal, papers, ami roi (epixhr)
-
-tmo mtg:
-- epix100
-  - timing scan
-- roentdek
-- mhz psana h5
+slurm, he,
+* wave8, epix100, fs.com order (mpo12 vs mpo8), epixhr2m perf, multiopal, papers, ami roi (epixhr)
 
 srcf:
 - bos/fiber handling
+- fiber purchase
+- rogue relative-path script
+- buffering settings (test SIGSUSPEND for each device)
+- monitoring decision for low-rate dets
+- xpm fanouts
+- auto coupled deadtime xpm register support in timing system python
 - move the pyxpm processes/network to SRCF
   - could also have local connections from e.g. rix nodes to the rix atca crate
-  - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8
+  - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8/MR3K4:FIM:W8/MR2K4:FIM:W8
     goes in the gateway RW
+- ami thresholds for hsd
 - high rate dets
   - piranha
   - bld
@@ -21,7 +23,8 @@ srcf:
 - low rate det
   - epicsarch
   - pvadet
-- roentdek
+- ami
+- roentdek alg
 - chunking
 - python drp
 - ami settable roi's
@@ -33,6 +36,7 @@ srcf:
 
 epix100:
 - tasks: timing scan, calib, run trigger, monitoring stream, takepeds
+  conda packages
   o run trigger: l0, accept trigger: l1, main reason: uniform temp
   o run executable, make it work (first-order) with simple config
 - questions:
@@ -62,7 +66,7 @@ ami jenkins, mona, epics_pva_addr_list, procmgr fix
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * per stream and per run event/dmg counts (caf)
-** psana handling integrating detectors
+** integrating detectors (daq and psana)
 * configure andor with configdb?
 * fix lcls1 smalldata mpi.sum cores not having any events (cpo)
 * support epix100
@@ -259,3 +263,27 @@ referral from degrossier
 saw buhrmann once before
 https://www.herzig-eye.com/our-surgeons/ralf-buhrmann-mdcm-mph-phd-frcsc/
 private eye institute
+
+**********************************************************************
+
+2 filesystems: ffb (700TB) and offline (12PB)
+with bigger disks can move ffb from 700TB to 1.4PB
+700TB = 10 hours at 20GB/s
+
+gpu:
+2milan 32 high clock rate
+4 nvidia a100
+
+1 box 4 servers 2x64 core 1 box 512 cores 5K cores total
+
+**********************************************************************
+
+different fiber
+long usb cable
+no failures today
+
+powercycle
+swap extender
+eliminate vls (shutdown with ioc manager)
+checkout the third camera
+(lower priority) try enet extender
