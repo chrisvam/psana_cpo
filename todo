@@ -1,19 +1,25 @@
-slurm, he,
-* wave8, epix100, fs.com order (mpo12 vs mpo8), epixhr2m perf, multiopal, papers, ami roi (epixhr)
+* queue times, tmo spectrometer, mfx ttool, evr cards, monitoring stream, cmp007, ami load, hutch epix100, epixhr2m perf, multiopal, papers, ami roi (epixhr)
+
+detectors:
+epix100, rixccd, epixm, tixel?, epixhr, opal replacement, k-microscope
 
 srcf:
 - bos/fiber handling
 - fiber purchase
 - rogue relative-path script
+- daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
 - monitoring decision for low-rate dets
 - xpm fanouts
 - auto coupled deadtime xpm register support in timing system python
+- time in detectors
+- move all tmo devices to xpm:2
 - move the pyxpm processes/network to SRCF
   - could also have local connections from e.g. rix nodes to the rix atca crate
   - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8/MR3K4:FIM:W8/MR2K4:FIM:W8
     goes in the gateway RW
 - ami thresholds for hsd
+- test deadtime for all dets with control-z
 - high rate dets
   - piranha
   - bld
@@ -35,7 +41,7 @@ srcf:
 - off by one
 
 epix100:
-- tasks: timing scan, calib, run trigger, monitoring stream, takepeds
+- tasks: xpm ids, lane, timing scan, calib, runtrigdel/daqtrigdel/acqwidth from lcls1 (xpptut15 run 260), monitoring stream, takepeds, extra rows
   conda packages
   o run trigger: l0, accept trigger: l1, main reason: uniform temp
   o run executable, make it work (first-order) with simple config
