@@ -1,5 +1,5 @@
-* queue times, tmo spectrometer, mfx ttool, evr cards, monitoring stream, cmp007, ami load, hutch epix100, epixhr2m perf, multiopal, papers, ami roi (epixhr)
-
+* hutch-python pva, ued, dan's automation snapshot, epix100, monitoring stream, epixhr2m perf, multiopal, papers, ami roi (epixhr)
+/reg/d/psdm/tmo/tmox49720/scratch/preproc/v2/logs/run94_cpo.log
 detectors:
 epix100, rixccd, epixm, tixel?, epixhr, opal replacement, k-microscope
 
@@ -34,6 +34,7 @@ srcf:
 - chunking
 - python drp
 - ami settable roi's
+- rogue relative path
 - rixccd
 - psana
   - live-mode
@@ -41,7 +42,7 @@ srcf:
 - off by one
 
 epix100:
-- tasks: xpm ids, lane, timing scan, calib, runtrigdel/daqtrigdel/acqwidth from lcls1 (xpptut15 run 260), monitoring stream, takepeds, extra rows
+- tasks: cam config, timing scan, xpm ids, calib/takepeds, runtrigdel/daqtrigdel/acqwidth from lcls1 (xpptut15 run 260), monitoring stream, extra rows, lane handling
   conda packages
   o run trigger: l0, accept trigger: l1, main reason: uniform temp
   o run executable, make it work (first-order) with simple config
@@ -71,6 +72,7 @@ ami jenkins, mona, epics_pva_addr_list, procmgr fix
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
+* epix100/epixhr deadtime not working (10Hz with epix100)
 * per stream and per run event/dmg counts (caf)
 ** integrating detectors (daq and psana)
 * configure andor with configdb?
