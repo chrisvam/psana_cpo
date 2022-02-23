@@ -1,4 +1,4 @@
-* hutch-python pva, ued, dan's automation snapshot, epix100, monitoring stream, epixhr2m perf, multiopal, papers, ami roi (epixhr)
+* ikon, tmo wave8, monitoring stream, epixhr2m perf, multiopal, papers, ami roi (epixhr)
 /reg/d/psdm/tmo/tmox49720/scratch/preproc/v2/logs/run94_cpo.log
 detectors:
 epix100, rixccd, epixm, tixel?, epixhr, opal replacement, k-microscope
@@ -42,7 +42,7 @@ srcf:
 - off by one
 
 epix100:
-- tasks: cam config, timing scan, xpm ids, calib/takepeds, runtrigdel/daqtrigdel/acqwidth from lcls1 (xpptut15 run 260), monitoring stream, extra rows, lane handling
+- tasks: extra rows, monitoring stream
   conda packages
   o run trigger: l0, accept trigger: l1, main reason: uniform temp
   o run executable, make it work (first-order) with simple config
@@ -66,7 +66,16 @@ epix100:
   o SlowAdcRegisters crashes gui
   o run gui with lcls2 timing and groupca
 
-ami jenkins, mona, epics_pva_addr_list, procmgr fix
+detector requests:
+- epix100 (feb. 2022)
+- rixccd archon (install may 2022, commission sep 2022)
+- superconducting BLD (fall 2022)
+- k-microscope dld (test early summer 2022, production in early 2023)
+- epixM (2 320kpx, 5kHz, jan 2023)
+- epixHR (2Mpx, 5kHz, summer 2023)
+- opal replacement (unknown)
+- ikon (unknown)
+
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
