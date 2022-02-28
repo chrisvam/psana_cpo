@@ -1,7 +1,6 @@
-* ikon, tmo wave8, monitoring stream, epixhr2m perf, multiopal, papers, ami roi (epixhr)
-/reg/d/psdm/tmo/tmox49720/scratch/preproc/v2/logs/run94_cpo.log
-detectors:
-epix100, rixccd, epixm, tixel?, epixhr, opal replacement, k-microscope
+* pepx, ami2 for lcls2, pepx, jupyter example (nbagg for andrei), ami reference plot, piranha, wave8, postings, work agreement, epixhr2m perf, multiopal, papers, ami roi (epixhr)
+
+ls -rtl /reg/g/psdm/detector/gains/epix10k/panels/0000000002-0175926529-2013265942-0342926405-2165845828-0000000000-0000000000/status/epix10ka_0140_20220122203359_mfxc00120_r0002_status.txt
 
 srcf:
 - bos/fiber handling
@@ -10,8 +9,9 @@ srcf:
 - daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
 - monitoring decision for low-rate dets
+- remember detector readout groups in cnf?
 - xpm fanouts
-- auto coupled deadtime xpm register support in timing system python
+*- auto coupled deadtime xpm register support in timing system python
 - time in detectors
 - move all tmo devices to xpm:2
 - move the pyxpm processes/network to SRCF
@@ -31,15 +31,15 @@ srcf:
   - pvadet
 - ami
 - roentdek alg
-- chunking
+- chunking (done)
 - python drp
 - ami settable roi's
 - rogue relative path
 - rixccd
 - psana
   - live-mode
-- resource mgmt
-- off by one
+*- resource mgmt
+*- off by one
 
 epix100:
 - tasks: extra rows, monitoring stream
@@ -70,11 +70,12 @@ detector requests:
 - epix100 (feb. 2022)
 - rixccd archon (install may 2022, commission sep 2022)
 - superconducting BLD (fall 2022)
-- k-microscope dld (test early summer 2022, production in early 2023)
+- ikon (for SVLS, early 2023)
+- k-microscope dld (test early summer 2022, production in early 2023?)
 - epixM (2 320kpx, 5kHz, jan 2023)
 - epixHR (2Mpx, 5kHz, summer 2023)
 - opal replacement (unknown)
-- ikon (unknown)
+- tixel (unknown)
 
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
