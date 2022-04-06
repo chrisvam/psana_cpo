@@ -1,24 +1,27 @@
-* pepx, ami2 for lcls2, pepx, jupyter example (nbagg for andrei), ami reference plot, piranha, wave8, postings, work agreement, epixhr2m perf, multiopal, papers, ami roi (epixhr)
+* peppex hsd, opal exposure, srcf tx/rx swap, hsd driver, xpmpva, qadc detector xface, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
 
-ls -rtl /reg/g/psdm/detector/gains/epix10k/panels/0000000002-0175926529-2013265942-0342926405-2165845828-0000000000-0000000000/status/epix10ka_0140_20220122203359_mfxc00120_r0002_status.txt
+commissioning plan docs: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
-srcf:
+srcf to do:
 - bos/fiber handling
 - fiber purchase
+- new detector requests (see below)
 - rogue relative-path script
 - daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
 - monitoring decision for low-rate dets
 - remember detector readout groups in cnf?
-- xpm fanouts
+- epicsarch not writing out 1MHz l1accepts (or goes in slow readout group)
+- xpm fanouts in srcf
 *- auto coupled deadtime xpm register support in timing system python
 - time in detectors
+- need slowupdate to obey deadtime? (messes up Ric's control-Z test of deadtime in srcf)
 - move all tmo devices to xpm:2
 - move the pyxpm processes/network to SRCF
   - could also have local connections from e.g. rix nodes to the rix atca crate
   - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8/MR3K4:FIM:W8/MR2K4:FIM:W8
     goes in the gateway RW
-- ami thresholds for hsd
+- ami-settable data reduction params (e.g. thresholds for hsd)
 - test deadtime for all dets with control-z
 - high rate dets
   - piranha
@@ -33,49 +36,22 @@ srcf:
 - roentdek alg
 - chunking (done)
 - python drp
-- ami settable roi's
-- rogue relative path
 - rixccd
 - psana
   - live-mode
-*- resource mgmt
-*- off by one
-
-epix100:
-- tasks: extra rows, monitoring stream
-  conda packages
-  o run trigger: l0, accept trigger: l1, main reason: uniform temp
-  o run executable, make it work (first-order) with simple config
-- questions:
-  o (matt) yaml file converter
-  o (matt) timing scan: ~rixopr/scripts/epixhr/
-  o (matt) how do you handle different submodules (surf) for kcu/epixhr
-  o (matt) why different patterns for kcu/epixhr rogue device instantiation?
-  o (matt) how to ensure deadtime handled correctly
-    o partitiondelay/triggerdelay/pausethreshold (trigdelay was 42
-      and pausethreshold was 16 for epixhr)
-  o running events
-    - look at acceptframe here: ~/git/epix-100a-gen2/software/python/ePixViewer/_epixViewer.py
-  o what registers are important (set to non-default vals) for our usage
-  o data format (4 asic subframes or monolithic?): only 1 subframe
-    o data shuffling? same as lcls1: likely not shuffled
-  o how close is epix100 to epixhr? (config/data)
-  o same version of submodules for kcu1500 and epix100
-  o need setup.py to get submodules in conda
-    o same version of submodules for kcu1500 and epix100
-  o SlowAdcRegisters crashes gui
-  o run gui with lcls2 timing and groupca
+*- dynamic resource mgmt
+*- automatic off by one detection
 
 detector requests:
-- epix100 (feb. 2022)
 - rixccd archon (install may 2022, commission sep 2022)
 - superconducting BLD (fall 2022)
 - ikon (for SVLS, early 2023)
-- k-microscope dld (test early summer 2022, production in early 2023?)
-- epixM (2 320kpx, 5kHz, jan 2023)
+- k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
+- tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
+  o bojan in TID is doing the work
+- epixM (2 320kpx, 5kHz, jan 2023), 6.4GB/s 320*2*2*5000
 - epixHR (2Mpx, 5kHz, summer 2023)
-- opal replacement (unknown)
-- tixel (unknown)
+- opal replacement (s991?)
 
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
@@ -83,6 +59,7 @@ detector requests:
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * epix100/epixhr deadtime not working (10Hz with epix100)
+* ami angular integration
 * per stream and per run event/dmg counts (caf)
 ** integrating detectors (daq and psana)
 * configure andor with configdb?
@@ -305,3 +282,22 @@ swap extender
 eliminate vls (shutdown with ioc manager)
 checkout the third camera
 (lower priority) try enet extender
+
+**********************************************************************
+
+peppex cabling:
+first cassette count from 1;
+slot 2 hsd timing
+slot 3 hsd leftmost
+slot 4 hsd second from left
+
+second cassette count from 1:
+slot 4 hsd second from right
+slot 5 hsd right
+slot 6 opal
+
+hsd timing plugged into xpm4 amc0 port 3 counting from 0
+
+
+
+
