@@ -12,6 +12,7 @@ class calculations:
         self.standdev={}
         self.meanerr={}
         self.deletelist=[]
+        self.msg = ''
     def chisquare(self, points):
         wtdMeanVar = 1./np.sum([1/v[1] for v in points])
         wtdMean = np.sum([v[0]/v[1] for v in points])*wtdMeanVar

@@ -7,15 +7,15 @@ import argparse
 parser=argparse.ArgumentParser()
 import matplotlib.pyplot as mp
 from collections import deque
-parser.add_argument("expname", help="Stick experiment. which in this case will be rixx43518")
-parser.add_argument("runnumber", type=int, help="The run number for the experiment, like run 34.")
+parser.add_argument("expname", help="experiment name")
+parser.add_argument("runnumber", type=int, help="run number for the experiment, like run 34.")
 parser.add_argument("--pdf", help="Set to true if you want a series of graphs showing the means. Graphs are stored in the same directory this program is in, with the detector as the name.", action='store_true')
-parser.add_argument("--email", help="Enter --email in order to get a useless email", action='store_true')
+parser.add_argument("--email", help="Enter --email in order to get email", action='store_true')
 args=parser.parse_args()
 expname=(args.expname)
 runnumber=(args.runnumber)
 window=5 #Determines how many "slots" there are, or if you're not the one who made this, how many chisquares you'll get.
-droppedeventcode=16
+droppedeventcode=161
 bigeventtimelist=[]
 def filter_func(event):
     if event.timestamp in bigeventtimelist:
@@ -42,7 +42,7 @@ class LCLS2_chi_group:
     def timestampgatherer(self):
         ds = DataSource(exp=expname, run=runnumber)
         self.myrun=next(ds.runs())
-        timer_det=self.myrun.Detector('timing') #Event code gatherer
+        timer_det=self.myrun.Detector('timing')
         for nevent,event in enumerate(self.myrun.events()):
             if nevent>300:
                 break
@@ -55,6 +55,7 @@ class LCLS2_chi_group:
             if len(self.eventcode)<self.window:
                 continue
             if self.eventcode[window//2][droppedeventcode]==1:
+                print('found dropped shot on event',nevent)
                 self.bigeventtimelist.append(list(self.eventtime))
                 continue
             #if len(bigeventtimelist)==dropshotcount: defunct limiter
@@ -72,7 +73,7 @@ class LCLS2_chi_group:
         for det in self.detlist:
             self.detslots[det._det_name]=[] #For every detector, it puts in a detector keyword with empty list "detname":[]
             for slot in range(window):
-                self.detslots[det._det_name].append([]) #Yoooooo, we got lists... IN LISTS. Perfect for slots
+                self.detslots[det._det_name].append([])
         for nevent, event in enumerate(myrun.events()):
             islot=nevent%5
             if nevent>300:
@@ -134,21 +135,27 @@ class LCLS2_chi_group:
         for detector in detector_infolist:
             #detector[1] is the detector type
             if detector[1] in self.supported_dettypes:
-                good_det.append(item[0])
+                good_det.append(detector[0])
             #Put detector (key) in good_det list
             #Check with IPython to see detector type of key use "dir(detector name)"
         return good_det
 
-myslotvars=LCLS2_chi_group(window)
-myslotvars.timestampgatherer()
-myslotvars.detresultgetter()
+dropshotinfo=LCLS2_chi_group(window)
+dropshotinfo.timestampgatherer()
+ndrop = len(dropshotinfo.bigeventtimelist)
+print('Found',ndrop,'dropped shots')
+if ndrop<5:
+    print('Too few dropped shots:',ndrop)
+    import sys
+    sys.exit(-1)
+dropshotinfo.detresultgetter()
 from dropshotcalculations import calculations
 emailarg=args.email
 pdfarg=args.pdf
-calculationvar=calculations(myslotvars.detslots, window, pdfarg, emailarg)
+calculationvar=calculations(dropshotinfo.detslots, window, emailarg, pdfarg)
 calculationvar.calculations()
 if args.pdf==True:
-    calculationvar.graph()
+    calculationvar.graph('exp='+args.expname+',run='+str(args.runnumber))
 calculationvar.chideterminer()
 if args.email==True:
     calculationvar.mailer()

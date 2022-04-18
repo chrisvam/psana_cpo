@@ -54,7 +54,7 @@ class LCLS1_chi_group:
 
     def detresultgetter(self):
         ds=DataSource(expstring+':idx') #Switches the idx mode. More data or somethin'
-        good_det_name=myslotvars.good_detectors() #Run the good_detectors function near the top. Returns a list.
+        good_det_name=self.good_detectors() #Run the good_detectors function near the top. Returns a list.
         print('Supported detectors:',good_det_name) #Just a personal thing, where it spits out a list of detectors it's gonna go through.
         self.detlist=[Detector(detname) for detname in good_det_name]
         run = next(ds.runs())
@@ -143,19 +143,19 @@ class LCLS1_chi_group:
                     good_det.append(detname[0])
         return good_det
 
-myslotvars=LCLS1_chi_group(window)
-myslotvars.timestampgatherer()
-ndrop = len(myslotvars.bigeventtimelist)
+dropshotinfo=LCLS1_chi_group(window)
+dropshotinfo.timestampgatherer()
+ndrop = len(dropshotinfo.bigeventtimelist)
 if ndrop>5:
     print('Found',ndrop,'dropped shots.')
 else:
     print('Too few dropped shots:',ndrop)
     sys.exit(-1)
-myslotvars.detresultgetter()
+dropshotinfo.detresultgetter()
 from dropshotcalculations import calculations
 emailarg=args.email
 pdfarg=args.pdf
-calculationvar=calculations(myslotvars.detslots, window, emailarg, pdfarg)
+calculationvar=calculations(dropshotinfo.detslots, window, emailarg, pdfarg)
 calculationvar.calculations()
 if args.pdf==True:
     calculationvar.graph(expstring)
