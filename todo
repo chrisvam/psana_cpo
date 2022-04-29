@@ -1,41 +1,44 @@
-* peppex hsd, opal exposure, srcf tx/rx swap, hsd driver, xpmpva, qadc detector xface, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+* phantom, taran, safe sum, andor integration, ly96 run 143 xtcav, psana damage, ami payload mismatch, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+
+ami payload mismatch: /cds/group/pcds/pds/ued/logfiles/2022/04/08_16:46:01_drp-ued-cmp001:ami-node_0.log
 
 commissioning plan docs: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
 srcf to do:
 - bos/fiber handling
-- fiber purchase
+- fiber purchase (done)
 - new detector requests (see below)
-- rogue relative-path script
+- rogue relative-path script (done, valerio used package-name mangling)
 - daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
-- monitoring decision for low-rate dets
-- remember detector readout groups in cnf?
+*- monitoring decision for low-rate dets
+- protect against hsd firmware unhappy if too many fex peaks (matt)
+* psana damage handling
+- remember detector readout groups in cnf? (done by caf)
 - epicsarch not writing out 1MHz l1accepts (or goes in slow readout group)
-- xpm fanouts in srcf
+- xpm fanouts in srcf (maybe not urgent since only piranha's need them?)
 *- auto coupled deadtime xpm register support in timing system python
 - time in detectors
-- need slowupdate to obey deadtime? (messes up Ric's control-Z test of deadtime in srcf)
-- move all tmo devices to xpm:2
+*- need slowupdate to obey deadtime? (messes up Ric's control-Z test of deadtime in srcf)
+*- move all tmo devices to xpm:2
 - move the pyxpm processes/network to SRCF
   - could also have local connections from e.g. rix nodes to the rix atca crate
   - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8/MR3K4:FIM:W8/MR2K4:FIM:W8
     goes in the gateway RW
 - ami-settable data reduction params (e.g. thresholds for hsd)
-- test deadtime for all dets with control-z
+*- scale to many drp's
 - high rate dets
   - piranha
-  - bld
+*  - bld
   - hsd
   - wave8
   - epixhr
 - low rate det
   - epicsarch
   - pvadet
-- ami
-- roentdek alg
-- chunking (done)
-- python drp
+- roentdek alg (done by mona)
+- chunking (done by caf)
+*- python drp
 - rixccd
 - psana
   - live-mode
@@ -43,7 +46,7 @@ srcf to do:
 *- automatic off by one detection
 
 detector requests:
-- rixccd archon (install may 2022, commission sep 2022)
+- rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
 - ikon (for SVLS, early 2023)
 - k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
@@ -52,7 +55,12 @@ detector requests:
 - epixM (2 320kpx, 5kHz, jan 2023), 6.4GB/s 320*2*2*5000
 - epixHR (2Mpx, 5kHz, summer 2023)
 - opal replacement (s991?)
+- MHz rix encoder?
 
+* manage running-condition dependent calibration constants (tweak serial id?) (mikhail)
+* monitoring new serial numbers for LCLS2 (mikhail)
+* eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
+* calibration constant provenance (mikhail)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
@@ -218,46 +226,12 @@ detector requests:
 
 **********************************************************************
 
-ray tracing:
-few thousand rays
-24 surfaces
-few dozen configurations (max 200x200, angles/heights)
-
-few thousand rays, 1 surface, 200 configurations: takes about 1 day
-
-batch ray trace only stores results to one surface
-max/min of few thousand floating point
-
-**********************************************************************
-
 1 rack of computing for ffb
  - 1000 cores 8 nodes in 4u
 ffb from 0.5PB to 1 or 2
 sdf storage 6 jbods 1.5PB in 1 jbod in 4u for 50k + $overhead
 enlarge sdf compute ?
 switching to new srcf-sdf in april
-
-**********************************************************************
-
-went through xpp/dxs so far:
-
-increased best case pie-slice by 2x (float vs. int)
-decreased ttool to 100kHz
-hsd best case 10x for peaks?
-agree with "most likely"
-increased sparkpix worst and most-likely by 2x for pixel index info?
-  - left best-case alone to give idea of large error bars
-fixed dxs sparkpix 2M didn't respect the DR reduction factor column
-
-fixed comment: no pie-slicing in cxi
-cxi: fixed epix best-case DR factor from 0.25 to .05
-fixed cxi sums (missing top two rows)
-
-buhrmann cataract
-referral from degrossier
-saw buhrmann once before
-https://www.herzig-eye.com/our-surgeons/ralf-buhrmann-mdcm-mph-phd-frcsc/
-private eye institute
 
 **********************************************************************
 
@@ -273,18 +247,6 @@ gpu:
 
 **********************************************************************
 
-different fiber
-long usb cable
-no failures today
-
-powercycle
-swap extender
-eliminate vls (shutdown with ioc manager)
-checkout the third camera
-(lower priority) try enet extender
-
-**********************************************************************
-
 peppex cabling:
 first cassette count from 1;
 slot 2 hsd timing
@@ -297,7 +259,3 @@ slot 5 hsd right
 slot 6 opal
 
 hsd timing plugged into xpm4 amc0 port 3 counting from 0
-
-
-
-
