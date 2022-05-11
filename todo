@@ -1,4 +1,4 @@
-* epixM reduction, rix piranha, comm plan, andor integration, psana damage, hsd overflow, ami payload mismatch, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+* ami eb at low rates, rix connect timeout, mismatch, fix piranha, rix piranha, andor integration, psana damage, hsd overflow, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
 
 ch161911649us
 
@@ -57,16 +57,16 @@ detector requests:
   o bojan in TID is doing the work
 - epixM (2 320kpx, 5kHz, jan 2023), 6.4GB/s 320*2*2*5000
 - epixHR (2Mpx, 5kHz, summer 2023)
-- opal replacement (s991?)
+- opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
 - timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
   o working with anton tremsin at berkeley
-- MHz rix encoder?
 
 * manage running-condition dependent calibration constants (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * calibration constant provenance (mikhail)
+* ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
