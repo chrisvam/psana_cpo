@@ -1,8 +1,6 @@
-* ami eb at low rates, rix connect timeout, mismatch, fix piranha, rix piranha, andor integration, psana damage, hsd overflow, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+* update tmo/rix, epixM, fix piranha, andor integration, psana damage, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
 
-ch161911649us
-
-ami payload mismatch: /cds/group/pcds/pds/ued/logfiles/2022/04/08_16:46:01_drp-ued-cmp001:ami-node_0.log
+ric: wave8 deadtime, slow update respond to deadtime
 
 commissioning plan docs: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
@@ -50,23 +48,29 @@ srcf to do:
 detector requests:
 - rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
-- high-rate mono-encoder support (fall 2022)
-- ikon (for SVLS, early 2023)
+- high-rate mono-encoder (jan. 2023)
+- ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
 - tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- epixM (2 320kpx, 5kHz, jan 2023), 6.4GB/s 320*2*2*5000
-- epixHR (2Mpx, 5kHz, summer 2023)
+- epixM (2 320kpx, 5kHz, jan 2023),
+  - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
+  - 384*192*2 per camera (737MB/s per camera @5kHz)
+- epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers
+  - 2 small epixHR's (140kpx?) single MTP12
 - opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
 - timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
   o working with anton tremsin at berkeley
+- varex xrd 4343 cameras for mec? (lcls1)
+- orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro) https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
 
-* manage running-condition dependent calibration constants (tweak serial id?) (mikhail)
+* manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * calibration constant provenance (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
+* understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
@@ -77,25 +81,21 @@ detector requests:
 * per stream and per run event/dmg counts (caf)
 ** integrating detectors (daq and psana)
 * configure andor with configdb?
-* fix lcls1 smalldata mpi.sum cores not having any events (cpo)
-* support epix100
 ** benchmark SZ and other reduction for real expt data (mikhail)
   - can SZ handle gain-range detectors?
-* put .cnf.running and .cnf.last in same dir as .cnf (caf)
 * make it harder to leave out timing system
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
-* understand why atm opal det.raw.image() doesn't work with fex enabled (matt, cpo)
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
-* turning low rate data into per-shot high rate (e.g. ttool background) ami+psana (mona)
-* procmgr with hundreds of nodes (caf)
+* turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
+* elegant early shutdown of psana with smd0 irecv for mtip? (mona)
+* ami2 array thresholding (ro)
+* procmgr performance with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
 * alias not in xtc file so more flexible
 * psana datasource for drp (mona)
-* dump out all lcls2 config objects with psana (ro)
-* fim link to xpm not locking (matt)
 * teb having memory allocation problem after too many deallocate's (ric)
 * select monitoring destination for particular events (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
@@ -126,21 +126,19 @@ detector requests:
 * handle bad external timing better? (matt)
 * deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
-* yves acremann detector
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
 * make swmr work with small-h5
 ** for phil: configdb_readxtc and compare configs (ro, caf)
 * archon for rix (dan)
 * improved psana1 tests (ro)
 * lcls2 common-mode for panels in different gain ranges (mikhail)
-* update rogue
 * plims for lcls2 (mikhail)
 * mpi jobs not exiting if one core crashes
 * managing prometheus files in promdir
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb? (mikhail)
 * epicsarch support for strings (ric says it's hard)
-* support damage in psana
+* support damage in psana (including counting)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
@@ -210,7 +208,7 @@ detector requests:
 * scalable calib-fetch solution for shmem/drp
 * sdf/nersc calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
-* lcls2 configdb tools: history (ro)
+* lcls2 configdb tools: history, delete (into "trash" folder for recovery?) (ro)
 * algorithms (drp/ana, e.g. beam-center finding)
 * singularity at slac
 * support more python versions
@@ -265,3 +263,22 @@ slot 5 hsd right
 slot 6 opal
 
 hsd timing plugged into xpm4 amc0 port 3 counting from 0
+
+**********************************************************************
+
+timepix discussion 06/06/22:
+
+can use external trigger or free-running: we will use EVR-generated 120Hz trigger
+main physics question to answer: can we separate one photon from two
+will run at 120Hz
+to synchronize with DAQ data can send extra ttl reset on a "slow" DAQ sequence to reset FPGA counter: this is more complex so don't do this
+BNC or SMA with 50ohms
+timing-in is easy: can use long exposure times and measure the time of the signal
+jyoti will set up remote desktop to access anton's windows machine in the hutch via ICS
+
+integrating comm protocol:
+- timepix3 is event-driver (current one is timepix1)
+- integrate timepix3
+- use their fpga
+- send jumbo udp packets on fiber. each photon is 6 bytes.
+- suggests using their fpga timestamp
