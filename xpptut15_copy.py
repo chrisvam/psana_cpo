@@ -135,7 +135,10 @@ exptlist = []
 #exptlist.append(exptruns('xcsx35617',[421],540))
 #exptlist.append(exptruns('mfxx45919',list(range(9,19)),550))
 #exptlist.append(exptruns('mfxx45919',list(range(80,86)),570))
-exptlist.append(exptruns('cxilw5019',list(range(248,251)),580))
+#exptlist.append(exptruns('cxilw5019',list(range(248,251)),580))
+#exptlist.append(exptruns('meclx9920',[634],590))  # cpo: mikhail did not use xpptut15_copy.py to populate run 590 I believe, so may be broken
+exptlist.append(exptruns('xppx53620',[74],600))
+exptlist.append(exptruns('cxilu9218',[12],610))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
