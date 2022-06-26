@@ -1,6 +1,6 @@
-* update tmo/rix, epixM, fix piranha, andor integration, psana damage, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+* varex, eth dld, chunking, new psana1 env after uxss, array2d ami, ami curve_fit example, riccardo, update tmo/rix, epixM, fix piranha, andor integration, psana damage, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
 
-ric: wave8 deadtime, slow update respond to deadtime
+array2d problem: breaks in 4.5.14, works in 4.5.10 with same mypy version?
 
 commissioning plan docs: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
@@ -53,7 +53,7 @@ detector requests:
 - k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
 - tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- epixM (2 320kpx, 5kHz, jan 2023),
+- epixM (2 320kpx, 5kHz, june 2023),
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
   - 384*192*2 per camera (737MB/s per camera @5kHz)
 - epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers
@@ -63,14 +63,18 @@ detector requests:
   o get start-time and time-over-threshold, ~2kHz, could be faster)
   o working with anton tremsin at berkeley
 - varex xrd 4343 cameras for mec? (lcls1)
-- orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro) https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
+- orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
+  https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
+* small VDS "link files" seem to have absolute path to partN files. should be relative path.
+* update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * calibration constant provenance (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
+* long eb connect times in rix (ric)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
@@ -282,3 +286,23 @@ integrating comm protocol:
 - use their fpga
 - send jumbo udp packets on fiber. each photon is 6 bytes.
 - suggests using their fpga timestamp
+
+**********************************************************************
+
+4000*2300*2*120=2GB/s (100Gbit enet)
+triggering over cxp
+fiber or bnc readout? (quad cxp6)
+many other detectors (8 definite, 2 possible, varex)
+lcls2: front-end box with timing and quad cxp6 in, pgp out
+software timestamping for lcls1?  lcls2: firmware
+
+**********************************************************************
+
+rename roiarch?
+masking and normalization (e.g. epix gaps)
+arch outside image
+
+- masks (define in ami?)
+- 2d, 3d image
+- q option with more parameters
+- inherited/coupled parameters for multiple roiarch's
