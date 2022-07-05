@@ -1,8 +1,6 @@
-* varex, eth dld, chunking, new psana1 env after uxss, array2d ami, ami curve_fit example, riccardo, update tmo/rix, epixM, fix piranha, andor integration, psana damage, xpmpva multipath epics problem, opal exposure, srcf tx/rx swap, hsd driver, cadillac, multiopal, papers, ami roi (epixhr), commissioning plan doc (19309-a4002)
+* piranha, stj detector estimate, taran, andor 16k vs 64k, long expt name, ami curve_fit example, epixM, andor integration, psana damage, daq-tmo-hsd-02, srcf tx/rx swap
 
-array2d problem: breaks in 4.5.14, works in 4.5.10 with same mypy version?
-
-commissioning plan docs: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
+commissioning plan docs (19309-a4002): https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
 srcf to do:
 - bos/fiber handling
@@ -46,29 +44,34 @@ srcf to do:
 *- automatic off by one detection
 
 detector requests:
-- rixccd archon (working in daq sep 2022, beam 2 months later)
+- (det) rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
-- high-rate mono-encoder (jan. 2023)
+- (tid) high-rate mono-encoder (jan. 2023)
 - ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
-- k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
-- tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
+- (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
+- (det) uxi needs more work from dan (lcls1)
+- (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- epixM (2 320kpx, 5kHz, june 2023),
+- (tid, det) epixM (2 320kpx, 5kHz, june 2023),
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
   - 384*192*2 per camera (737MB/s per camera @5kHz)
-- epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers
+- (tid,det) epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers
   - 2 small epixHR's (140kpx?) single MTP12
-- opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
-- timepix for rix: standalone mode in July 2022 (256x256 px,
+- (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
+- (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
   o working with anton tremsin at berkeley
-- varex xrd 4343 cameras for mec? (lcls1)
+- (det) varex xrd 4343 cameras for mec? (lcls1)
 - orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
   https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
+- starcryo?: https://starcryo.com/stj-x-ray-spectrometers/
+- (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
+  not identical to epixHR.
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
+* swapping slurm jobs script (ro)
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * calibration constant provenance (mikhail)
@@ -91,6 +94,7 @@ detector requests:
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
+* ami mypy daemon is long-lived: can cross release boundaries
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
@@ -306,3 +310,5 @@ arch outside image
 - 2d, 3d image
 - q option with more parameters
 - inherited/coupled parameters for multiple roiarch's
+
+**********************************************************************
