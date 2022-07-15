@@ -1,4 +1,10 @@
-* fim i0 feedback, piranha, stj detector estimate, taran, andor 16k vs 64k, long expt name, ami curve_fit example, epixM, andor integration, psana damage, daq-tmo-hsd-02, srcf tx/rx swap
+* taran, long expt name, ami curve_fit example, piranha, stj detector estimate, andor 16k vs 64k, epixM, andor integration, psana damage, daq-tmo-hsd-02, srcf tx/rx swap
+
+ued:
+background subtracted
+check background not changing
+integrations of image (e.g. radial integration)
+single-electron-counting, time-bin, plot vs. motor delay
 
 commissioning plan docs (19309-a4002): https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
@@ -53,9 +59,13 @@ detector requests:
 - (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
 - (tid, det) epixM (2 320kpx, 5kHz, june 2023),
+  - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
+  - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
   - 384*192*2 per camera (737MB/s per camera @5kHz)
-- (tid,det) epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers
+- (tid,det) epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers: prototype in august 2022, beam in sept 2022 (and dec 22). quad in November 2022.  full cam in march 2023.  full 2M det commissioning june 2023.  quad is different than single.
+  - 5 to 10 fibers pairs needs to be converted (use local xpm to generate
+    multimode).  maybe 12 if edge-ml stuff.
   - 2 small epixHR's (140kpx?) single MTP12
 - (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
 - (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
@@ -67,6 +77,8 @@ detector requests:
 - starcryo?: https://starcryo.com/stj-x-ray-spectrometers/
 - (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
+  - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
+- alvium for LCLS2 (request from giacomo)
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
@@ -310,5 +322,3 @@ arch outside image
 - 2d, 3d image
 - q option with more parameters
 - inherited/coupled parameters for multiple roiarch's
-
-**********************************************************************
