@@ -1,4 +1,4 @@
-* taran, long expt name, ami curve_fit example, piranha, stj detector estimate, andor 16k vs 64k, epixM, andor integration, psana damage, daq-tmo-hsd-02, srcf tx/rx swap
+* lcls1 rel, ami race conditions, drp ipmi, dld, return piranha, peppex hsd134 segfault, andor integration, daq-tmo-hsd-02, srcf tx/rx swap
 
 ued:
 background subtracted
@@ -74,11 +74,10 @@ detector requests:
 - (det) varex xrd 4343 cameras for mec? (lcls1, needed april/may 2023)
 - orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
   https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
-- starcryo?: https://starcryo.com/stj-x-ray-spectrometers/
 - (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
-- alvium for LCLS2 (request from giacomo)
+- alvium for LCLS2 (request from giacomo) https://www.alliedvision.com/en/products/alvium-configurator/alvium-1800-u/240/#_configurator
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
@@ -95,6 +94,7 @@ detector requests:
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
+* mask editor (mikhail)
 * epix100/epixhr deadtime not working (10Hz with epix100)
 * ami angular integration
 * per stream and per run event/dmg counts (caf)
@@ -107,6 +107,8 @@ detector requests:
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
 * ami mypy daemon is long-lived: can cross release boundaries
+* configdb management for changing fex/teb decisions
+* run lcls1 jungfrau at 120Hz (ddamiani, dan)
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
@@ -322,3 +324,9 @@ arch outside image
 - 2d, 3d image
 - q option with more parameters
 - inherited/coupled parameters for multiple roiarch's
+
+1Z180E674254080344
+
+broken ami: pop, xtcav, hsd, photfind and linearity, xpp
+good ami: blobfinder, hitfinder, flyscan, wf sideband sub, stepscan, wf integration vs delay stage, normalization of andor, ratio of peak areas and epics, calculator, complex, timestamp plot, export, reference plot
+
