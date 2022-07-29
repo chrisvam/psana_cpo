@@ -1,4 +1,4 @@
-* lcls1 rel, ami race conditions, drp ipmi, dld, return piranha, peppex hsd134 segfault, andor integration, daq-tmo-hsd-02, srcf tx/rx swap
+* det priorities, CI (macos), batch nodes, lcls1 rel, ami race conditions, drp ipmi, dld, return piranha, peppex hsd134 segfault, andor integration, daq-tmo-hsd-02, srcf tx/rx swap
 
 ued:
 background subtracted
@@ -53,10 +53,10 @@ detector requests:
 - (det) rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
 - (tid) high-rate mono-encoder (jan. 2023)
-- ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
+- (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
 - (det) uxi needs more work from dan (lcls1)
-- (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
+- (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
 - (tid, det) epixM (2 320kpx, 5kHz, june 2023),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
@@ -67,17 +67,16 @@ detector requests:
   - 5 to 10 fibers pairs needs to be converted (use local xpm to generate
     multimode).  maybe 12 if edge-ml stuff.
   - 2 small epixHR's (140kpx?) single MTP12
-- (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?)
-- (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
+- (will approve) (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?) https://www.alliedvision.com/en/products/alvium-configurator/alvium-1800-u/240/#_configurator
+- (approved for standalone) (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
   o working with anton tremsin at berkeley
-- (det) varex xrd 4343 cameras for mec? (lcls1, needed april/may 2023)
-- orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
+- (unapproved) (det) varex xrd 4343 cameras for mec? (offered assistance, lcls1, needed april/may 2023)
+- (unapproved) orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
   https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
 - (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
-- alvium for LCLS2 (request from giacomo) https://www.alliedvision.com/en/products/alvium-configurator/alvium-1800-u/240/#_configurator
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
