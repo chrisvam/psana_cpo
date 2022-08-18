@@ -1,10 +1,4 @@
-* det priorities, CI (macos), batch nodes, lcls1 rel, ami race conditions, drp ipmi, dld, return piranha, peppex hsd134 segfault, andor integration, daq-tmo-hsd-02, srcf tx/rx swap
-
-ued:
-background subtracted
-check background not changing
-integrations of image (e.g. radial integration)
-single-electron-counting, time-bin, plot vs. motor delay
+* mono enc, drp ipmi, peppex hsd134 segfault, daq-tmo-hsd-02, srcf tx/rx swap
 
 commissioning plan docs (19309-a4002): https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
@@ -12,6 +6,7 @@ srcf to do:
 - bos/fiber handling
 - fiber purchase (done)
 - new detector requests (see below)
+- atm edge-finding for piranha and feedback
 - rogue relative-path script (done, valerio used package-name mangling)
 - daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
@@ -55,15 +50,16 @@ detector requests:
 - (tid) high-rate mono-encoder (jan. 2023)
 - (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
+- h5 full-pathname issue in part0 files
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- (tid, det) epixM (2 320kpx, 5kHz, june 2023),
+- (tid, det) epixM (start work nov 2022, 2 320kpx, 5kHz, june 2023),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
   - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
   - 384*192*2 per camera (737MB/s per camera @5kHz)
-- (tid,det) epixHR (2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers: prototype in august 2022, beam in sept 2022 (and dec 22). quad in November 2022.  full cam in march 2023.  full 2M det commissioning june 2023.  quad is different than single.
+- (tid,det) epixHR (start work sept 2022, 2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers: prototype in august 2022, beam in sept 2022 (and dec 22). quad in November 2022.  full cam in march 2023.  full 2M det commissioning june 2023.  quad is different than single.
   - 5 to 10 fibers pairs needs to be converted (use local xpm to generate
     multimode).  maybe 12 if edge-ml stuff.
   - 2 small epixHR's (140kpx?) single MTP12
@@ -77,6 +73,7 @@ detector requests:
 - (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
+- andor iXon for UED
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
@@ -94,6 +91,7 @@ detector requests:
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * mask editor (mikhail)
+* ability for select-gui to allow teb's to be deselected (down to 1) (mikhail)
 * epix100/epixhr deadtime not working (10Hz with epix100)
 * ami angular integration
 * per stream and per run event/dmg counts (caf)
@@ -134,7 +132,6 @@ detector requests:
 * xface for ami controlling detector params
 * web display of ami plots
 * mhz bld (matt)
-* hsdioc needing restart (matt)
 * uniform (epics?) interface to detector config registers for config scans
 * automatically push releases for lcls1/lcls2 to nersc/sdf/other
 * hsd test pattern mode (matt)
@@ -175,7 +172,6 @@ detector requests:
 * general test that all public detector attributes are method taking event with return type (ro)
 ** support multiple cameras on one drp node
 ** one exe writing multiple files to improve performance
-* move batch tests to slurm
 ** xtcdata duplicate names throw
 * move away from afs (mv pdsdata/psalg repo)
 * spares
@@ -189,18 +185,14 @@ detector requests:
 * state machine confusing (ric email) lower priority?
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
-* reduction algorithms (ric)
 * move other hutches to lcls2
 * allocation of readout groups and devices, lanes
 ** shared drp node allocation mechanism (caf)
-* xpplr8116 geom calib const access for py3
-* make hsd's more robust, e.g. timing dropouts (matt)
 * LCLS2 drop shots (bykiks evtcode 161)
-* MHz with real tmo analysis (mona)
+* MHz with real tmo analysis including pre/post processing partitioning (mona)
 * create more platforms for procmgr
 * practice power outage
 * parallel jupyterhub with visualization
-* daq2 chunking (dan)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
@@ -222,7 +214,6 @@ detector requests:
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
 * calibdb dns issue (in travis macos build)
-* replace travis
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
 * dlopen for reduction alg
@@ -233,9 +224,9 @@ detector requests:
 * algorithms (drp/ana, e.g. beam-center finding)
 * singularity at slac
 * support more python versions
-* SDF support including ARP
+* S3DF support including ARP
 * automatic users add to sdf lcls queue (wilko, valerio)
-* python DRP? (ric, matt)
+* python DRP? (valerio, ric)
 * fiber power readings everywhere (matt, tid)
 * peaknet
 * ami:
@@ -324,8 +315,30 @@ arch outside image
 - q option with more parameters
 - inherited/coupled parameters for multiple roiarch's
 
-1Z180E674254080344
-
 broken ami: pop, xtcav, hsd, photfind and linearity, xpp
 good ami: blobfinder, hitfinder, flyscan, wf sideband sub, stepscan, wf integration vs delay stage, normalization of andor, ratio of peak areas and epics, calculator, complex, timestamp plot, export, reference plot
 
+phil recommends divide by 16adu/kev
+mikhails formula (sig-ped)/gain to get kev
+det.gain returns something to divide or multiply by?
+- silke multiplies by det.gain for epix100
+epix10k 10 for high gain .01 for low gain
+phil uploads adu/kev because mikhail divides
+may be inconsistent with documentation
+consistent handling (adu/kev or kev/adu) of:
+- uploaded numbers
+- file on disk deployed by makepeds
+- value by det.gain
+- documentation
+epix100, rayonix for lcls1.  try to be consistent in lcls2
+gain goes into pixel_gain file
+mikhail has 0.06kev/adu
+
+other detectors (jungfrau, epix10k): adu/kev->divide
+epix100: ev/adu (.06kev/adu)->multiply (lcls1, other way round for lcls2)
+many files have relative gains (around 1)
+propose lcls1 "gain-factor": kev/adu
+
+mark hunter:
+institutional/personal pressure (sebastien helped prioritize)
+collaborative vs. competitive access to resources
