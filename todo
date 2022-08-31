@@ -1,4 +1,22 @@
-* mono enc, drp ipmi, peppex hsd134 segfault, daq-tmo-hsd-02, srcf tx/rx swap
+loops, ami config
+* xfracas, users mtg, ami2 det.config, txi diodes, tmo gmd, srcf, mono enc, drp ipmi, peppex hsd134 segfault, daq-tmo-hsd-02, srcf tx/rx swap
+s3df: sudo, shared accounts, group permissions, access to offline /scratch from ffb
+
+ami issues: 
+- (bug) need a new amityping
+- (bug) missing "dict" type in drop-down list of types for pyedit
+- (bug) one time exported pyeditor box had no terminals (not reproducible)
+- (inconvenience) can't export multiple pyeditor boxes to same py lib file
+  - have to change EventProcessor class so no conflicts in py lib file
+- (bug) exported py edit boxes need Reset when edited-in
+- (documentation) documentation: use Node/CtrlNode or other Node?
+- (feature?) beginrun in py edit box should be passed run: allows people to
+  make their own detectors, passing flags?
+- (bug) toggling between managed-library graphs:
+  File "/cds/home/c/cpo/git/ami/ami/flowchart/NodeLibrary.py", line 45, in addNodeType
+    raise Exception("Node type name '%s' is already registered." % name)
+Exception: Node type name 'Thresh2900' is already registered.
+
 
 commissioning plan docs (19309-a4002): https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
 
@@ -54,7 +72,7 @@ detector requests:
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- (tid, det) epixM (start work nov 2022, 2 320kpx, 5kHz, june 2023),
+- (tid, det) epixM (start work nov 2022, 2 320kpx, 5kHz, commission april/june 2023),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
   - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
@@ -73,7 +91,7 @@ detector requests:
 - (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
-- andor iXon for UED
+- andor iXon for UED (flexible, June/July 2023?)
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * monitoring new serial numbers for LCLS2 (mikhail)
@@ -342,3 +360,34 @@ propose lcls1 "gain-factor": kev/adu
 mark hunter:
 institutional/personal pressure (sebastien helped prioritize)
 collaborative vs. competitive access to resources
+
+**********************************************************************
+
+ami-local -b 1 -f interval=1 psana://exp=ueddaq02,run=569,dir=/cds/data/psdm/prj/public01/xtc/
+
+dan and seshu
+scripts vs ami
+people develop their own libraries (personal/hutch):
+  commonly used pieces moved into core
+three categories:
+  using existing boxes
+  creating custom boxes
+  detector guts
+mask gain bits
+thresholded image
+managing libraries (avoiding creeping featurism)
+editing library files with text editor
+accessing calibconst: raw-pedestal (psana/psana/detector/UtilsEpix10ka.py
+customizing epix calibration
+controlling kwargs, e.g. cmpars
+https://confluence.slac.stanford.edu/display/PSDMInternal/Detector+Interface+Proposal
+
+**********************************************************************
+
+rix high-rate risks:
+
+high-rate mono-encoder
+using sequencer so andor can cleanly integrate over shots
+new dets: epixM, high rate mono, archon, bld
+practicing high-rate rix analysis in advance
+managing which events AMI sees
