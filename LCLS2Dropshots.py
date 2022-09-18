@@ -40,12 +40,13 @@ class LCLS2_chi_group:
         self.bigeventtimelist=[] #Used to store a bunch of event times
 
     def timestampgatherer(self):
-        ds = DataSource(exp=expname, run=runnumber)
+        ds = DataSource(exp=expname, run=runnumber, detectors=['timing'])
         self.myrun=next(ds.runs())
         timer_det=self.myrun.Detector('timing')
         for nevent,event in enumerate(self.myrun.events()):
-            if nevent>300:
-                break
+            if nevent%1000==0: print('event:',nevent)
+            #if nevent>300:
+            #    break
             timestamp=event.timestamp
             if self.eventcode is None:
                 print("none")
@@ -66,15 +67,15 @@ class LCLS2_chi_group:
 
     def detresultgetter(self):
         ds=DataSource(exp=expname, run=runnumber, filter=filter_func) #Switches the idx mode. More data or somethin'
-        myrun=next(ds.runs())
+        self.myrun=next(ds.runs())
         good_det_name=self.good_detectors() #Run the good_detectors function near the top. Returns a list of dettypes.
         print(good_det_name, "good det names") #Just a personal thing, where it spits out a list of detectors it's gonna go through.
-        self.detlist=[(myrun.Detector(detname)) for detname in good_det_name]
+        self.detlist=[(self.myrun.Detector(detname)) for detname in good_det_name]
         for det in self.detlist:
             self.detslots[det._det_name]=[] #For every detector, it puts in a detector keyword with empty list "detname":[]
             for slot in range(window):
                 self.detslots[det._det_name].append([])
-        for nevent, event in enumerate(myrun.events()):
+        for nevent, event in enumerate(self.myrun.events()):
             islot=nevent%5
             if nevent>300:
                 break
@@ -134,6 +135,7 @@ class LCLS2_chi_group:
         detector_infolist=self.myrun.xtcinfo
         for detector in detector_infolist:
             #detector[1] is the detector type
+            print('***found',detector)
             if detector[1] in self.supported_dettypes:
                 good_det.append(detector[0])
             #Put detector (key) in good_det list
@@ -142,9 +144,11 @@ class LCLS2_chi_group:
 
 dropshotinfo=LCLS2_chi_group(window)
 dropshotinfo.timestampgatherer()
+tsfname = 'exp='+args.expname+',run='+str(args.runnumber)+'_timestamps.npy'
+np.save(tsfname,np.array(dropshotinfo.bigeventtimelist))
 ndrop = len(dropshotinfo.bigeventtimelist)
 print('Found',ndrop,'dropped shots')
-if ndrop<5:
+if ndrop<3:
     print('Too few dropped shots:',ndrop)
     import sys
     sys.exit(-1)
@@ -152,6 +156,7 @@ dropshotinfo.detresultgetter()
 from dropshotcalculations import calculations
 emailarg=args.email
 pdfarg=args.pdf
+print('******* detslots',dropshotinfo.detslots)
 calculationvar=calculations(dropshotinfo.detslots, window, emailarg, pdfarg)
 calculationvar.calculations()
 if args.pdf==True:
