@@ -156,7 +156,7 @@ def submit_all():
     #    mailmsg["To"]+=",pcds-it-l@slac.stanford.edu,yoon82"
     mailmsg["Subject"] = "psana batch test"
     p = Popen(["/usr/sbin/sendmail", "-t"], stdin=PIPE)
-    p.communicate(mailmsg.as_string())
+    p.communicate(mailmsg.as_string().encode())
 
 def checkdirs():
     for d in all_ana:
