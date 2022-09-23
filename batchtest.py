@@ -20,64 +20,45 @@ import datetime
 ana03 = ['/reg/data/ana03/test/psana_batch/ost%x' % i for i in range(1,19)]
 ana15 = ['/reg/data/ana15/test/psana_batch/ost%x' % i for i in range(1,7)]
 
-ana = [
+xtc_ana = [
+    '/reg/data/ana01/test/psana_batch',
     '/reg/data/ana02/test/psana_batch',
-    #'/reg/data/ana11/test/psana_batch',
-    #'/reg/data/ana12/test/psana_batch',
-    '/reg/data/ana13/test/psana_batch',
-    #'/reg/data/ana14/test/psana_batch',
+]
+
+xtc_ana+=ana03
+
+calib_ana = [
+    # Leave out ana13 because we get intermittent stale file handle issues in drpsrcf
+    #'/reg/data/ana13/test/psana_batch',
+    '/reg/data/ana15/test/psana_batch',
     '/reg/data/ana16/test/psana_batch',
 ]
 
-ana = ana+ana03+ana15
+calib_ana+=ana15
 
-ffb = ['/reg/data/ffb01/test/psana_batch','/reg/data/ffb02/test/psana_batch']
+all_ana = xtc_ana + calib_ana
+
+ffb = ['/cds/data/drpsrcf/temp/psana_batch']
 
 timeLimitMinutes = 2
 headroomMinutes = 2
 queues = ['psfehq'  , 'psanaq', 'anaq']
-dirs =   [ana, ana, ana]
+dirs =   [all_ana, all_ana, calib_ana+ffb]
 
 logdir = '/reg/g/psdm/utils/batchtest_slurm/logs/'
-
-def hostrange(field):
-    split = field.split('-')
-    start = int(split[0])
-    end = int(split[1])
-    length = len(split[0])
-    formatstr = '%0'+str(length)+'d'
-    return [formatstr%i for i in range(start,end+1)]
-
-def parse_hosts(hosts_field):
-    if '[' not in hosts_field: # only one node
-        return [hosts_field]
-    start = hosts_field.index('[')
-    rootname = hosts_field[:start]
-    end = hosts_field.index(']')
-    hostnumbers = []
-    fields = hosts_field[start+1:end].split(',')
-    for f in fields:
-        if '-' in f:
-            hostnumbers+=hostrange(f)
-        else:
-            hostnumbers.append(f)
-    hostnames = [rootname+n for n in hostnumbers]
-    return hostnames
 
 def gethosts(queue):
     openhosts = []
     otherhosts = []
-    result = subprocess.check_output('sinfo -p %s'%queue, shell=True).decode('utf-8')
-    print(result)
+    result = subprocess.check_output('sinfo -N -p %s'%queue, shell=True).decode('utf-8')
     for line in result.split('\n')[1:]:
         if ' idle' in line or ' alloc' in line or ' mix' in line or ' drain' in line or ' down' in line:
             fields = line.split()
             if len(fields) == 0: continue
-            hosts_field = fields[5]
             if ' drain' not in line and ' down' not in line:
-                openhosts+=parse_hosts(hosts_field)
+                openhosts.append(fields[0])
             else:
-                otherhosts+=parse_hosts(hosts_field)
+                otherhosts.append(fields[0])
     openhosts.sort()
     otherhosts.sort()
     return openhosts,otherhosts
@@ -88,9 +69,13 @@ def submit(hpair,q,joblist,dirlist,jobid):
     logname = hpair[0]+'_'+hpair[1]+'_'+d+'.log'
     print('launched',logname)
     logopt = ' -o '+logdir+logname
-    hostopt = ' -w '+hpair[0]+','+hpair[1]
+    if hpair[0]==hpair[1]:
+        print('*** running single host job')
+        hostopt = ' -w '+hpair[0]
+    else:
+        hostopt = ' -w '+hpair[0]+','+hpair[1]
     timelimit = ' -t %d '%timeLimitMinutes
-    pycmd = 'python /reg/g/psdm/utils/batchtest/batchtest_mpi.py -d '+' '.join(dirlist)
+    pycmd = 'python /reg/g/psdm/utils/batchtest_slurm/batchtest_mpi.py -d '+' '.join(dirlist)
     # openmpi's ORTE requires jobid which doesn't get set when using --no-alloc
     # need to run as user "slurm" to get access to --no-alloc option
     # this in turn requires passwordless sudo for the srun command
@@ -174,11 +159,18 @@ def submit_all():
     p.communicate(mailmsg.as_string())
 
 def checkdirs():
-    for d in ana:
+    for d in all_ana:
+        subprocess.Popen(['ls','-rtl',d+'/e307-r0999-s00-c00.xtc'])
+        subprocess.Popen(['ls','-rtl',d+'/index/e307-r0999-s00-c00.xtc.idx'])
+
+def checkffbdirs():
+    for d in calib_ana+ffb:
         subprocess.Popen(['ls','-rtl',d+'/e307-r0999-s00-c00.xtc'])
         subprocess.Popen(['ls','-rtl',d+'/index/e307-r0999-s00-c00.xtc.idx'])
 
 if len(sys.argv)>1 and sys.argv[1]=='checkdirs':
     checkdirs()
+elif len(sys.argv)>1 and sys.argv[1]=='checkffbdirs':
+    checkffbdirs()
 else:
     submit_all()

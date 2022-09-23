@@ -17,7 +17,7 @@ args = parser.parse_args()
 for d in args.dir:
     nerror=0
     if not os.path.isfile(d+'/e307-r0999-s00-c00.xtc'):
-        print '*** Error: Host',socket.gethostname(),'cannot access directory',d
+        print('*** Error: Host',socket.gethostname(),'cannot access directory',d)
         nerror+=1
     if nerror:
         sys.exit()
@@ -37,11 +37,11 @@ for d in args.dir:
         for i in range(mylength):
             evt = run.event(mytimes[i])
             if evt is None:
-                print '*** event fetch failed'
+                print('*** event fetch failed')
                 continue
             cam = evt.get(psana.Princeton.FrameV1,src)
             if cam is None:
-                print '*** failed to get cam'
+                print('*** failed to get cam')
                 continue
             if firsttime:
                 sum=cam.data().astype(np.float)
@@ -55,7 +55,7 @@ for d in args.dir:
     comm.Reduce(sum,sumall)
 
     if rank==0:
-        print 'dir:',d
-        print 'sum:',np.sum(sumall)
+        print('dir:',d)
+        print('sum:',np.sum(sumall))
 
 MPI.Finalize()
