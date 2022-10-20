@@ -82,7 +82,7 @@ def submit(hpair,q,joblist,dirlist,jobid):
     # via /etc/sudoers.d/srun file with a line like this:
     # cpo ALL=(slurm) NOPASSWD:SETENV: /usr/bin/srun
     os.environ['SLURM_JOBID']=str(jobid)
-    cmd = 'sudo --preserve-env=PATH,SLURM_JOBID,SIT_DATA -u slurm /usr/bin/srun --no-alloc --jobid='+str(jobid)+timelimit+qopt+logopt+hostopt+' '+pycmd
+    cmd = 'sudo --preserve-env=PATH,SLURM_JOBID,SIT_DATA,SIT_ROOT,SIT_PSDM_DATA -u slurm /usr/bin/srun --no-alloc --jobid='+str(jobid)+timelimit+qopt+logopt+hostopt+' '+pycmd
     subprocess.Popen(cmd, shell=True)
     time.sleep(.1) # this sleep may help srun's that don't seem to start?
     joblist.append(logname)
