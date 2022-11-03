@@ -1,6 +1,22 @@
-loops, ami config
-* xfracas, users mtg, ami2 det.config, txi diodes, tmo gmd, srcf, mono enc, drp ipmi, peppex hsd134 segfault, daq-tmo-hsd-02, srcf tx/rx swap
-s3df: sudo, shared accounts, group permissions, access to offline /scratch from ffb
+* phil epix reg (slack), pytorch, opal timing, riccardo task, newrel, move to 4.5.17, phil ami (multigraph, export), camlink timing workaround, fiber cleanup, srcf nodes, phil ami, piranha fex, gmd offbyone, py39
+
+rix ami/meb: cmp007, 14, 18, teb 14
+tmo ami/meb: mon001, 24,     teb 13
+sick nodes: 13 (no kcu) 15 (bad eth, no ib) cmp016 (no ib)
+
+get away from 7 (piranha) 14 (epixhr) 18 (tmo hsd's) 24 (tmo hsd's)
+save mon001 for base processes
+
+available 13,28,29,30,8
+
+one node for ami (tmo: 28, rix: 29)
+one node for user-meb (tmo: 30, rix: 8)
+one node for both teb's (13)
+
+- global: timing glitches, move atca to mon001 (and permanent netconfig), running neh-base.cnf from 4.5.17, piranha background (jan.) (slowupdate and L1)
+- tmo: hsd's, peppex hsd's/opal, acr feedback test
+- rix: no ami grafana
+- lower priority: fibers to clean up
 
 ami issues: 
 - (bug) need a new amityping
@@ -66,6 +82,7 @@ detector requests:
 - (det) rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
 - (tid) high-rate mono-encoder (jan. 2023)
+- dream hsd's in jan. 2023
 - (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
 - h5 full-pathname issue in part0 files
@@ -94,6 +111,7 @@ detector requests:
 - andor iXon for UED (flexible, June/July 2023?)
 
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
+* improve destination callback (mona)
 * monitoring new serial numbers for LCLS2 (mikhail)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
 * swapping slurm jobs script (ro)
@@ -103,6 +121,7 @@ detector requests:
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * long eb connect times in rix (ric)
+* andor pedestal subtraction (mikhail)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
@@ -118,7 +137,10 @@ detector requests:
 ** benchmark SZ and other reduction for real expt data (mikhail)
   - can SZ handle gain-range detectors?
 * make it harder to leave out timing system
+* algorithm for non-quantized det-image charge sharing (mikhail)
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
+* create an example of parallel smallh5 with mpi/dask (riccardo)
+* test psana2 live mode (mona)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
 * ami mypy daemon is long-lived: can cross release boundaries
@@ -127,12 +149,13 @@ detector requests:
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
+* timetool slowupdate background handling in psana (mona)
 * elegant early shutdown of psana with smd0 irecv for mtip? (mona)
 * ami2 array thresholding (ro)
 * procmgr performance with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
 * alias not in xtc file so more flexible
-* psana datasource for drp (mona)
+* psana datasource for drp (valerio/mona)
 * teb having memory allocation problem after too many deallocate's (ric)
 * select monitoring destination for particular events (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
@@ -210,7 +233,7 @@ detector requests:
 * MHz with real tmo analysis including pre/post processing partitioning (mona)
 * create more platforms for procmgr
 * practice power outage
-* parallel jupyterhub with visualization
+* parallel jupyterhub with visualization (copy euxfel?) (riccardo/mona/wilko/valerio)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
@@ -386,8 +409,252 @@ https://confluence.slac.stanford.edu/display/PSDMInternal/Detector+Interface+Pro
 
 rix high-rate risks:
 
-high-rate mono-encoder
+moving DAQ to SRCF:
+ric claus work
+- high rates: hsd, wave8, piranha, bld
+- selecting events in ami
+matt: high rate bld
+switching to LCLS2 timing
+dan archon
+s3df 
+
+risks:
+complexity of running detectors at different rates
+high-rate mono-encoder (two?), high rate bld
 using sequencer so andor can cleanly integrate over shots
 new dets: epixM, high rate mono, archon, bld
 practicing high-rate rix analysis in advance
 managing which events AMI sees
+s3df delays
+IOC detectors (like andor) need new module from Kukhee
+
+**********************************************************************
+
+tmo detectors:
+
+2 piranhas (fzp, atm) + 1 opal (fzp) + 1 opal (cvmi)
+1 for dream atm + 1 spare
+currently have 4 (2 cvmi, 1 atm, 1 fzp)
+bld
+
+rix priority:
+
+2 andor newton
+3 wave8
+1 atm piranha
+1 atm opal
+hsd's?
+bld
+high-rate mono encoder and/or step-scans
+
+**********************************************************************
+
+general to do:
+- recabling to srcf
+  o use data volume to each node to figure out cabling
+  o (optional) multi-camlink operation.
+    - could program timing link on reboot
+    - every process could set full link mask?
+  o what should go through the bos?
+- switching to LCLS2 timing (Dec. 1?)
+- 33kHz BLD: ebeam, gmd, test asap. waiting for software development.
+- commission s3df (but keep old system going too)
+  o psana
+  o smalldata
+  o movers
+  o mon-node calibdir
+- spares (piranha in particular)
+- migrate ctl nodes (move hsd processes, but not mono encoder)
+- move timing crate from fee alcove to 208
+- xtcav "nice" for acr?
+- live mode
+
+
+tmo to-do:
+- when can we switch from opals to piranhas?
+- (optional) multi-camlink running
+- will fzp/atm opals run at same time?
+- hsd fex overflow damage flagged?
+- test hsd prescale raw waveform buffering
+- move away from xpm0 to xpm2 for all tmo timing
+
+tmo schedule:
+
+[cvmi_opal_1, oct 27, nov 19] - retire date is negotiable, (maybe needs to be earlier?)
+[cvmi_opal_2, oct 27, nov 19] - retire date is negotiable, (maybe needs to be earlier?)
+[atm_opal,       oct 27, possibly run 22]
+[fzp_opal,        oct 27, possibly run 22]
+[atm_pirhana, oct 27, not planned]
+[fzp_pirhana,  oct 27, not planned]
+
+rix to-do:
+- integrating-andor timestamping (I think Dan said this is fine as-is)
+- accelerator burst-mode operation
+- scans with burst-mode (one burst is one andor event)
+- (somewhat optional) high-rate interpolated mono encoder for fly-scans
+  o offline second-pass with interpolation could also work
+  o step-scans with slow mono are another option
+
+**********************************************************************
+
+100kHz data volumes:
+
+- wave8: 8waveforms*256samples/sample*2bytes/sample*0.1MHz = 400MB/s
+  need to add FEX data too
+- piranha: 2048px*2bytes/px*0.1MHz=410MB/s
+- hsd full wf: 60000samples*2bytes/sample*0.1MHz = 12GB/s
+  max waveform length appears to be ~60000 samples looking at xtc2 file?
+  FEX needs to reduce it to 4GB/s (3x)
+- bld: 336bytes/event*0.1MHz = 33MB/s
+  (from xtcreader -f /cds/data/psdm/prj/public01/xtc/tmoc00118-r0222-s008-c000.xtc2)
+- timing: 309bytes/event*0.1MHz = 31MB/s
+
+recabling proposal:
+- tmo timing (including pvadet, bld)
+- rix timing
+- (4) tmo camlink nodes
+- (2) rix camlink nodes
+- tmo/rix fim node (5 fims)
+- (2) rix hsd nodes
+- (7) tmo hsd nodes
+- peppex hsd node
+- (2) tmo/rix ami
+- (2) tmo/rix teb
+- (2) tmo/rix mebuser
+
+total of 25 nodes
+5 spares
+
+**********************************************************************
+
+3.10 errors:
+
+qt errors in groupca/xpmpva
+control.py qt setvalue wants int but getting float
+piranha rogue errors
+
+**********************************************************************
+
+rix analysis
+
+point detector APD via wave8, background subtract
+direct andor integrate over shots and background subtract
+vls andor no background
+might want to run at 1Hz with bigger images
+filtering (using the signal itself like APD, or other det: I0 from fim's, GMD, use goose trigger or bykik (laser/xray on/off))
+binning in terms of delay (vitara) eventually use timetool
+fly-scan with mono-encoder and bin
+after binning (vitara, eventually timetool, mono encoder) do normalization (I0 kb fim's)
+no peak-finders
+could run droplet on vls andor (droplets may merge) background low enough that not necessary?
+could we run the andors in different modes?  might be complex in burst mode
+
+march: beam at the mono
+april: beam in chemrix
+
+mockup piranha at 33kHz by modifying opal?
+
+propose 33kHz analysis as "worst case" (gets easier with bursts and integrating detectors)
+
+**********************************************************************
+
+according to bos:
+cmp11 goes to amc0 port 5 (checked)
+cmp12 goes to amc0 port 3 (checked)
+cmp06 goes to amc0 port 6 (trusting bos aliases)
+
+**********************************************************************
+
+worries:
+political assigning time
+off-shift handling?  preemption or queue position?
+reservations more wasteful
+preemption latency
+
+1 - reservations + head-of-queue-qos
+2 - ffb preemption qos + head-of-queue-off-shift qos
+3 - 4 layers of preemption
+
+association: priorities based on partition/account/reservation/qos (either for preemption or position-in-queue)
+slurmacctmgr command is used to manage priorities
+
+**********************************************************************
+
+outer product options:
+
+need two: one with hsd channel itself, and one with piranha readout
+
+- only do half of the symmetric outer product (with hsd channel itself)
+- reduce the sample rate by ~4
+- reduce window to 2us (12000 samples) 1us @1MHz
+- use peaks (guess badness is 5+-3)
+- replace with tixel eventually (which does thresholding)
+  o may not use tixel because of the thresholding, depending on expt
+- use pre-scaled full-waveform events for bkgd?
+
+**********************************************************************
+
+epixhr
+
+include forced-low, forced-medium
+for AHL, AML
+new format for timing (2 lanes each with 2 asics, each with timing info)
+
+saci bus lockup?
+same firmware on receiving end?
+
+**********************************************************************
+
+2 cfg 1a:a cmp017 dev1 in cnf but txlinkid says should be dev0
+3 cfg 1a:b cmp020 dev0 in cnf but txlinkid says should be dev1 
+5 cfg 3d:b cmp018 dev0 in cnf but txlinkid says should be dev1
+6 cfg 3d:a cmp021 dev0 in cnf no pgp lock
+8 5e:a cmp022 dev1 in cnf but txlinkid says should be dev0
+9 5e:b cmp022 dev0 in cnf but txlinkid says should be dev1
+10 da:b cmp024 dev0 in cnf but txlinkid says should be dev1
+11 da:a cmp024 dev1 in cnf but txlinkid says should be dev0
+
+tmo-drp[37848]: <I> MebCtrb   sent Enable @ 1034556513.272083936 (00011d3c6f8840) to MEB ID 1 @   0x7f7
+7fc4ef000 (00080000 + 12 * 00800000)
+tmo-drp[37848]: <C> PGPReader: Jump in complete l1Count 13459 -> 13444 | difference -15, tid L1Ac
+cept
+tmo-drp[37848]: <C> data: 3f99cfcd 0c00011d 1b87f332 3daa149a d3290001 00003484 service: 0xc
+tmo-drp[37848]: <C> lastTid L1Accept
+tmo-drp[37848]: <C> lastData: 3f99b1b6 0c00011d 1b07f32f 3daa149a cf270001 00003493
+tmo-drp[37848]: <E> broken event:  00000000
+tmo-drp[37848]: <E> broken event:  00000000
+tmo-drp[37848]: <E> broken event:  00000000
+tmo-drp[37848]: <E> broken event:  00000000
+tmo-drp[37848]: <E> broken event:  00000000
+
+ana: mona, mikhail, valmar, riccardo, ddamiani
+daq: claus, matt, cpo, valmar, caf
+
+**********************************************************************
+
+fee running
+
+early november (old timing)
+late january (new timing)
+
+slow power meter pv camera un-timestamped (phil heimann)
+gmd/xgmd
+ebeam bld?
+epicsarch bunch of slow pv's
+
+**********************************************************************
+
+ansys:
+
+- linux, not ubuntu, rhel ok
+- mpi
+- used lsf in past, need to figure out if slurm is ok?
+- license already on an existing slac server (nodenames license1)
+- ok to wait in queue
+- want 512 cores (ran 128 cores a couple of years in the centos7 cluster)
+- thermal loads on mono, xpp (diling), dxs (hasan) or spectrometer
+- juhao would install, previously was a postdoc (gzhou)
+- previously have used existing mpi installations (could try conda)
+- also include:
+  - slac's ansys point-of-contact: singularity?
+  - ansys engineer
