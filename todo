@@ -1,47 +1,15 @@
-* phil epix reg (slack), pytorch, opal timing, riccardo task, newrel, move to 4.5.17, phil ami (multigraph, export), camlink timing workaround, fiber cleanup, srcf nodes, phil ami, piranha fex, gmd offbyone, py39
-
-rix ami/meb: cmp007, 14, 18, teb 14
-tmo ami/meb: mon001, 24,     teb 13
-sick nodes: 13 (no kcu) 15 (bad eth, no ib) cmp016 (no ib)
-
-get away from 7 (piranha) 14 (epixhr) 18 (tmo hsd's) 24 (tmo hsd's)
-save mon001 for base processes
-
-available 13,28,29,30,8
-
-one node for ami (tmo: 28, rix: 29)
-one node for user-meb (tmo: 30, rix: 8)
-one node for both teb's (13)
+* xtcav, tqdm, vincent, fee teststand, ami2 ci, tpr driver, workshop video, slow mmu, slowupdate, pytorch, camlink timing workaround, piranha fex
 
 - global: timing glitches, move atca to mon001 (and permanent netconfig), running neh-base.cnf from 4.5.17, piranha background (jan.) (slowupdate and L1)
 - tmo: hsd's, peppex hsd's/opal, acr feedback test
 - rix: no ami grafana
 - lower priority: fibers to clean up
 
-ami issues: 
-- (bug) need a new amityping
-- (bug) missing "dict" type in drop-down list of types for pyedit
-- (bug) one time exported pyeditor box had no terminals (not reproducible)
-- (inconvenience) can't export multiple pyeditor boxes to same py lib file
-  - have to change EventProcessor class so no conflicts in py lib file
-- (bug) exported py edit boxes need Reset when edited-in
-- (documentation) documentation: use Node/CtrlNode or other Node?
-- (feature?) beginrun in py edit box should be passed run: allows people to
-  make their own detectors, passing flags?
-- (bug) toggling between managed-library graphs:
-  File "/cds/home/c/cpo/git/ami/ami/flowchart/NodeLibrary.py", line 45, in addNodeType
-    raise Exception("Node type name '%s' is already registered." % name)
-Exception: Node type name 'Thresh2900' is already registered.
-
-
-commissioning plan docs (19309-a4002): https://docs.google.com/spreadsheets/d/e/2PACX-1vR_f7tpWeLufEHW12w9aPW64wv73TcaZ4MOIjRyjjxOY3s75vnJ3yRPD9OycXIyTmCDjIhKKexzHeXm/pubhtml
+high rate commissioning:
+- check l0delays and round-trip times and buffering
 
 srcf to do:
-- bos/fiber handling
-- fiber purchase (done)
-- new detector requests (see below)
 - atm edge-finding for piranha and feedback
-- rogue relative-path script (done, valerio used package-name mangling)
 - daq kafka bus all-files-started
 - buffering settings (test SIGSUSPEND for each device)
 *- monitoring decision for low-rate dets
@@ -81,11 +49,12 @@ srcf to do:
 detector requests:
 - (det) rixccd archon (working in daq sep 2022, beam 2 months later)
 - superconducting BLD (fall 2022)
-- (tid) high-rate mono-encoder (jan. 2023)
+- (tid) high-rate mono-encoder
+  o interpolated absolute encoder (march 2023)
+  o high rate relative encoder (december 2023)
 - dream hsd's in jan. 2023
 - (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
-- h5 full-pathname issue in part0 files
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
@@ -117,7 +86,9 @@ detector requests:
 * swapping slurm jobs script (ro)
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
+* exclude-detector list (mona)
 * calibration constant provenance (mikhail)
+* h5 full-pathname issue in part0 files
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * long eb connect times in rix (ric)
@@ -231,7 +202,8 @@ detector requests:
 ** shared drp node allocation mechanism (caf)
 * LCLS2 drop shots (bykiks evtcode 161)
 * MHz with real tmo analysis including pre/post processing partitioning (mona)
-* create more platforms for procmgr
+* create more platforms for procmgr, perhaps with offsets for each hutch based on xpm? (caf)
+* procmgr don't complain about undefined platform when all ports are specified (e.g. neh-base.cnf)
 * practice power outage
 * parallel jupyterhub with visualization (copy euxfel?) (riccardo/mona/wilko/valerio)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
@@ -658,3 +630,11 @@ ansys:
 - also include:
   - slac's ansys point-of-contact: singularity?
   - ansys engineer
+
+1DN=50e
+0.2DN=10e
+
+**********************************************************************
+
+abaqus (amir shojaie)
+https://drive.google.com/drive/folders/1EXyVkaVju9CAVzN_ZccaIT_taS9w1vzx
