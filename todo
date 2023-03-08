@@ -1,4 +1,13 @@
-* xtcav, tqdm, vincent, fee teststand, ami2 ci, tpr driver, workshop video, slow mmu, slowupdate, pytorch, camlink timing workaround, piranha fex
+* atmopal segv, xpp epixhr (robot arm to rack 33 or 30 (single mode)), epixHR+wave8 (lcls1 bld), epixUHR, abaqus mem, atmopal segv, mpo8, test rix, integrating andor, root replacement, txi kpp, epixhr 2M emulation in srcf, piranha fex, epixM, epixUHR
+
+riccardo:
+- root replacement for phil
+- epixM
+- fakecam epixhr (big project, using valerio's drp-python)
+
+omar: ipmi, daq-tmo-hsd-02 .ko file
+
+xpm0: event code 272,273 33kHz 35kHz
 
 - global: timing glitches, move atca to mon001 (and permanent netconfig), running neh-base.cnf from 4.5.17, piranha background (jan.) (slowupdate and L1)
 - tmo: hsd's, peppex hsd's/opal, acr feedback test
@@ -11,8 +20,6 @@ high rate commissioning:
 srcf to do:
 - atm edge-finding for piranha and feedback
 - daq kafka bus all-files-started
-- buffering settings (test SIGSUSPEND for each device)
-*- monitoring decision for low-rate dets
 - protect against hsd firmware unhappy if too many fex peaks (matt)
 * psana damage handling
 - remember detector readout groups in cnf? (done by caf)
@@ -47,7 +54,7 @@ srcf to do:
 *- automatic off by one detection
 
 detector requests:
-- (det) rixccd archon (working in daq sep 2022, beam 2 months later)
+- (det) rixccd archon (installed in hutch march 2023, beam oct 2023?)
 - superconducting BLD (fall 2022)
 - (tid) high-rate mono-encoder
   o interpolated absolute encoder (march 2023)
@@ -55,18 +62,20 @@ detector requests:
 - dream hsd's in jan. 2023
 - (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
+- ami roiarch with 3D (mikhail)
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- (tid, det) epixM (start work nov 2022, 2 320kpx, 5kHz, commission april/june 2023),
+- (tid, det) epixM (prototype in asc mid-may 2023, 2 320kpx, 5kHz, commission april/june 2023, probably delayed),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
   - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
   - 384*192*2 per camera (737MB/s per camera @5kHz)
-- (tid,det) epixHR (start work sept 2022, 2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers: prototype in august 2022, beam in sept 2022 (and dec 22). quad in November 2022.  full cam in march 2023.  full 2M det commissioning june 2023.  quad is different than single.
+- (tid,det) epixHR (prototype quad in march, start work sept 2022, 2Mpx, 5kHz, summer 2023) single MTP24 broken out to 3 MTP8 fibers: prototype in august 2022, beam in sept 2022 (and dec 22). quad in November 2022.  full cam in march 2023.  full 2M det commissioning june 2023.  quad is different than single.
   - 5 to 10 fibers pairs needs to be converted (use local xpm to generate
     multimode).  maybe 12 if edge-ml stuff.
   - 2 small epixHR's (140kpx?) single MTP12
+- cookiebox (early 2024): guarantee 8 channels, hope for 16
 - (will approve) (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?) https://www.alliedvision.com/en/products/alvium-configurator/alvium-1800-u/240/#_configurator
 - (approved for standalone) (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
@@ -74,16 +83,21 @@ detector requests:
 - (unapproved) (det) varex xrd 4343 cameras for mec? (offered assistance, lcls1, needed april/may 2023)
 - (unapproved) orca quest hamamatsu cxp camera? (lcls1, xpp? matt seaberg takahiro)
   https://www.hamamatsu.com/eu/en/product/cameras/qcmos-cameras/C15550-20UP.html
-- (tid, det) small epixUHR (200x200): beam-test with daq april 2023 (35kHz).
+- (tid, det) small epixUHR (200x200): (emulator available end of feb. 2023) beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
 - andor iXon for UED (flexible, June/July 2023?)
 
+* saxs/waxs data reduction (chuck)
+* fluctuation saxs/waxs data reduction (chuck)
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * improve destination callback (mona)
 * monitoring new serial numbers for LCLS2 (mikhail)
+* release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
 * swapping slurm jobs script (ro)
+* multi camlink cameras in a node
+* configuration management/control for calibration/fexA/fexB
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * exclude-detector list (mona)
@@ -92,6 +106,9 @@ detector requests:
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * long eb connect times in rix (ric)
+* more hsd's for simultaneous cookiebox/dream running (14+16 channels)
+  but maybe not more hsd's if tixel works (weaver)
+* not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
 * andor pedestal subtraction (mikhail)
 * managing sharing: readout groups, drp nodes, cnf files, timing system connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
@@ -99,12 +116,15 @@ detector requests:
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * mask editor (mikhail)
+* when running ami in daq detector list is intermittently not updated (ddamiani)
 * ability for select-gui to allow teb's to be deselected (down to 1) (mikhail)
 * epix100/epixhr deadtime not working (10Hz with epix100)
 * ami angular integration
 * per stream and per run event/dmg counts (caf)
+* better management of drp .service files (shared drive, puppet, kubernetes?)
 ** integrating detectors (daq and psana)
 * configure andor with configdb?
+* silver behenate fitting (including z-stagger) for panel positions (mikhail)
 ** benchmark SZ and other reduction for real expt data (mikhail)
   - can SZ handle gain-range detectors?
 * make it harder to leave out timing system
@@ -120,6 +140,7 @@ detector requests:
 * move TMO to xpm:2 (like RIX)
 * reduction algorithms
 * turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
+* timing system register to count inhibited l1accepts for integrating detectors (matt)
 * timetool slowupdate background handling in psana (mona)
 * elegant early shutdown of psana with smd0 irecv for mtip? (mona)
 * ami2 array thresholding (ro)
@@ -132,7 +153,7 @@ detector requests:
 * avoid missing 1 second of epicsarch data at beginning of run
 * small daq teststand for automated continuous-integration tests?
 * multisegment epicsinfo in pvadetector
-* ami controlling DRP ROI via configdb? (seshu)
+* ami controlling DRP general ROI with masks via configdb? (mikhail)
 * twocanary (toucan) in srcf
 * code/results migration to/from nersc/sdf
 * psmon only update one of multiplot (ddamiani)
@@ -146,7 +167,6 @@ detector requests:
 * mhz bld (matt)
 * uniform (epics?) interface to detector config registers for config scans
 * automatically push releases for lcls1/lcls2 to nersc/sdf/other
-* hsd test pattern mode (matt)
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
 * opals for different daq's on same machine (larry+pcds)
 * fix psana1 test release LD_PRELOAD hack caused by removal of
@@ -168,7 +188,7 @@ detector requests:
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb? (mikhail)
 * epicsarch support for strings (ric says it's hard)
-* support damage in psana (including counting)
+* support damage in psana, including counting (mona)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
 * support uniform 3D arrays in areadetector interface
@@ -240,7 +260,7 @@ detector requests:
 * S3DF support including ARP
 * automatic users add to sdf lcls queue (wilko, valerio)
 * python DRP? (valerio, ric)
-* fiber power readings everywhere (matt, tid)
+* fiber power readings from timing system kcu's (matt)
 * peaknet
 * ami:
   - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
@@ -638,3 +658,141 @@ ansys:
 
 abaqus (amir shojaie)
 https://drive.google.com/drive/folders/1EXyVkaVju9CAVzN_ZccaIT_taS9w1vzx
+
+**********************************************************************
+
+hr100 vs hr110 (hr100 for supervisors)
+need 328 (incident reporting)
+pjb101 (prejob briefing)
+431 (human performance improvement tools)
+cro202 (conflict of interest for pi's) (no such course, think it is cro102)
+
+**********************************************************************
+
+txi hxr kpp measurements:
+- postponed from april 29? may? june?
+- 1kHz and 10kHz SC beam going through hxr undulators into txi
+- wave8 daq (synced trigger)
+- want 100Hz old hxr gasdet bld, gate width up to andy/philheimann
+  o will do with unsynchronized epics.  silke says someone is working
+    on this
+- NO ebeam bld (hxr bld (e.g. gasdet, some ebeam)  will be 120Hz?)
+- epics
+- no daq camera. use untimestamped controls camera, perhaps recorded in daq.
+- need single mode fibers, may need cassettes
+- timing in wave8 will be done earlier in tmo
+- just wave8 and a bunch of epics variables
+
+tickets:
+
+https://jira.slac.stanford.edu/browse/LCLSECSD-1546
+https://jira.slac.stanford.edu/browse/LCLSECSD-1874
+
+**********************************************************************
+
+rix fim 0,1 ioc's down
+andor_dir ioc down
+andors/manta need to move to lcls2 timing
+no bld
+
+**********************************************************************
+
+xpp rack 2 elevation 22-25 ph5 (labelled on right): 4 free pairs on left?
+xpp rack B950S-30 elevation 46 cassette labelled slot 3
+strand 3,4 flipped in rightmost xpp cassette in 208, 1,2,5,6,7,8 good
+leftmost xpp cassette in 208 strands 7,8 go to xpp hutch slot 1, fibers 7,8 (currently has something plugged in in the xpp hutch, but not in 208
+
+- plug epixhr "data1" (fiber 1 on breakout cable, counting from 1)
+  into rack 30 slot 3 fibers 5,6
+- plug epixhr "data2" (fiber 2 on breakout cable, counting from 1)
+  into rack 30 slot 3 fibers 7,8
+- plug epixhr "timing" (fiber 4 on breakout cable, counting from 1)
+  into rack 30 slot 3 fibers 1,2
+
+in room 208 use top xpm right-most amc (0, I think) port 4 (counting from 0)
+data1 goes into bos 1.6.7->5.2.5
+data2 goes into bos 1.6.8->5.2.6
+
+txi 3 cassettes free
+txi rack b950s-13 elevation 43
+
+**********************************************************************
+
+conversation with xinxin
+
+this problem
+crashes
+slowness
+pyeditor not saving (inputs and outputs disappearing)
+
+align pinhole and gas-cell
+normalize with wave8
+sum thresholded/normalized image to measure background (time-window or infinity)
+plot summed number vs. x/y/tilt/roll for pinhole and gas-cell
+
+use mean vs. scan
+
+scatter sum vs. motor
+
+want uniform background, compare quadrants (make difference close to zero)
+
+ami-local -b 1 -f interval=0.01 psana://exp=cxilx9320,run=46,repeat=true &
+This is a dataset when we were aligning the gas cell
+ami-local -b 1 -f interval=0.01 psana://exp=cxilx9320,run=47,repeat=true &
+This is a dataset when we were aligning the pinhole
+ami-local -b 1 -f interval=0.01 psana://exp=cxilx6520,run=244,repeat=true &
+This is a dataset of SF6 static scattering
+ami-local -b 1 -f interval=0.01 psana://exp=cxilx6520,run=214,repeat=true &
+No gas, X-ray background, we might have damaged the pinhole because the background looks bad...
+
+**********************************************************************
+
+epixuhr:
+- can download software
+- one set of bare boards in lab1 (have been running it)
+
+https://github.com/slaclab/epix-uhr-dev
+instructions for running devGui above
+kcu1500 firmware from https://github.com/slaclab/pgp-pcie-apps/releases
+
+goals:
+- get events flowing in the daq
+  - check that timing link from the xpm works
+- charge injection calibration software can be written now, but
+  won't provide real data until we have real asic
+
+emulator needs 6V digital and 6V analog power supply
+will provide banana plugs
+detector group will provide power supplies
+
+will go in lab3 or FEE alcove (currently in lab1)
+
+major differences between HR/UHR:
+- 17kHz frames (eventually 35kHz)
+- shape is different
+- saci bus is different (register writes)
+  o all the registers going to the asic are on saci
+  o all other registers are on axi
+- definition of saci registers is in
+
+start from curent HR or from devGui? Lots of changes to make clocking
+synchronous so not clear.
+
+talk to pietro about technical stuff
+lower priority than epixM and epixHR
+
+**********************************************************************
+
+xpp epixhr test:
+
+- with lcls1 timing using new (top) xpm in 208
+- use existing old-style wave8 bld
+- not clear if we look like tmo/rix/tst
+
+weight loss
+nicotine
+down by 11
+moth
+florida
+ious
+trivial
