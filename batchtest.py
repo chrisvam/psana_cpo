@@ -22,7 +22,7 @@ ana15 = ['/reg/data/ana15/test/psana_batch/ost%x' % i for i in range(1,7)]
 
 xtc_ana = [
     '/reg/data/ana01/test/psana_batch',
-    '/reg/data/ana02/test/psana_batch',
+    #'/reg/data/ana02/test/psana_batch',
 ]
 
 xtc_ana+=ana03
@@ -42,8 +42,8 @@ ffb = ['/cds/data/drpsrcf/temp/psana_batch']
 
 timeLimitMinutes = 2
 headroomMinutes = 2
-queues = ['psfehq'  , 'psanaq', 'anaq']
-dirs =   [all_ana, all_ana, calib_ana+ffb]
+queues = ['psanaq', 'anaq']
+dirs =   [all_ana, calib_ana+ffb]
 
 logdir = '/reg/g/psdm/utils/batchtest_slurm/logs/'
 
@@ -82,6 +82,7 @@ def submit(hpair,q,joblist,dirlist,jobid):
     # via /etc/sudoers.d/srun file with a line like this:
     # cpo ALL=(slurm) NOPASSWD:SETENV: /usr/bin/srun
     os.environ['SLURM_JOBID']=str(jobid)
+
     cmd = 'sudo --preserve-env=PATH,SLURM_JOBID,SIT_DATA,SIT_ROOT,SIT_PSDM_DATA -u slurm /usr/bin/srun --no-alloc --jobid='+str(jobid)+timelimit+qopt+logopt+hostopt+' '+pycmd
     subprocess.Popen(cmd, shell=True)
     time.sleep(.1) # this sleep may help srun's that don't seem to start?
