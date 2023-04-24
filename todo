@@ -1,6 +1,28 @@
-* atmopal segv, xpp epixhr (robot arm to rack 33 or 30 (single mode)), epixHR+wave8 (lcls1 bld), epixUHR, abaqus mem, atmopal segv, mpo8, test rix, integrating andor, root replacement, txi kpp, epixhr 2M emulation in srcf, piranha fex, epixM, epixUHR
+* rix daq, password, roberto, valmar, more timing cables, mcbrowne monitoring, passwords, s3df import, s3df batchtests, lcls1 wave8 bld, tmo wave8, xpp epixhr (robot arm to rack 33 or 30 (single mode)), lcls1 gdet in lcls2, epixUHR, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), txi rp (wave8+"GEM"gdet epics), piranha fex, epixM, epixUHR
 
-riccardo:
+integ andor issues:
+- psmon rank0 with "mpirun -n 5 python andor.py" (maybe just call publish.init()?)
+- matt's dropped-l1 counter
+- no unaligned_andor_norm in h5?
+- put srv_node in elog db
+- wrapper scripts to watch for updated srv_node for psplot
+- do normalization correctly if andor shot is dropped due to deadtime
+- understand batch_size=1 param to datasource
+
+s3df issues:
+- live mode (nfs and native?)
+- open ports
+- import issue
+- srun pmix "canary"
+- multicluster
+
+tmo detectors:
+
+Detectors to be ready in June: 2X FIMs (2 on KB1), ATM opal&piranha for IP1, FZP opal&piranha, HSDs, BLD, Laser wav8, IM5K4 
+
+Detectors to be added by the end of calendar year 2023: two more FIMs on KB2 and IM6K4, ATM opal&piranha for IP2, another Laser wav8 for IP2
+
+
 - root replacement for phil
 - epixM
 - fakecam epixhr (big project, using valerio's drp-python)
@@ -98,6 +120,7 @@ detector requests:
 * swapping slurm jobs script (ro)
 * multi camlink cameras in a node
 * configuration management/control for calibration/fexA/fexB
+* test timbvd reduction for txi and libpressio
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * exclude-detector list (mona)
@@ -105,6 +128,7 @@ detector requests:
 * h5 full-pathname issue in part0 files
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
+* dgramedit requires config_dgramedit argument. should it just be config_dgram? (mona)
 * long eb connect times in rix (ric)
 * more hsd's for simultaneous cookiebox/dream running (14+16 channels)
   but maybe not more hsd's if tixel works (weaver)
@@ -117,6 +141,7 @@ detector requests:
  - make drp nodes more uniform?
 * mask editor (mikhail)
 * when running ami in daq detector list is intermittently not updated (ddamiani)
+* have daq bluesky scan scripts default to "scan" as scan detector name to avoid psana crash (caf)
 * ability for select-gui to allow teb's to be deselected (down to 1) (mikhail)
 * epix100/epixhr deadtime not working (10Hz with epix100)
 * ami angular integration
@@ -129,6 +154,7 @@ detector requests:
   - can SZ handle gain-range detectors?
 * make it harder to leave out timing system
 * algorithm for non-quantized det-image charge sharing (mikhail)
+* raise exception instead of crashing when idx/smd files are missing in psana1
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
 * create an example of parallel smallh5 with mpi/dask (riccardo)
 * test psana2 live mode (mona)
@@ -675,7 +701,7 @@ txi hxr kpp measurements:
 - wave8 daq (synced trigger)
 - want 100Hz old hxr gasdet bld, gate width up to andy/philheimann
   o will do with unsynchronized epics.  silke says someone is working
-    on this
+    on this (called "GEM")
 - NO ebeam bld (hxr bld (e.g. gasdet, some ebeam)  will be 120Hz?)
 - epics
 - no daq camera. use untimestamped controls camera, perhaps recorded in daq.
@@ -697,6 +723,8 @@ no bld
 
 **********************************************************************
 
+xpp epixhr test:
+
 xpp rack 2 elevation 22-25 ph5 (labelled on right): 4 free pairs on left?
 xpp rack B950S-30 elevation 46 cassette labelled slot 3
 strand 3,4 flipped in rightmost xpp cassette in 208, 1,2,5,6,7,8 good
@@ -715,6 +743,19 @@ data2 goes into bos 1.6.8->5.2.6
 
 txi 3 cassettes free
 txi rack b950s-13 elevation 43
+
+for the xpp wave8 data silke writes:
+
+XppSb2BeamMon	
+239.255.24.75	XPP-SB2-BMMON	XPP Local
+
+need to add second bld device with "ipimb" structure with new
+multicast group
+239.255.24.40
+https://confluence.slac.stanford.edu/display/PCDS/Notes+on+Photon-Side+BLD+Generation
+https://confluence.slac.stanford.edu/pages/viewpage.action?pageId=138790412
+
+There also is SB3 (...76), but I think that is the device that is current an LCLS2 wave8. But check both, one should work, otherwise inquire with Vincent
 
 **********************************************************************
 
@@ -789,10 +830,34 @@ xpp epixhr test:
 - use existing old-style wave8 bld
 - not clear if we look like tmo/rix/tst
 
-weight loss
-nicotine
-down by 11
-moth
-florida
-ious
-trivial
+**********************************************************************
+
+- 31,34,39 broken
+- 32 epixhr timing
+- 33,35-38,40-44 epixhr emulation
+- 45 wave8
+
+**********************************************************************
+
+saxs/waxs meeting with tim van driel and andy aquila
+
+other expts to analyze:
+
+photonizing:
+- yanwen xcs
+- minitti photonizing
+
+saxs/waxs:
+gas phase
+low intensity jet
+detector calibration with constant sample and varying intensities to study systematics
+2x2 high-q binning is a possibility
+
+next on the list:
+
+fluctuation saxs/waxs.  mark hunter old not-very-good data. new expt coming up.
+spi: binning in q space because detector is not planar (needs fancy binning)
+
+for next time:
+look at differences with/without compression
+
