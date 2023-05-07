@@ -1,4 +1,5 @@
-* rix daq, password, roberto, valmar, more timing cables, mcbrowne monitoring, passwords, s3df import, s3df batchtests, lcls1 wave8 bld, tmo wave8, xpp epixhr (robot arm to rack 33 or 30 (single mode)), lcls1 gdet in lcls2, epixUHR, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), txi rp (wave8+"GEM"gdet epics), piranha fex, epixM, epixUHR
+det.image, 
+* segment sort, high rate gmd/xgmd, txi w8, tmo atm piranha, andor psmon, jana slides, full uniqueid, psana1 live-mode stat workaround, mfx fibers, more timing cables, tmo wave8, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), txi rp (wave8+"GEM"gdet epics), epixM, epixUHR
 
 integ andor issues:
 - psmon rank0 with "mpirun -n 5 python andor.py" (maybe just call publish.init()?)
@@ -10,9 +11,9 @@ integ andor issues:
 - understand batch_size=1 param to datasource
 
 s3df issues:
+- ampere preemptable
 - live mode (nfs and native?)
 - open ports
-- import issue
 - srun pmix "canary"
 - multicluster
 
@@ -120,6 +121,7 @@ detector requests:
 * swapping slurm jobs script (ro)
 * multi camlink cameras in a node
 * configuration management/control for calibration/fexA/fexB
+* individual deadtime sources in grafana so we don't need to run xpmpva (matt)
 * test timbvd reduction for txi and libpressio
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
@@ -861,3 +863,22 @@ spi: binning in q space because detector is not planar (needs fancy binning)
 for next time:
 look at differences with/without compression
 
+**********************************************************************
+
+fibers to mfx
+
+lowest fodu in rack 2 in 208 rightmost cassette maybe?
+
+need 6 strands
+12 strands 8 available single-mode from mezzanine to mfx
+are going to be in mfx rack
+timescale: equipment arrives in 2 weeks, a month until it works
+goes to main rack in hutch (rack 4) where networking is
+
+cf 1529
+jf 135
+tc 511+69
+jv 630
+sc 117+116
+
+eosinophilic asophagitis
