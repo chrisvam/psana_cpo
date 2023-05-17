@@ -141,8 +141,9 @@ exptlist = []
 #exptlist.append(exptruns('cxilu9218',[12],610))
 #exptlist.append(exptruns('amox23616',[104,131,137],620))
 #exptlist.append(exptruns('xppx49520',[267],630))
-exptlist.append(exptruns('xpplv9818',[127],640))
-exptlist.append(exptruns('mfxc00118',[239],650))
+# xpptut15 run 640 unreported?
+exptlist.append(exptruns('xpplv9818',[127],650))
+exptlist.append(exptruns('mfxc00118',[239],660))
 
 rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
