@@ -1,5 +1,27 @@
-det.image, 
-* segment sort, high rate gmd/xgmd, txi w8, tmo atm piranha, andor psmon, jana slides, full uniqueid, psana1 live-mode stat workaround, mfx fibers, more timing cables, tmo wave8, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), txi rp (wave8+"GEM"gdet epics), epixM, epixUHR
+* riccardo proj, calibdir reproduce, psffb jobs, large-gate deadtime, fairshare, rix practice, gem-gdet, andor 1Hz, github actions (curl vs. requests), high rate gmd/xgmd, andor psmon, psana1 live-mode stat workaround, mfx fibers, more timing cables, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), epixM, epixUHR
+
+mona proj:
+- excluded detector list in confluence documentation
+- eliminate filter_fn text from confluence documentation (now smd_callback)
+- test live mode with full tmo.cnf
+- more timing fibers for ric epixhr emulation
+- dgramedit requires config_dgramedit argument. should it just be config_dgram?
+- ttool background (work with ric)
+- destination callback (conflicts with integrating detector?). work with silke,andy@txi
+- epixM
+
+rix andor:
+- make it easier:
+  o input ms instead of buckets (1buckets=14/13us)
+    - readoutime/exposuretime/beamrate/nrepeat
+  o create easier access to the xpm PV's (without PVAADDRLIST)
+  o mike/kukhee eventcode xfave
+- make it more real
+  o for 5ms readout 4648 for number of buckets (using 14/13us per bucket)
+- add event code filtering to the analysis script
+- why didn't we see andor in ami with full image?
+
+- wave8 deadtime, mono encoder crash, hsd deadtime @10kHz
 
 integ andor issues:
 - psmon rank0 with "mpirun -n 5 python andor.py" (maybe just call publish.init()?)
@@ -11,10 +33,13 @@ integ andor issues:
 - understand batch_size=1 param to datasource
 
 s3df issues:
+- on/off shift: qos on the account gets set automatically
+- weka core pinning
+- fairshare?
 - ampere preemptable
-- live mode (nfs and native?)
-- open ports
 - srun pmix "canary"
+- open ports
+- live mode (nfs and native?)
 - multicluster
 
 tmo detectors:
@@ -89,7 +114,7 @@ detector requests:
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- (tid, det) epixM (prototype in asc mid-may 2023, 2 320kpx, 5kHz, commission april/june 2023, probably delayed),
+- (tid, det) epixM (integration prototype (no asic, no emulation) from tid beginning of june 2023? version with asic end of june?, 2 320kpx, 5kHz, commission april/june 2023, probably delayed),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
   - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
@@ -125,7 +150,6 @@ detector requests:
 * test timbvd reduction for txi and libpressio
 * update aes-stream-driver to 64-bit so we can unpin rogue
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
-* exclude-detector list (mona)
 * calibration constant provenance (mikhail)
 * h5 full-pathname issue in part0 files
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
@@ -625,78 +649,6 @@ same firmware on receiving end?
 
 **********************************************************************
 
-2 cfg 1a:a cmp017 dev1 in cnf but txlinkid says should be dev0
-3 cfg 1a:b cmp020 dev0 in cnf but txlinkid says should be dev1 
-5 cfg 3d:b cmp018 dev0 in cnf but txlinkid says should be dev1
-6 cfg 3d:a cmp021 dev0 in cnf no pgp lock
-8 5e:a cmp022 dev1 in cnf but txlinkid says should be dev0
-9 5e:b cmp022 dev0 in cnf but txlinkid says should be dev1
-10 da:b cmp024 dev0 in cnf but txlinkid says should be dev1
-11 da:a cmp024 dev1 in cnf but txlinkid says should be dev0
-
-tmo-drp[37848]: <I> MebCtrb   sent Enable @ 1034556513.272083936 (00011d3c6f8840) to MEB ID 1 @   0x7f7
-7fc4ef000 (00080000 + 12 * 00800000)
-tmo-drp[37848]: <C> PGPReader: Jump in complete l1Count 13459 -> 13444 | difference -15, tid L1Ac
-cept
-tmo-drp[37848]: <C> data: 3f99cfcd 0c00011d 1b87f332 3daa149a d3290001 00003484 service: 0xc
-tmo-drp[37848]: <C> lastTid L1Accept
-tmo-drp[37848]: <C> lastData: 3f99b1b6 0c00011d 1b07f32f 3daa149a cf270001 00003493
-tmo-drp[37848]: <E> broken event:  00000000
-tmo-drp[37848]: <E> broken event:  00000000
-tmo-drp[37848]: <E> broken event:  00000000
-tmo-drp[37848]: <E> broken event:  00000000
-tmo-drp[37848]: <E> broken event:  00000000
-
-ana: mona, mikhail, valmar, riccardo, ddamiani
-daq: claus, matt, cpo, valmar, caf
-
-**********************************************************************
-
-fee running
-
-early november (old timing)
-late january (new timing)
-
-slow power meter pv camera un-timestamped (phil heimann)
-gmd/xgmd
-ebeam bld?
-epicsarch bunch of slow pv's
-
-**********************************************************************
-
-ansys:
-
-- linux, not ubuntu, rhel ok
-- mpi
-- used lsf in past, need to figure out if slurm is ok?
-- license already on an existing slac server (nodenames license1)
-- ok to wait in queue
-- want 512 cores (ran 128 cores a couple of years in the centos7 cluster)
-- thermal loads on mono, xpp (diling), dxs (hasan) or spectrometer
-- juhao would install, previously was a postdoc (gzhou)
-- previously have used existing mpi installations (could try conda)
-- also include:
-  - slac's ansys point-of-contact: singularity?
-  - ansys engineer
-
-1DN=50e
-0.2DN=10e
-
-**********************************************************************
-
-abaqus (amir shojaie)
-https://drive.google.com/drive/folders/1EXyVkaVju9CAVzN_ZccaIT_taS9w1vzx
-
-**********************************************************************
-
-hr100 vs hr110 (hr100 for supervisors)
-need 328 (incident reporting)
-pjb101 (prejob briefing)
-431 (human performance improvement tools)
-cro202 (conflict of interest for pi's) (no such course, think it is cro102)
-
-**********************************************************************
-
 txi hxr kpp measurements:
 - postponed from april 29? may? june?
 - 1kHz and 10kHz SC beam going through hxr undulators into txi
@@ -710,6 +662,9 @@ txi hxr kpp measurements:
 - need single mode fibers, may need cassettes
 - timing in wave8 will be done earlier in tmo
 - just wave8 and a bunch of epics variables
+- other epics: power meter (andy, can get name from jyoti) controls uv sensitive diodes
+  (alyssa, jyoti can provide epics names).  get gem-gdet names from silke (she
+  said it might be working on may 11, 2023)
 
 tickets:
 
@@ -875,10 +830,4 @@ are going to be in mfx rack
 timescale: equipment arrives in 2 weeks, a month until it works
 goes to main rack in hutch (rack 4) where networking is
 
-cf 1529
-jf 135
-tc 511+69
-jv 630
-sc 117+116
-
-eosinophilic asophagitis
+**********************************************************************
