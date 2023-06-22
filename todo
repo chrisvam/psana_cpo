@@ -1,4 +1,15 @@
-* riccardo proj, calibdir reproduce, psffb jobs, large-gate deadtime, fairshare, rix practice, gem-gdet, andor 1Hz, github actions (curl vs. requests), high rate gmd/xgmd, andor psmon, psana1 live-mode stat workaround, mfx fibers, more timing cables, integrating andor (and step scans, goose also set per andor image, multiple andors with different integration times, 10ms-1s), epixM, epixUHR
+* lcls1 timing, rix scans, riccardo proj, tmo lcls1, ming-fu tpr/opal, pyxpm err, usleep, print statements, rix scans, rix failures, rix xpm pv access, andor psmon, gem-gdet, psana1 live-mode stat workaround, mfx fibers, more timing cables, epixM, epixUHR
+
+weka stuff:
+4.2=multicluster
+july 4th
+rhel8 weka server nodes (for multicluster): 
+ethernet multicluster for s3df side:
+s3 backend
+ib multicluster (ffb) not yet, so nfs where ACLs don't work, could workaround by using ethernet
+disappearing ib xface: working with nvidia. workaround: downgrade, but prevents moving to 4.3 (spring 2024). 4.1 supports rolling updates. 4.0.10.5 currently, july 4th
+drp-srcf nodes upgrade: potentially OFED changes, need 1 drp-srcf-cmp* RHEL8 but won't move all the clients, and client weka versions 4.2 (depends on weka), test nodes not being used
+data-mover/silke: decide friday workaround in place next week
 
 mona proj:
 - excluded detector list in confluence documentation
@@ -10,36 +21,16 @@ mona proj:
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
 - epixM
 
-rix andor:
-- make it easier:
-  o input ms instead of buckets (1buckets=14/13us)
-    - readoutime/exposuretime/beamrate/nrepeat
-  o create easier access to the xpm PV's (without PVAADDRLIST)
-  o mike/kukhee eventcode xfave
-- make it more real
-  o for 5ms readout 4648 for number of buckets (using 14/13us per bucket)
-- add event code filtering to the analysis script
-- why didn't we see andor in ami with full image?
-
-- wave8 deadtime, mono encoder crash, hsd deadtime @10kHz
-
-integ andor issues:
-- psmon rank0 with "mpirun -n 5 python andor.py" (maybe just call publish.init()?)
-- matt's dropped-l1 counter
-- no unaligned_andor_norm in h5?
-- put srv_node in elog db
-- wrapper scripts to watch for updated srv_node for psplot
-- do normalization correctly if andor shot is dropped due to deadtime
-- understand batch_size=1 param to datasource
-
 s3df issues:
-- on/off shift: qos on the account gets set automatically
-- weka core pinning
+- test early next week
+- test filesystems now and send notifications
+- enable fairshare
+- default 125 cores on milan
+- seshu/amedeo/users agreeing with enabling ampere qos-preemptable
+- silke: coordinator roles deprecated for job kill, since it's global (rubin, lcls...)
 - fairshare?
-- ampere preemptable
 - srun pmix "canary"
 - open ports
-- live mode (nfs and native?)
 - multicluster
 
 tmo detectors:
@@ -47,59 +38,6 @@ tmo detectors:
 Detectors to be ready in June: 2X FIMs (2 on KB1), ATM opal&piranha for IP1, FZP opal&piranha, HSDs, BLD, Laser wav8, IM5K4 
 
 Detectors to be added by the end of calendar year 2023: two more FIMs on KB2 and IM6K4, ATM opal&piranha for IP2, another Laser wav8 for IP2
-
-
-- root replacement for phil
-- epixM
-- fakecam epixhr (big project, using valerio's drp-python)
-
-omar: ipmi, daq-tmo-hsd-02 .ko file
-
-xpm0: event code 272,273 33kHz 35kHz
-
-- global: timing glitches, move atca to mon001 (and permanent netconfig), running neh-base.cnf from 4.5.17, piranha background (jan.) (slowupdate and L1)
-- tmo: hsd's, peppex hsd's/opal, acr feedback test
-- rix: no ami grafana
-- lower priority: fibers to clean up
-
-high rate commissioning:
-- check l0delays and round-trip times and buffering
-
-srcf to do:
-- atm edge-finding for piranha and feedback
-- daq kafka bus all-files-started
-- protect against hsd firmware unhappy if too many fex peaks (matt)
-* psana damage handling
-- remember detector readout groups in cnf? (done by caf)
-- epicsarch not writing out 1MHz l1accepts (or goes in slow readout group)
-- xpm fanouts in srcf (maybe not urgent since only piranha's need them?)
-*- auto coupled deadtime xpm register support in timing system python
-- time in detectors
-*- need slowupdate to obey deadtime? (messes up Ric's control-Z test of deadtime in srcf)
-*- move all tmo devices to xpm:2
-- move the pyxpm processes/network to SRCF
-  - could also have local connections from e.g. rix nodes to the rix atca crate
-  - short term: DAQ:NEH:XPM/DAQ:TMO:HSD/RIX:FIM:W8/MR4K2:FIM:W8/MR3K4:FIM:W8/MR2K4:FIM:W8
-    goes in the gateway RW
-- ami-settable data reduction params (e.g. thresholds for hsd)
-*- scale to many drp's
-- high rate dets
-  - piranha
-*  - bld
-  - hsd
-  - wave8
-  - epixhr
-- low rate det
-  - epicsarch
-  - pvadet
-- roentdek alg (done by mona)
-- chunking (done by caf)
-*- python drp
-- rixccd
-- psana
-  - live-mode
-*- dynamic resource mgmt
-*- automatic off by one detection
 
 detector requests:
 - (det) rixccd archon (installed in hutch march 2023, beam oct 2023?)
@@ -136,26 +74,24 @@ detector requests:
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
 - andor iXon for UED (flexible, June/July 2023?)
 
-* saxs/waxs data reduction (chuck)
-* fluctuation saxs/waxs data reduction (chuck)
+* saxs/waxs data reduction (stefano)
+* uniform (epics?) interface to detector config registers for config scans
+* fluctuation saxs/waxs data reduction (stefano)
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * improve destination callback (mona)
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
-* swapping slurm jobs script (ro)
 * multi camlink cameras in a node
 * configuration management/control for calibration/fexA/fexB
-* individual deadtime sources in grafana so we don't need to run xpmpva (matt)
-* test timbvd reduction for txi and libpressio
-* update aes-stream-driver to 64-bit so we can unpin rogue
+psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
+* sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
 * calibration constant provenance (mikhail)
 * h5 full-pathname issue in part0 files
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
-* dgramedit requires config_dgramedit argument. should it just be config_dgram? (mona)
-* long eb connect times in rix (ric)
+* only 4 bits for xpm number in xpm remote link id (matt)
 * more hsd's for simultaneous cookiebox/dream running (14+16 channels)
   but maybe not more hsd's if tixel works (weaver)
 * not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
@@ -170,7 +106,7 @@ detector requests:
 * have daq bluesky scan scripts default to "scan" as scan detector name to avoid psana crash (caf)
 * ability for select-gui to allow teb's to be deselected (down to 1) (mikhail)
 * epix100/epixhr deadtime not working (10Hz with epix100)
-* ami angular integration
+* ami 3D angular integration (mikhail)
 * per stream and per run event/dmg counts (caf)
 * better management of drp .service files (shared drive, puppet, kubernetes?)
 ** integrating detectors (daq and psana)
@@ -182,42 +118,29 @@ detector requests:
 * algorithm for non-quantized det-image charge sharing (mikhail)
 * raise exception instead of crashing when idx/smd files are missing in psana1
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
-* create an example of parallel smallh5 with mpi/dask (riccardo)
 * test psana2 live mode (mona)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
 * ami mypy daemon is long-lived: can cross release boundaries
 * configdb management for changing fex/teb decisions
 * run lcls1 jungfrau at 120Hz (ddamiani, dan)
-* move TMO to xpm:2 (like RIX)
-* reduction algorithms
-* turning low rate data into per-shot high rate (e.g. ttool background, encoder) ami+psana (mona)
-* timing system register to count inhibited l1accepts for integrating detectors (matt)
 * timetool slowupdate background handling in psana (mona)
-* elegant early shutdown of psana with smd0 irecv for mtip? (mona)
-* ami2 array thresholding (ro)
 * procmgr performance with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
 * alias not in xtc file so more flexible
-* psana datasource for drp (valerio/mona)
-* teb having memory allocation problem after too many deallocate's (ric)
 * select monitoring destination for particular events (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
 * small daq teststand for automated continuous-integration tests?
 * multisegment epicsinfo in pvadetector
 * ami controlling DRP general ROI with masks via configdb? (mikhail)
-* twocanary (toucan) in srcf
-* code/results migration to/from nersc/sdf
 * psmon only update one of multiplot (ddamiani)
 * psana test to verify that all detector interfaces follow the rules
 * psmon XYPlot format list of one item breaks multiple lines silently (ddamiani)
 * more psmon examples for andy (ddamiani)
-* consider adding "safe" Xtc::alloc with max-size argument to avoid fixed-buf overruns (or maybe in higher layer)
 * off-by-one enabling automation (stoppers)
 * xface for ami controlling detector params
 * web display of ami plots
 * mhz bld (matt)
-* uniform (epics?) interface to detector config registers for config scans
 * automatically push releases for lcls1/lcls2 to nersc/sdf/other
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
 * opals for different daq's on same machine (larry+pcds)
@@ -226,13 +149,10 @@ detector requests:
   in SConsTools/psdm_cplusplus.py for gcc48.
 * psana dbase access for live mode list of files
 * handle bad external timing better? (matt)
-* deadtime-per-detector in grafana
 * generic detector calibration constants (e.g. manta)
 * teststand: kcu's to acc nodes (01,02,05,06), bring back ffb, fix ib manager and moving it to switch
 * make swmr work with small-h5
 ** for phil: configdb_readxtc and compare configs (ro, caf)
-* archon for rix (dan)
-* improved psana1 tests (ro)
 * lcls2 common-mode for panels in different gain ranges (mikhail)
 * plims for lcls2 (mikhail)
 * mpi jobs not exiting if one core crashes
@@ -243,8 +163,6 @@ detector requests:
 * support damage in psana, including counting (mona)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
-* support uniform 3D arrays in areadetector interface
-* remove git passwords for relmanage
 * eliminate opal lcls1->lcls2 timing toggling (larry, ben)
 * multiseg epics (kwargs or collection segids?) (mona)
 * jungfrau/epix dark shot pedestals
@@ -261,17 +179,16 @@ detector requests:
 * spares
 ** make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * move readout group config info from segment levels to ts
-* optionally don't record selected detectors to disk
+** optionally don't record selected detectors to disk
 * mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
-* daq window placement
+* daq window auto placement
 * parallelized calibrations (mikhail)
 * state machine confusing (ric email) lower priority?
 * monitor deadtime per-lane (matt)
 * improved grafana (like ganglia)
 * move other hutches to lcls2
 * allocation of readout groups and devices, lanes
-** shared drp node allocation mechanism (caf)
 * LCLS2 drop shots (bykiks evtcode 161)
 * MHz with real tmo analysis including pre/post processing partitioning (mona)
 * create more platforms for procmgr, perhaps with offsets for each hutch based on xpm? (caf)
@@ -293,7 +210,7 @@ detector requests:
 * update procServ (caf)
 * slow updates need to obey deadtime (matt)
 * setting msgdelay in timing system? (matt)
-* syslog print throttling (caf)
+** syslog print throttling (caf)
 * off-by-one (psana1/2) (ro)
 * off-by-one support for low-rate devices
 * units support in det xface
@@ -831,3 +748,77 @@ timescale: equipment arrives in 2 weeks, a month until it works
 goes to main rack in hutch (rack 4) where networking is
 
 **********************************************************************
+
+elegant handling of bad configurations: what can we do?
+
+(bad triggering)
+
+two messy cases:
+
+wrong l0delay: crashes, deadtime
+too large gate_ns: missed trigger (some detectors, like piranha)
+  - remove the detectors from partition in a binary-search fashion to
+    learn who is responsible, then look at settings of that detector, in particular
+    gate_ns
+
+piranha may need its own l0delay because of hutch->srcf trigger round-trip (7us each way?)
+l0delay is in us, so instead of 99, perhaps 79? lower l0delay increases pressure
+on buffering but OK at 100kHz.
+
+hsd: shouldn't drop triggers because it supports overlapping windows.  even if
+     data volume gets large deadtime should keep triggering orderly.
+piranha: drop a trigger and get off by one
+   could set batcher-event-builder timeouts, but would have to change dynamically
+   with gate_ns and trigger-rates
+
+100ms different timestamp for the andor (when triggering at 10Hz)
+
+(should test, but hopefully under control) slow code/datatransfer: deadtime, associated with right det
+
+**********************************************************************
+
+norm=g5=evtcode272 (SEQCODES 0Hz?) (one image every 30 seconds in ami?)
+dir=g6=evtcode276 (SEQCODES 102Hz?) (0.5Hz in ami)
+
+switch norm andor to evtcode273 (SEQCODES 102Hz): behaves better
+
+**********************************************************************
+
+We're looking to replace our 50 gallon gas water heater with a heat-pump water heater.  There is physical space (we might move it about 4 feet to an area with 8 feet of vertical height).  I believe we have electrical capacity for a 240V 15A model from a nearby sub panel (about 10 feet away).  We would like a 10 year warranty, if possible.  You can see some photos here:  https://photos.app.goo.gl/qUsDruW5kQVZBKpFA.  We would need some help (e.g. documentation) to get rebates from Peninsula Clean Energy as well as permits.  Thanks!
+
+noise (rheem)
+power
+wall strap
+warranty
+rebates
+condensate
+leak detection
+15a vs 30a vs 120v
+code/permits
+
+recommended electricians by wizard plumbing: jeff lewis electric, bayshore electrical
+603-867-8248
+recirculation pump?
+
+bayshore plumbers also recommended bayshore electric
+
+electrician rob ortiz 669 292 9707 recommended by united plumbing. liked him.
+
+shoreway plumbing:
+julio and hugo (plumbers installing water heater)
+jose: 650-670-2036
+
+try other atm's
+call boa to get list of symbols
+
+lab3: 68.2F later: 66.8F
+pietro's lab: 69.5F later: 69.5F
+fee alcove outside racks: 71.3F
+fee alcove inside rack: 81.4F
+
+lab3 nodes:
+drp-tst-dev008, dev004, acc05, acc02, acc01,
+daq-tst-dev02 (add kcu?), dev03 (add kcu?), dev06 (hsd)
+
+redwood city heat-pump water heater
+vicky sherman 650-780-7472 vsherman@redwoodcity.org climateactionplan@redwoodcity.org
