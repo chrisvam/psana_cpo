@@ -43,7 +43,8 @@ smdfiles = [open(f,'r') for f in smdnames]
 outsmdfiles = [open(f,'w') for f in outsmdnames]
 
 while 1:
-    for fin,fout in zip(smdfiles+files,outsmdfiles+outfiles):
+    #for fin,fout in zip(smdfiles+files,outsmdfiles+outfiles):
+    for fin,fout in zip(files+smdfiles,outfiles+outsmdfiles):
         dg = Dgram(fin)
         print(dg.transitionId(),dg.clocklow(),dg.clockhigh(),dg.fiducials())
         if dg.transitionId()==12: time.sleep(1)
