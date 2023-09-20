@@ -6,6 +6,8 @@ import stat
 import numpy as np
 import os
 
+rootdir = '/reg/d/psdm'
+
 class Dgram:
     def __init__(self,f):
         self._nwords = 10
@@ -64,7 +66,7 @@ def safecopy(inf,outf):
 # assumes just one set of constants for now, using the first run
 def copyconstants(hutch,expt,inruns,outruns):
     from PSCalib.CalibFileFinder import CalibFileFinder
-    cdir = os.path.join('/reg/d/psdm',hutch,expt,'calib')
+    cdir = os.path.join(rootdir,hutch,expt,'calib')
     groupdirs = glob.glob(os.path.join(cdir,'*'))
     for groupdir in groupdirs:
         if ':' not in groupdir: continue # heuristic to avoid random dirs in calib/
@@ -142,10 +144,10 @@ exptlist = []
 #exptlist.append(exptruns('amox23616',[104,131,137],620))
 #exptlist.append(exptruns('xppx49520',[267],630))
 # xpptut15 run 640 unreported?
-exptlist.append(exptruns('xpplv9818',[127],650))
-exptlist.append(exptruns('mfxc00118',[239],660))
+#exptlist.append(exptruns('xpplv9818',[127],650))
+#exptlist.append(exptruns('mfxc00118',[239],660))
+exptlist.append(exptruns('mfxx49820',list(range(15,20)),670))
 
-rootdir = '/reg/d/psdm'
 datadirs = ['xtc/index','xtc/smalldata','xtc']
 outtopdir = os.path.join(rootdir,'xpp/xpptut15')
 for e in exptlist:
