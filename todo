@@ -1,4 +1,66 @@
-* lcls1 timing, rix scans, riccardo proj, tmo lcls1, ming-fu tpr/opal, pyxpm err, usleep, print statements, rix scans, rix failures, rix xpm pv access, andor psmon, gem-gdet, psana1 live-mode stat workaround, mfx fibers, more timing cables, epixM, epixUHR
+* cxi disable jungfrau common mode, caf encoder data, mypy, timing/mona/encoder/jana, silke integ events, acr feedback, rix piranha, xpm gateway not writeable from rix-daq, alice green, timing-in detectors, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, print statements, gem-gdet, more timing cables, epixM
+
+det grp issues:
+- may need epixhr at mfx (24 pairs, 20 data plus 4 timing)
+  o only 6 pairs currently according to omar
+- epixm at mfx: raw-data fibers 1 timing, 4 data, 1 register, others are
+  edge-ML fibers and spares
+- dan: rixs ccd in october
+- wilko: asc data to s3df
+  o can't go directly to s3df because of routing: go through ffb
+  o can do it for dss nodes for lcls1 (slow becaue of gbit)
+  o needs to check for lcls2
+- matt epixhr running:
+  - bld different timestamps:
+    o wanted run trigger before the beam
+    o insert extra run trigger event codes to emulate high rate (several time) after 140, so detector was triggered late, after the 140 (matt has diagram), so different timestamp
+  - with bld unstable scans
+  - with bld free running over 120Hz broke at 3am
+    o matt doesn't know about that (maybe common-readout-group was no longer comon?).  need to have sequence with right parameters to get event code 280 (common readout group, and also the run trigger) to exactly match event code 140
+  - complexity (e.g. running on mon001, gateway should take care of it)
+  - mike browne:
+    o ioc wasn't running. confusion about mpod. two ioc functions: check power
+      supply, get detector temperatures.
+    o thermistors from monitoring ioc, keithley
+- ability to run at asc or mfx?
+  - should be easy
+
+matt:
+switch to official BLD data-description server
+schedule acr/rix accelerator burst-pattern mtg
+hsd repair
+tmo-to-acr feedback without gateways (bld or epics or both)
+test all detectors in tmo/rix
+robustness of timing links (install new tdet firmware everywhere?)
+long ami 11s latency seen in both tmo/rix under some conditions
+add sp1k4 gige to tmo.cnf
+add mono04 gige to rix.cnf
+
+drp-srcf-mds001 (reboot -f) bad mellanox enet xface (already lowered OFED version).  also restarted nfs server.  plan: mount calib-dir with nfs on mon nodes
+
+riccardo:
+- gmd/xgmd running in rix
+- epixuhr
+- finishing uproot
+- batchtest in s3df (requires openmpi with pmi2, not pmix)
+- juhao work
+- reproduce timing problems in fee teststand
+
+moeller waveforms:
+- do a demo before aug. 1
+- kpp measurement in rix, scanning undulator gaps
+- vincent doing analysis (in france)
+- maybe as early as aug. 1?  (cpo vacation)
+- gmd/xgmd bld and waveforms
+- vincent looks for k-edge or l-edge in one gmd using the other gmd for normalization (no edge)
+- scans with hutch-python of the undulator gap (calibrating the undulator gap, I think?)
+- look at old email messages
+
+drp-srcf-gpu001-004
+
+epix10k: july 13,15,21 mfx, lcls1.  scans (matt/dan)
+epixhr: aug 29, sept 14,15, mfxdg1beammon (before attenuation) mfxdg2beammon (after attenuation)
+ask Dan: see pdsdata/xtc/BldInfo.hh
 
 weka stuff:
 4.2=multicluster
@@ -10,28 +72,30 @@ ib multicluster (ffb) not yet, so nfs where ACLs don't work, could workaround by
 disappearing ib xface: working with nvidia. workaround: downgrade, but prevents moving to 4.3 (spring 2024). 4.1 supports rolling updates. 4.0.10.5 currently, july 4th
 drp-srcf nodes upgrade: potentially OFED changes, need 1 drp-srcf-cmp* RHEL8 but won't move all the clients, and client weka versions 4.2 (depends on weka), test nodes not being used
 data-mover/silke: decide friday workaround in place next week
+ofed rolled back from 5.8 to 5.1 need to update for weka 4.3
 
 mona proj:
-- excluded detector list in confluence documentation
-- eliminate filter_fn text from confluence documentation (now smd_callback)
-- test live mode with full tmo.cnf
+- high rate integrating detector
+- batchtest without pmi2
+- epixM (get the detector from dionisio)
 - more timing fibers for ric epixhr emulation
-- dgramedit requires config_dgramedit argument. should it just be config_dgram?
-- ttool background (work with ric)
+- high rate encoder
+- rix piranha
+- live mode sleep problem
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
-- epixM
 
 s3df issues:
-- test early next week
-- test filesystems now and send notifications
-- enable fairshare
-- default 125 cores on milan
-- seshu/amedeo/users agreeing with enabling ampere qos-preemptable
+- hierarchy of shares
+- ffb mount monitoring
+- 78 nodes
+- run clush with sudo?
+- jupyter automatic queue selection
+- pmix instead of pmi2
+- jupyter remove lcls1-py2
+- filesystem automatic slurm node removal
+- enable fairshare (yee says couple of weeks?)
+- batchtest work
 - silke: coordinator roles deprecated for job kill, since it's global (rubin, lcls...)
-- fairshare?
-- srun pmix "canary"
-- open ports
-- multicluster
 
 tmo detectors:
 
@@ -52,7 +116,7 @@ detector requests:
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
-- (tid, det) epixM (integration prototype (no asic, no emulation) from tid beginning of june 2023? version with asic end of june?, 2 320kpx, 5kHz, commission april/june 2023, probably delayed),
+- (tid, det) epixM (lorenzo, integration prototype (no asic, no emulation) from tid beginning of end of august 2023 with asics? 2 320kpx, 5kHz),
   - no fixed gain mode, only one autorange mode AHL, some gain ambiguity that needs to be resolved
   - integrate in november 2022.  full cam in june 2023.
   - MTP24 broken out to 3 MTP8 fiber 6.4GB/s
@@ -73,30 +137,40 @@ detector requests:
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
 - andor iXon for UED (flexible, June/July 2023?)
+- axis-sxr-60-std 36MPx 26Hz camera request from Kristjan in RIX
 
+* share simple python code between ami2/psana1/psana2 (amityping, psmon, "HPolar")
+* split daq/ana conda envs (valerio)
+* calibconst for lcls1 for ami2 (e.g. jungfrau)
 * saxs/waxs data reduction (stefano)
 * uniform (epics?) interface to detector config registers for config scans
 * fluctuation saxs/waxs data reduction (stefano)
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * improve destination callback (mona)
+* event counts in logbook for phil
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
 * multi camlink cameras in a node
+* converting grafana values into epics alarms
 * configuration management/control for calibration/fexA/fexB
 psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
 * sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
+* didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona)
+* event counts in elog for phil. jira ecs-3843 (chris ford, mikhail)
 * calibration constant provenance (mikhail)
 * h5 full-pathname issue in part0 files
+* resurrect psana1 unit tests ("scons test") (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
+* force inclusion of all necessary TREX data for xtcav
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * only 4 bits for xpm number in xpm remote link id (matt)
 * more hsd's for simultaneous cookiebox/dream running (14+16 channels)
   but maybe not more hsd's if tixel works (weaver)
 * not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
 * andor pedestal subtraction (mikhail)
-* managing sharing: readout groups, drp nodes, cnf files, timing system connections
+* managing sharing: readout groups, drp nodes, cnf files, bos connections
  - Chris Ford is working on a shared-DAQ resource allocation manager
  - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
@@ -109,7 +183,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * ami 3D angular integration (mikhail)
 * per stream and per run event/dmg counts (caf)
 * better management of drp .service files (shared drive, puppet, kubernetes?)
-** integrating detectors (daq and psana)
+** integrating detector "exposure time" psana param (mona)
 * configure andor with configdb?
 * silver behenate fitting (including z-stagger) for panel positions (mikhail)
 ** benchmark SZ and other reduction for real expt data (mikhail)
@@ -118,6 +192,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * algorithm for non-quantized det-image charge sharing (mikhail)
 * raise exception instead of crashing when idx/smd files are missing in psana1
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
+* control_gui not showing up on right screen in tmo (ami, procstat do) (mikhail)
 * test psana2 live mode (mona)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
@@ -141,6 +216,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * xface for ami controlling detector params
 * web display of ami plots
 * mhz bld (matt)
+* bld data structure populated automatically from epics
 * automatically push releases for lcls1/lcls2 to nersc/sdf/other
 * makepeds/calibrun regression tests and simplification or freeze? (mikhail)
 * opals for different daq's on same machine (larry+pcds)
@@ -156,6 +232,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * lcls2 common-mode for panels in different gain ranges (mikhail)
 * plims for lcls2 (mikhail)
 * mpi jobs not exiting if one core crashes
+* address psana/daq prometheus issues described on confluence (mona/ric)
 * managing prometheus files in promdir
 * put procstat in prometheus (or hard to duplicate all functionality?)
 * how to deal with pickle in the calibdb? (mikhail)
@@ -244,27 +321,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 
 **********************************************************************
 
-1 rack of computing for ffb
- - 1000 cores 8 nodes in 4u
-ffb from 0.5PB to 1 or 2
-sdf storage 6 jbods 1.5PB in 1 jbod in 4u for 50k + $overhead
-enlarge sdf compute ?
-switching to new srcf-sdf in april
-
-**********************************************************************
-
-2 filesystems: ffb (700TB) and offline (12PB)
-with bigger disks can move ffb from 700TB to 1.4PB
-700TB = 10 hours at 20GB/s
-
-gpu:
-2milan 32 high clock rate
-4 nvidia a100
-
-1 box 4 servers 2x64 core 1 box 512 cores 5K cores total
-
-**********************************************************************
-
 peppex cabling:
 first cassette count from 1;
 slot 2 hsd timing
@@ -280,294 +336,9 @@ hsd timing plugged into xpm4 amc0 port 3 counting from 0
 
 **********************************************************************
 
-timepix discussion 06/06/22:
-
-can use external trigger or free-running: we will use EVR-generated 120Hz trigger
-main physics question to answer: can we separate one photon from two
-will run at 120Hz
-to synchronize with DAQ data can send extra ttl reset on a "slow" DAQ sequence to reset FPGA counter: this is more complex so don't do this
-BNC or SMA with 50ohms
-timing-in is easy: can use long exposure times and measure the time of the signal
-jyoti will set up remote desktop to access anton's windows machine in the hutch via ICS
-
-integrating comm protocol:
-- timepix3 is event-driver (current one is timepix1)
-- integrate timepix3
-- use their fpga
-- send jumbo udp packets on fiber. each photon is 6 bytes.
-- suggests using their fpga timestamp
-
-**********************************************************************
-
-4000*2300*2*120=2GB/s (100Gbit enet)
-triggering over cxp
-fiber or bnc readout? (quad cxp6)
-many other detectors (8 definite, 2 possible, varex)
-lcls2: front-end box with timing and quad cxp6 in, pgp out
-software timestamping for lcls1?  lcls2: firmware
-
-**********************************************************************
-
-rename roiarch?
-masking and normalization (e.g. epix gaps)
-arch outside image
-
-- masks (define in ami?)
-- 2d, 3d image
-- q option with more parameters
-- inherited/coupled parameters for multiple roiarch's
-
-broken ami: pop, xtcav, hsd, photfind and linearity, xpp
-good ami: blobfinder, hitfinder, flyscan, wf sideband sub, stepscan, wf integration vs delay stage, normalization of andor, ratio of peak areas and epics, calculator, complex, timestamp plot, export, reference plot
-
-phil recommends divide by 16adu/kev
-mikhails formula (sig-ped)/gain to get kev
-det.gain returns something to divide or multiply by?
-- silke multiplies by det.gain for epix100
-epix10k 10 for high gain .01 for low gain
-phil uploads adu/kev because mikhail divides
-may be inconsistent with documentation
-consistent handling (adu/kev or kev/adu) of:
-- uploaded numbers
-- file on disk deployed by makepeds
-- value by det.gain
-- documentation
-epix100, rayonix for lcls1.  try to be consistent in lcls2
-gain goes into pixel_gain file
-mikhail has 0.06kev/adu
-
-other detectors (jungfrau, epix10k): adu/kev->divide
-epix100: ev/adu (.06kev/adu)->multiply (lcls1, other way round for lcls2)
-many files have relative gains (around 1)
-propose lcls1 "gain-factor": kev/adu
-
-mark hunter:
-institutional/personal pressure (sebastien helped prioritize)
-collaborative vs. competitive access to resources
-
-**********************************************************************
-
-ami-local -b 1 -f interval=1 psana://exp=ueddaq02,run=569,dir=/cds/data/psdm/prj/public01/xtc/
-
-dan and seshu
-scripts vs ami
-people develop their own libraries (personal/hutch):
-  commonly used pieces moved into core
-three categories:
-  using existing boxes
-  creating custom boxes
-  detector guts
-mask gain bits
-thresholded image
-managing libraries (avoiding creeping featurism)
-editing library files with text editor
-accessing calibconst: raw-pedestal (psana/psana/detector/UtilsEpix10ka.py
-customizing epix calibration
-controlling kwargs, e.g. cmpars
-https://confluence.slac.stanford.edu/display/PSDMInternal/Detector+Interface+Proposal
-
-**********************************************************************
-
-rix high-rate risks:
-
-moving DAQ to SRCF:
-ric claus work
-- high rates: hsd, wave8, piranha, bld
-- selecting events in ami
-matt: high rate bld
-switching to LCLS2 timing
-dan archon
-s3df 
-
-risks:
-complexity of running detectors at different rates
-high-rate mono-encoder (two?), high rate bld
-using sequencer so andor can cleanly integrate over shots
-new dets: epixM, high rate mono, archon, bld
-practicing high-rate rix analysis in advance
-managing which events AMI sees
-s3df delays
-IOC detectors (like andor) need new module from Kukhee
-
-**********************************************************************
-
-tmo detectors:
-
-2 piranhas (fzp, atm) + 1 opal (fzp) + 1 opal (cvmi)
-1 for dream atm + 1 spare
-currently have 4 (2 cvmi, 1 atm, 1 fzp)
-bld
-
-rix priority:
-
-2 andor newton
-3 wave8
-1 atm piranha
-1 atm opal
-hsd's?
-bld
-high-rate mono encoder and/or step-scans
-
-**********************************************************************
-
-general to do:
-- recabling to srcf
-  o use data volume to each node to figure out cabling
-  o (optional) multi-camlink operation.
-    - could program timing link on reboot
-    - every process could set full link mask?
-  o what should go through the bos?
-- switching to LCLS2 timing (Dec. 1?)
-- 33kHz BLD: ebeam, gmd, test asap. waiting for software development.
-- commission s3df (but keep old system going too)
-  o psana
-  o smalldata
-  o movers
-  o mon-node calibdir
-- spares (piranha in particular)
-- migrate ctl nodes (move hsd processes, but not mono encoder)
-- move timing crate from fee alcove to 208
-- xtcav "nice" for acr?
-- live mode
-
-
-tmo to-do:
-- when can we switch from opals to piranhas?
-- (optional) multi-camlink running
-- will fzp/atm opals run at same time?
-- hsd fex overflow damage flagged?
-- test hsd prescale raw waveform buffering
-- move away from xpm0 to xpm2 for all tmo timing
-
-tmo schedule:
-
-[cvmi_opal_1, oct 27, nov 19] - retire date is negotiable, (maybe needs to be earlier?)
-[cvmi_opal_2, oct 27, nov 19] - retire date is negotiable, (maybe needs to be earlier?)
-[atm_opal,       oct 27, possibly run 22]
-[fzp_opal,        oct 27, possibly run 22]
-[atm_pirhana, oct 27, not planned]
-[fzp_pirhana,  oct 27, not planned]
-
-rix to-do:
-- integrating-andor timestamping (I think Dan said this is fine as-is)
-- accelerator burst-mode operation
-- scans with burst-mode (one burst is one andor event)
-- (somewhat optional) high-rate interpolated mono encoder for fly-scans
-  o offline second-pass with interpolation could also work
-  o step-scans with slow mono are another option
-
-**********************************************************************
-
-100kHz data volumes:
-
-- wave8: 8waveforms*256samples/sample*2bytes/sample*0.1MHz = 400MB/s
-  need to add FEX data too
-- piranha: 2048px*2bytes/px*0.1MHz=410MB/s
-- hsd full wf: 60000samples*2bytes/sample*0.1MHz = 12GB/s
-  max waveform length appears to be ~60000 samples looking at xtc2 file?
-  FEX needs to reduce it to 4GB/s (3x)
-- bld: 336bytes/event*0.1MHz = 33MB/s
-  (from xtcreader -f /cds/data/psdm/prj/public01/xtc/tmoc00118-r0222-s008-c000.xtc2)
-- timing: 309bytes/event*0.1MHz = 31MB/s
-
-recabling proposal:
-- tmo timing (including pvadet, bld)
-- rix timing
-- (4) tmo camlink nodes
-- (2) rix camlink nodes
-- tmo/rix fim node (5 fims)
-- (2) rix hsd nodes
-- (7) tmo hsd nodes
-- peppex hsd node
-- (2) tmo/rix ami
-- (2) tmo/rix teb
-- (2) tmo/rix mebuser
-
-total of 25 nodes
-5 spares
-
-**********************************************************************
-
-3.10 errors:
-
-qt errors in groupca/xpmpva
-control.py qt setvalue wants int but getting float
-piranha rogue errors
-
-**********************************************************************
-
-rix analysis
-
-point detector APD via wave8, background subtract
-direct andor integrate over shots and background subtract
-vls andor no background
-might want to run at 1Hz with bigger images
-filtering (using the signal itself like APD, or other det: I0 from fim's, GMD, use goose trigger or bykik (laser/xray on/off))
-binning in terms of delay (vitara) eventually use timetool
-fly-scan with mono-encoder and bin
-after binning (vitara, eventually timetool, mono encoder) do normalization (I0 kb fim's)
-no peak-finders
-could run droplet on vls andor (droplets may merge) background low enough that not necessary?
-could we run the andors in different modes?  might be complex in burst mode
-
-march: beam at the mono
-april: beam in chemrix
-
-mockup piranha at 33kHz by modifying opal?
-
-propose 33kHz analysis as "worst case" (gets easier with bursts and integrating detectors)
-
-**********************************************************************
-
-according to bos:
-cmp11 goes to amc0 port 5 (checked)
-cmp12 goes to amc0 port 3 (checked)
-cmp06 goes to amc0 port 6 (trusting bos aliases)
-
-**********************************************************************
-
-worries:
-political assigning time
-off-shift handling?  preemption or queue position?
-reservations more wasteful
-preemption latency
-
-1 - reservations + head-of-queue-qos
-2 - ffb preemption qos + head-of-queue-off-shift qos
-3 - 4 layers of preemption
-
-association: priorities based on partition/account/reservation/qos (either for preemption or position-in-queue)
-slurmacctmgr command is used to manage priorities
-
-**********************************************************************
-
-outer product options:
-
-need two: one with hsd channel itself, and one with piranha readout
-
-- only do half of the symmetric outer product (with hsd channel itself)
-- reduce the sample rate by ~4
-- reduce window to 2us (12000 samples) 1us @1MHz
-- use peaks (guess badness is 5+-3)
-- replace with tixel eventually (which does thresholding)
-  o may not use tixel because of the thresholding, depending on expt
-- use pre-scaled full-waveform events for bkgd?
-
-**********************************************************************
-
-epixhr
-
-include forced-low, forced-medium
-for AHL, AML
-new format for timing (2 lanes each with 2 asics, each with timing info)
-
-saci bus lockup?
-same firmware on receiving end?
-
-**********************************************************************
-
-txi hxr kpp measurements:
-- postponed from april 29? may? june?
+txi hxr kpp measurements: (aquila)
+https://confluence.slac.stanford.edu/pages/viewpage.action?spaceKey=L2SI&title=RP+testing
+- scheduled around halloween '23?
 - 1kHz and 10kHz SC beam going through hxr undulators into txi
 - wave8 daq (synced trigger)
 - want 100Hz old hxr gasdet bld, gate width up to andy/philheimann
@@ -590,227 +361,6 @@ https://jira.slac.stanford.edu/browse/LCLSECSD-1874
 
 **********************************************************************
 
-rix fim 0,1 ioc's down
-andor_dir ioc down
-andors/manta need to move to lcls2 timing
-no bld
-
-**********************************************************************
-
-xpp epixhr test:
-
-xpp rack 2 elevation 22-25 ph5 (labelled on right): 4 free pairs on left?
-xpp rack B950S-30 elevation 46 cassette labelled slot 3
-strand 3,4 flipped in rightmost xpp cassette in 208, 1,2,5,6,7,8 good
-leftmost xpp cassette in 208 strands 7,8 go to xpp hutch slot 1, fibers 7,8 (currently has something plugged in in the xpp hutch, but not in 208
-
-- plug epixhr "data1" (fiber 1 on breakout cable, counting from 1)
-  into rack 30 slot 3 fibers 5,6
-- plug epixhr "data2" (fiber 2 on breakout cable, counting from 1)
-  into rack 30 slot 3 fibers 7,8
-- plug epixhr "timing" (fiber 4 on breakout cable, counting from 1)
-  into rack 30 slot 3 fibers 1,2
-
-in room 208 use top xpm right-most amc (0, I think) port 4 (counting from 0)
-data1 goes into bos 1.6.7->5.2.5
-data2 goes into bos 1.6.8->5.2.6
-
-txi 3 cassettes free
-txi rack b950s-13 elevation 43
-
-for the xpp wave8 data silke writes:
-
-XppSb2BeamMon	
-239.255.24.75	XPP-SB2-BMMON	XPP Local
-
-need to add second bld device with "ipimb" structure with new
-multicast group
-239.255.24.40
-https://confluence.slac.stanford.edu/display/PCDS/Notes+on+Photon-Side+BLD+Generation
-https://confluence.slac.stanford.edu/pages/viewpage.action?pageId=138790412
-
-There also is SB3 (...76), but I think that is the device that is current an LCLS2 wave8. But check both, one should work, otherwise inquire with Vincent
-
-**********************************************************************
-
-conversation with xinxin
-
-this problem
-crashes
-slowness
-pyeditor not saving (inputs and outputs disappearing)
-
-align pinhole and gas-cell
-normalize with wave8
-sum thresholded/normalized image to measure background (time-window or infinity)
-plot summed number vs. x/y/tilt/roll for pinhole and gas-cell
-
-use mean vs. scan
-
-scatter sum vs. motor
-
-want uniform background, compare quadrants (make difference close to zero)
-
-ami-local -b 1 -f interval=0.01 psana://exp=cxilx9320,run=46,repeat=true &
-This is a dataset when we were aligning the gas cell
-ami-local -b 1 -f interval=0.01 psana://exp=cxilx9320,run=47,repeat=true &
-This is a dataset when we were aligning the pinhole
-ami-local -b 1 -f interval=0.01 psana://exp=cxilx6520,run=244,repeat=true &
-This is a dataset of SF6 static scattering
-ami-local -b 1 -f interval=0.01 psana://exp=cxilx6520,run=214,repeat=true &
-No gas, X-ray background, we might have damaged the pinhole because the background looks bad...
-
-**********************************************************************
-
-epixuhr:
-- can download software
-- one set of bare boards in lab1 (have been running it)
-
-https://github.com/slaclab/epix-uhr-dev
-instructions for running devGui above
-kcu1500 firmware from https://github.com/slaclab/pgp-pcie-apps/releases
-
-goals:
-- get events flowing in the daq
-  - check that timing link from the xpm works
-- charge injection calibration software can be written now, but
-  won't provide real data until we have real asic
-
-emulator needs 6V digital and 6V analog power supply
-will provide banana plugs
-detector group will provide power supplies
-
-will go in lab3 or FEE alcove (currently in lab1)
-
-major differences between HR/UHR:
-- 17kHz frames (eventually 35kHz)
-- shape is different
-- saci bus is different (register writes)
-  o all the registers going to the asic are on saci
-  o all other registers are on axi
-- definition of saci registers is in
-
-start from curent HR or from devGui? Lots of changes to make clocking
-synchronous so not clear.
-
-talk to pietro about technical stuff
-lower priority than epixM and epixHR
-
-**********************************************************************
-
-xpp epixhr test:
-
-- with lcls1 timing using new (top) xpm in 208
-- use existing old-style wave8 bld
-- not clear if we look like tmo/rix/tst
-
-**********************************************************************
-
-- 31,34,39 broken
-- 32 epixhr timing
-- 33,35-38,40-44 epixhr emulation
-- 45 wave8
-
-**********************************************************************
-
-saxs/waxs meeting with tim van driel and andy aquila
-
-other expts to analyze:
-
-photonizing:
-- yanwen xcs
-- minitti photonizing
-
-saxs/waxs:
-gas phase
-low intensity jet
-detector calibration with constant sample and varying intensities to study systematics
-2x2 high-q binning is a possibility
-
-next on the list:
-
-fluctuation saxs/waxs.  mark hunter old not-very-good data. new expt coming up.
-spi: binning in q space because detector is not planar (needs fancy binning)
-
-for next time:
-look at differences with/without compression
-
-**********************************************************************
-
-fibers to mfx
-
-lowest fodu in rack 2 in 208 rightmost cassette maybe?
-
-need 6 strands
-12 strands 8 available single-mode from mezzanine to mfx
-are going to be in mfx rack
-timescale: equipment arrives in 2 weeks, a month until it works
-goes to main rack in hutch (rack 4) where networking is
-
-**********************************************************************
-
-elegant handling of bad configurations: what can we do?
-
-(bad triggering)
-
-two messy cases:
-
-wrong l0delay: crashes, deadtime
-too large gate_ns: missed trigger (some detectors, like piranha)
-  - remove the detectors from partition in a binary-search fashion to
-    learn who is responsible, then look at settings of that detector, in particular
-    gate_ns
-
-piranha may need its own l0delay because of hutch->srcf trigger round-trip (7us each way?)
-l0delay is in us, so instead of 99, perhaps 79? lower l0delay increases pressure
-on buffering but OK at 100kHz.
-
-hsd: shouldn't drop triggers because it supports overlapping windows.  even if
-     data volume gets large deadtime should keep triggering orderly.
-piranha: drop a trigger and get off by one
-   could set batcher-event-builder timeouts, but would have to change dynamically
-   with gate_ns and trigger-rates
-
-100ms different timestamp for the andor (when triggering at 10Hz)
-
-(should test, but hopefully under control) slow code/datatransfer: deadtime, associated with right det
-
-**********************************************************************
-
-norm=g5=evtcode272 (SEQCODES 0Hz?) (one image every 30 seconds in ami?)
-dir=g6=evtcode276 (SEQCODES 102Hz?) (0.5Hz in ami)
-
-switch norm andor to evtcode273 (SEQCODES 102Hz): behaves better
-
-**********************************************************************
-
-We're looking to replace our 50 gallon gas water heater with a heat-pump water heater.  There is physical space (we might move it about 4 feet to an area with 8 feet of vertical height).  I believe we have electrical capacity for a 240V 15A model from a nearby sub panel (about 10 feet away).  We would like a 10 year warranty, if possible.  You can see some photos here:  https://photos.app.goo.gl/qUsDruW5kQVZBKpFA.  We would need some help (e.g. documentation) to get rebates from Peninsula Clean Energy as well as permits.  Thanks!
-
-noise (rheem)
-power
-wall strap
-warranty
-rebates
-condensate
-leak detection
-15a vs 30a vs 120v
-code/permits
-
-recommended electricians by wizard plumbing: jeff lewis electric, bayshore electrical
-603-867-8248
-recirculation pump?
-
-bayshore plumbers also recommended bayshore electric
-
-electrician rob ortiz 669 292 9707 recommended by united plumbing. liked him.
-
-shoreway plumbing:
-julio and hugo (plumbers installing water heater)
-jose: 650-670-2036
-
-try other atm's
-call boa to get list of symbols
-
 lab3: 68.2F later: 66.8F
 pietro's lab: 69.5F later: 69.5F
 fee alcove outside racks: 71.3F
@@ -820,5 +370,42 @@ lab3 nodes:
 drp-tst-dev008, dev004, acc05, acc02, acc01,
 daq-tst-dev02 (add kcu?), dev03 (add kcu?), dev06 (hsd)
 
-redwood city heat-pump water heater
-vicky sherman 650-780-7472 vsherman@redwoodcity.org climateactionplan@redwoodcity.org
+**********************************************************************
+
+epixhremu timing link status
+
+34: bad rxclock:  no fiber
+37: looked good (linkup) -3.49
+38: bad rxclock -3.69 (fixed by plugging/unplugging)
+39: down: no fiber
+40: rxclock 0: -26.22
+41: bad rxclock: -3.9
+42: bad rxclock: -3.6 (fixed by plugging/unplugging)
+
+**********************************************************************
+
+rix device issues:
+piranha 71kHz and 100dt at 10kHz
+mr2k1: no timing sub-window (just "no EVR" message)
+hsd_0,1 (and dt with hsd2,3 eventually)
+encoder
+only chemrix wave8
+manta not downstream of xpm?
+
+recorded rixx1003721 run 169 with
+71kHz: timing, wave8
+10Hz: opal,manta
+1Hz: vls,norm,dir
+
+recorded rixx1003721 run 171 with
+71kHz: timing, wave8, hsd_0, hsd_1
+10Hz: opal,manta,vls,norm,dir,mr2k1(untimestamped),exsmanta
+
+norm/dir rog 5, evtcode 272 (1Hz)
+vls,opal,manta rog 6, evtcode 276 (10Hz, gated)
+timing,wave8 rog 2, evtcode 284 (33kHz, gated)
+
+**********************************************************************
+
+ata cell e13 (resident area) f11 (date)
+update in shared folder
