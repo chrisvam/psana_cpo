@@ -1,4 +1,11 @@
-* cxi disable jungfrau common mode, caf encoder data, mypy, timing/mona/encoder/jana, silke integ events, acr feedback, rix piranha, xpm gateway not writeable from rix-daq, alice green, timing-in detectors, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, print statements, gem-gdet, more timing cables, epixM
+psplot_live, multiple plots, move to official kafka, what user-code has to do, rix-daq to s3df, 12320-12330
+mona psplot and priorities, mona timing question, two factor
+* mona proj, mikhail 3 events, phil, encoder: (re-spin encoder, mount 1U chassis, physical infrastructure, rehome strategy), lcls1 damage stats, hsd_14, cxix1000021:run5 det.image, integ events, acr feedback, rix piranha, xpm gateway not writeable from rix-daq, alice green, timing-in detectors, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, print statements, gem-gdet, more timing cables, epixM
+
+kristjan requests:
+- single-rate for (infinite sequence) rixgeneratory.py (one camera)
+- add something for laser on/off with andors (infinite sequence)
+  o every second, third, or fourth
 
 det grp issues:
 - may need epixhr at mfx (24 pairs, 20 data plus 4 timing)
@@ -37,6 +44,13 @@ add sp1k4 gige to tmo.cnf
 add mono04 gige to rix.cnf
 
 drp-srcf-mds001 (reboot -f) bad mellanox enet xface (already lowered OFED version).  also restarted nfs server.  plan: mount calib-dir with nfs on mon nodes
+
+ric projects:
+- psana grafana
+- acr mcast feedback
+- libsz to roi switch (and easily change roi config params)
+- epixhremu to 20 nodes
+- multicamlink drp
 
 riccardo:
 - gmd/xgmd running in rix
@@ -85,16 +99,15 @@ mona proj:
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
 
 s3df issues:
-- hierarchy of shares
-- ffb mount monitoring
-- 78 nodes
-- run clush with sudo?
+- seshu ampere jobs
+- how does slurm gather cores for mpi?
+- what are psana's mpi core "layout" requirements for efficient running? (get input from Mona)
+- "perazzo" sharing (needs a scalable way of calling the "delta" function)
+  o delta-function (allocated vs. used) takes a long time: can create a denial-of-service of slurm since it's slow
+- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores
+- run clush with sudo? (need to ssh to sdfmgr002)
 - jupyter automatic queue selection
-- pmix instead of pmi2
-- jupyter remove lcls1-py2
-- filesystem automatic slurm node removal
-- enable fairshare (yee says couple of weeks?)
-- batchtest work
+- weka: read-while-write, permissions
 - silke: coordinator roles deprecated for job kill, since it's global (rubin, lcls...)
 
 tmo detectors:
@@ -140,6 +153,7 @@ detector requests:
 - axis-sxr-60-std 36MPx 26Hz camera request from Kristjan in RIX
 
 * share simple python code between ami2/psana1/psana2 (amityping, psmon, "HPolar")
+* datasource kwarg to suppress fetching of calib constants for mikhail's mask editor (mona)
 * split daq/ana conda envs (valerio)
 * calibconst for lcls1 for ami2 (e.g. jungfrau)
 * saxs/waxs data reduction (stefano)
@@ -151,19 +165,21 @@ detector requests:
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
-* multi camlink cameras in a node
+* multi camlink cameras in a node (ric?)
 * converting grafana values into epics alarms
 * configuration management/control for calibration/fexA/fexB
 psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
 * sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
+* eliminate psana1 calibdir in favor of database (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
-* didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona)
+* didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona, ric)
 * event counts in elog for phil. jira ecs-3843 (chris ford, mikhail)
 * calibration constant provenance (mikhail)
 * h5 full-pathname issue in part0 files
 * resurrect psana1 unit tests ("scons test") (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * force inclusion of all necessary TREX data for xtcav
+* utility to put lcls2 h5 files in time-order (mona? mikhail? caf? riccardo?)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * only 4 bits for xpm number in xpm remote link id (matt)
 * more hsd's for simultaneous cookiebox/dream running (14+16 channels)
@@ -176,6 +192,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
  - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * mask editor (mikhail)
+* when detector list is long in control-gui, can't hit "apply" button  (mikhail)
 * when running ami in daq detector list is intermittently not updated (ddamiani)
 * have daq bluesky scan scripts default to "scan" as scan detector name to avoid psana crash (caf)
 * ability for select-gui to allow teb's to be deselected (down to 1) (mikhail)
@@ -407,5 +424,49 @@ timing,wave8 rog 2, evtcode 284 (33kHz, gated)
 
 **********************************************************************
 
-ata cell e13 (resident area) f11 (date)
-update in shared folder
+rix doesn't see problems at the moment. so maybe xpm0 is happy?
+
+shortterm:
+
+1. clean fibers and change transceivers between xpm0 and xpm2
+2. separate xpm's in the atca crate
+3. eject xpm2/xpm4 (should be no difference with fru_deactivate)
+   (less likely since 6,4 go down) change transceivers
+   (less likely since 6,4 go down) clean fibers
+4. remove xpm2 (xpm0->xpm4->xpm6) (currently 6 is driven by 2)
+5. swap xpm's with fee alcove
+6. new version of software broke it? (unlikely since rix is working)
+7. more RF isolation with air resistance modules
+8. pyxpm software overwriting registers
+9. only xpm's with front-panel inputs have trouble? (or "second tier leaf")
+
+xpm4,5,6: noRTM
+xpm0,2,3: RTM
+
+longterm:
+
+- reproduce in fee alcove (by unplugging fiber from ACR)
+- instrument firmware
+  o PLL input frequency drifting out of range (lock status)
+  o power glitching
+- is it a lingering temperature effect?  (maybe reproducible in the
+  teststand)
+
+possible partial solutions:
+- reset state machine that gets stuck (we kludged a fix once with a loopback)
+  Matt has an idea here.
+
+timing issues:
+- spares (including rtm's)
+- txlinkreset (firmware)
+- xpm link glitches (firmware)
+- toggle between xpmmini/lcls2
+- 25kHz fiducial
+- xpm ports won't lock to themselves
+- no link lock on timing KCUs
+- distribute knowledge more widely
+- general diagnostic techniques for understanding problems like the above (e.g. how do we know a PLL input is within a required frequency range?)
+- want to try: synchronous retransmission (no clock domain crossing)
+  o can be done without trying to understand firmware
+- not just them telling us what to do: deeper committment
+  o needs gert
