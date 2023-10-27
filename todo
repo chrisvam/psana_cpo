@@ -1,6 +1,4 @@
-psplot_live, multiple plots, move to official kafka, what user-code has to do, rix-daq to s3df, 12320-12330
-mona psplot and priorities, mona timing question, two factor
-* mona proj, mikhail 3 events, phil, encoder: (re-spin encoder, mount 1U chassis, physical infrastructure, rehome strategy), lcls1 damage stats, hsd_14, cxix1000021:run5 det.image, integ events, acr feedback, rix piranha, xpm gateway not writeable from rix-daq, alice green, timing-in detectors, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, print statements, gem-gdet, more timing cables, epixM
+* laser event codes (phase, xpm control, xpm-0 reboot), mtu IT jira, pulseid in psana, gmd/piranha correlation, scons test, mhz encoder, acr feedback (mcast/tcp), timing-in procedure, encoder infrastructure, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, integ events, acr feedback, alice green, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables, epixM
 
 kristjan requests:
 - single-rate for (infinite sequence) rixgeneratory.py (one camera)
@@ -32,7 +30,7 @@ det grp issues:
 - ability to run at asc or mfx?
   - should be easy
 
-matt:
+matt projects:
 switch to official BLD data-description server
 schedule acr/rix accelerator burst-pattern mtg
 hsd repair
@@ -43,8 +41,6 @@ long ami 11s latency seen in both tmo/rix under some conditions
 add sp1k4 gige to tmo.cnf
 add mono04 gige to rix.cnf
 
-drp-srcf-mds001 (reboot -f) bad mellanox enet xface (already lowered OFED version).  also restarted nfs server.  plan: mount calib-dir with nfs on mon nodes
-
 ric projects:
 - psana grafana
 - acr mcast feedback
@@ -52,7 +48,7 @@ ric projects:
 - epixhremu to 20 nodes
 - multicamlink drp
 
-riccardo:
+riccardo proj:
 - gmd/xgmd running in rix
 - epixuhr
 - finishing uproot
@@ -60,54 +56,29 @@ riccardo:
 - juhao work
 - reproduce timing problems in fee teststand
 
-moeller waveforms:
-- do a demo before aug. 1
-- kpp measurement in rix, scanning undulator gaps
-- vincent doing analysis (in france)
-- maybe as early as aug. 1?  (cpo vacation)
-- gmd/xgmd bld and waveforms
-- vincent looks for k-edge or l-edge in one gmd using the other gmd for normalization (no edge)
-- scans with hutch-python of the undulator gap (calibrating the undulator gap, I think?)
-- look at old email messages
-
-drp-srcf-gpu001-004
-
-epix10k: july 13,15,21 mfx, lcls1.  scans (matt/dan)
-epixhr: aug 29, sept 14,15, mfxdg1beammon (before attenuation) mfxdg2beammon (after attenuation)
-ask Dan: see pdsdata/xtc/BldInfo.hh
-
-weka stuff:
-4.2=multicluster
-july 4th
-rhel8 weka server nodes (for multicluster): 
-ethernet multicluster for s3df side:
-s3 backend
-ib multicluster (ffb) not yet, so nfs where ACLs don't work, could workaround by using ethernet
-disappearing ib xface: working with nvidia. workaround: downgrade, but prevents moving to 4.3 (spring 2024). 4.1 supports rolling updates. 4.0.10.5 currently, july 4th
-drp-srcf nodes upgrade: potentially OFED changes, need 1 drp-srcf-cmp* RHEL8 but won't move all the clients, and client weka versions 4.2 (depends on weka), test nodes not being used
-data-mover/silke: decide friday workaround in place next week
-ofed rolled back from 5.8 to 5.1 need to update for weka 4.3
-
 mona proj:
-- high rate integrating detector
-- batchtest without pmi2
 - epixM (get the detector from dionisio)
 - more timing fibers for ric epixhr emulation
 - high rate encoder
 - rix piranha
 - live mode sleep problem
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
+- moving vds h5?
+- h5 time sort
 
 s3df issues:
+- silke on contact page?
+- do preemptable jobs have a priority or first-come-first-serve?
+- ampere folding processes with no batch jobs?
 - seshu ampere jobs
-- how does slurm gather cores for mpi?
-- what are psana's mpi core "layout" requirements for efficient running? (get input from Mona)
-- "perazzo" sharing (needs a scalable way of calling the "delta" function)
-  o delta-function (allocated vs. used) takes a long time: can create a denial-of-service of slurm since it's slow
-- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores
 - run clush with sudo? (need to ssh to sdfmgr002)
+- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores: cryoem: 33, fermi 33, lcls 111, rubin 1?, ad 13, simes 1?
+- how does slurm gather cores for mpi?
+- "perazzo" sharing (needs a scalable way of calling the "delta" function)
+  o delta-function (allocated vs. used) takes a long time to compute: can create a denial-of-service of slurm since it's slow
+  o "forcing" people into preemptable when they exceed their allocation
 - jupyter automatic queue selection
-- weka: read-while-write, permissions
+- weka: read-while-write (permissions fixed with 4.2.4)
 - silke: coordinator roles deprecated for job kill, since it's global (rubin, lcls...)
 
 tmo detectors:
@@ -151,6 +122,7 @@ detector requests:
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
 - andor iXon for UED (flexible, June/July 2023?)
 - axis-sxr-60-std 36MPx 26Hz camera request from Kristjan in RIX
+  https://www.axis-photon.com/streak-camera/axis-sxr-60-36mpix-soft-x-ray-scmos-camera/
 
 * share simple python code between ami2/psana1/psana2 (amityping, psmon, "HPolar")
 * datasource kwarg to suppress fetching of calib constants for mikhail's mask editor (mona)
@@ -165,7 +137,10 @@ detector requests:
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
-* multi camlink cameras in a node (ric?)
+* running daq with missing bld (ric claus)
+* running daq with damaging pvadet (ric claus)
+* fix daq timeout behavior where we sometimes get damage from many nodes  (ric claus)
+* multi camlink cameras in a node (ric claus)
 * converting grafana values into epics alarms
 * configuration management/control for calibration/fexA/fexB
 psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
@@ -178,6 +153,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * h5 full-pathname issue in part0 files
 * resurrect psana1 unit tests ("scons test") (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
+* when rix piranha had small number of dma buffers (like opal) we often, but not always, got 100% deadtime and BEB timeouts.  feels like buffers not configurerd correctly when deadtime happens (ric, matt, mona, riccardo)
 * force inclusion of all necessary TREX data for xtcav
 * utility to put lcls2 h5 files in time-order (mona? mikhail? caf? riccardo?)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
@@ -422,7 +398,7 @@ norm/dir rog 5, evtcode 272 (1Hz)
 vls,opal,manta rog 6, evtcode 276 (10Hz, gated)
 timing,wave8 rog 2, evtcode 284 (33kHz, gated)
 
-**********************************************************************
+c**********************************************************************
 
 rix doesn't see problems at the moment. so maybe xpm0 is happy?
 
@@ -470,3 +446,27 @@ timing issues:
   o can be done without trying to understand firmware
 - not just them telling us what to do: deeper committment
   o needs gert
+
+**********************************************************************
+
+cov normalized to stddev of gmd np.cov(30 events)/np.std(gmd (30 events)) threshold and sum
+
+fzp trace: threshold and sum over pixels (1 number) per event
+gmd: 1 number per event, gmd.perpulseenergy
+
+record 100 shots (two arrays of 100 numbers)
+np.cov(fzp,gmd)/np.mean(gmd)
+
+ami (pythoneditor?) script
+
+trigger rate 100Hz (1MHz+destination 4 (mask 0x10))
+
+friday night, or saturday night
+run without intensifier (time separately)
+
+for ATM: time the laser to the x-ray, then time the cameras to the laser
+saturday night: timed in laser on the diode
+monday/tuesday afternoon: time cameras to the laser
+acr feedback: not needed until xtcav (few weeks)
+
+took tmoc00221 run 38 as a test scan with fzp/atm piranhas (atm piranha is a standin for gmd)
