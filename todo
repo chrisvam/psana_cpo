@@ -1,34 +1,21 @@
-* laser event codes (phase, xpm control, xpm-0 reboot), mtu IT jira, pulseid in psana, gmd/piranha correlation, scons test, mhz encoder, acr feedback (mcast/tcp), timing-in procedure, encoder infrastructure, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, integ events, acr feedback, alice green, txi kpp (grp7 grafana), psana1 live, rix integ det data, cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables, epixM
+* yiping, revisit hsd buffer size (131kB), fdr, dan review, 13us fim difference, rix hsd2/3, s3df h5 jupyter, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
 
-kristjan requests:
-- single-rate for (infinite sequence) rixgeneratory.py (one camera)
-- add something for laser on/off with andors (infinite sequence)
-  o every second, third, or fourth
+fdr:
+- slides on meeting requirements in table 3 (online analysis)
+- table 6 get hsd info from matt
+- table 8
+- table 9
+- table 10
+- table 11
+- table 12
+table 13 and table 4: wilko
 
-det grp issues:
-- may need epixhr at mfx (24 pairs, 20 data plus 4 timing)
-  o only 6 pairs currently according to omar
-- epixm at mfx: raw-data fibers 1 timing, 4 data, 1 register, others are
-  edge-ML fibers and spares
-- dan: rixs ccd in october
-- wilko: asc data to s3df
-  o can't go directly to s3df because of routing: go through ffb
-  o can do it for dss nodes for lcls1 (slow becaue of gbit)
-  o needs to check for lcls2
-- matt epixhr running:
-  - bld different timestamps:
-    o wanted run trigger before the beam
-    o insert extra run trigger event codes to emulate high rate (several time) after 140, so detector was triggered late, after the 140 (matt has diagram), so different timestamp
-  - with bld unstable scans
-  - with bld free running over 120Hz broke at 3am
-    o matt doesn't know about that (maybe common-readout-group was no longer comon?).  need to have sequence with right parameters to get event code 280 (common readout group, and also the run trigger) to exactly match event code 140
-  - complexity (e.g. running on mon001, gateway should take care of it)
-  - mike browne:
-    o ioc wasn't running. confusion about mpod. two ioc functions: check power
-      supply, get detector temperatures.
-    o thermistors from monitoring ioc, keithley
-- ability to run at asc or mfx?
-  - should be easy
+dan projects:
+- delay line detector
+- alice green ami graph for lcls1
+- vincent filter box
+- jungfrau 16M
+- mec varex, xpp orca quest? depending on priorities
 
 matt projects:
 switch to official BLD data-description server
@@ -57,23 +44,17 @@ riccardo proj:
 - reproduce timing problems in fee teststand
 
 mona proj:
-- epixM (get the detector from dionisio)
 - more timing fibers for ric epixhr emulation
+- vds with missing h5 data in some files?
 - high rate encoder
-- rix piranha
-- live mode sleep problem
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
-- moving vds h5?
 - h5 time sort
 
 s3df issues:
-- silke on contact page?
-- do preemptable jobs have a priority or first-come-first-serve?
-- ampere folding processes with no batch jobs?
-- seshu ampere jobs
-- run clush with sudo? (need to ssh to sdfmgr002)
-- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores: cryoem: 33, fermi 33, lcls 111, rubin 1?, ad 13, simes 1?
+- default jupyter to batch and add note
+- adding users to slurm accounts
 - how does slurm gather cores for mpi?
+- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores: cryoem: 33, fermi 33, lcls 111, rubin 1?, ad 13, simes 1?
 - "perazzo" sharing (needs a scalable way of calling the "delta" function)
   o delta-function (allocated vs. used) takes a long time to compute: can create a denial-of-service of slurm since it's slow
   o "forcing" people into preemptable when they exceed their allocation
@@ -87,16 +68,56 @@ Detectors to be ready in June: 2X FIMs (2 on KB1), ATM opal&piranha for IP1, FZP
 
 Detectors to be added by the end of calendar year 2023: two more FIMs on KB2 and IM6K4, ATM opal&piranha for IP2, another Laser wav8 for IP2
 
-detector requests:
+detector requests priority update:
+meeting with sebastien/james/georgi on nov. 20, 2023
+- (mostly done) rixccd
+- superconducting phase-cavity (close) and ebeam BLD for lcls2
+- small txi epixHR (beginning of 2025)
+- rix high-rate mono-encoder
+- mfx jungfrau16M
+- tmo tixel (running standalone in february?)
+  - magnetic bottle expts could use existing detector
+  - would be nice to replace a dream delay-line-detector
+    with tixel? need a larger one. not obligated to users
+    higher priority than big txi epixHR
+  - could replace k-microscope delay-line detector
+- rix axis sxr-60 camera (chemrix spectrometer)
+  - smaller pixel than epix
+  - can't use andor: flange-mount makes grazing-incidence difficult
+  - could happen before "the shutdown" (july 2025)
+  - highest priority for new instrument for rixs experiments
+  - plan is to implement as an IOC (who? dan? if tid could do it that would be great)
+- big txi epixHR (big one delayed until aug 2025)
+- rix epixM (depends on approved experiments)
+- rix k-microscope delay-line-detector (depends on approved experiments)
+  o should we use the dream dld instead?
+  o communicate with Bob Schoenlein
+- epixUHR (testing and in XPP, production not until late 2026)
+- ued andor ixon (the camera used in the old daq? but maybe not)
+  - maybe an IOC because of long integration times
+  - might not be too bad if it's an andor
+  - get more information
+- opal replacement?
+  - imperx? AD supports IOC with pgp-camlink. not super-fast (60Hz-100Hz)
+  - maybe not necessary since gige can be timestamped at 100Hz? needs testing
+    can talk to dougie about some data taken with high rate exit-slit manta
+    (progress from Dan and MikeB)
+- (previously approved for "standalone running") rix timepix
+  - tixel does same sort of thing
+  - done by anton
+  - no definitive plans
+  - josh turner is supposed to work with anton
+  - successor to epixM to get to high rates (or tixel)
+- (previously "unapproved") mec varex (a user group is bringing one to MEC)
+- (previously "unapproved") xpp orca
+
 - (det) rixccd archon (installed in hutch march 2023, beam oct 2023?)
 - superconducting BLD (fall 2022)
 - (tid) high-rate mono-encoder
   o interpolated absolute encoder (march 2023)
   o high rate relative encoder (december 2023)
-- dream hsd's in jan. 2023
 - (unapproved) ikon (for SVLS, kristjan et al., early 2023, perhaps princeton mid-late 2023?)
 - (tid, det?) k-microscope dld (test early summer 2022, production in early 2023?, beam summer 2023)
-- ami roiarch with 3D (mikhail)
 - (det) uxi needs more work from dan (lcls1)
 - (standalone approved) (tid, det) tixel (tmo standalone rogue tmo, dec. 2022?, daq integration if looks good)
   o bojan in TID is doing the work
@@ -109,7 +130,8 @@ detector requests:
   - 5 to 10 fibers pairs needs to be converted (use local xpm to generate
     multimode).  maybe 12 if edge-ml stuff.
   - 2 small epixHR's (140kpx?) single MTP12
-- cookiebox (early 2024): guarantee 8 channels, hope for 16
+- tmo cookiebox (early 2024): guarantee 8 channels, hope for 16
+- mfx jungfrau 16M
 - (will approve) (tid) opal replacement (s991? photometrics kinetix? giacomo thinks perhaps alvium?) https://www.alliedvision.com/en/products/alvium-configurator/alvium-1800-u/240/#_configurator
 - (approved for standalone) (tid,det) timepix for rix: standalone mode in July 2022 (256x256 px,
   o get start-time and time-over-threshold, ~2kHz, could be faster)
@@ -120,24 +142,32 @@ detector requests:
 - (tid, det) small epixUHR (200x200): (emulator available end of feb. 2023) beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
-- andor iXon for UED (flexible, June/July 2023?)
+- andor iXon for UED, alex reid (flexible, June/July 2023?)
 - axis-sxr-60-std 36MPx 26Hz camera request from Kristjan in RIX
   https://www.axis-photon.com/streak-camera/axis-sxr-60-36mpix-soft-x-ray-scmos-camera/
 
+* grafana to epics alarm handler
+* after-the-fact lcls2 daq alias in database (both configdb and detnames)
 * share simple python code between ami2/psana1/psana2 (amityping, psmon, "HPolar")
 * datasource kwarg to suppress fetching of calib constants for mikhail's mask editor (mona)
 * split daq/ana conda envs (valerio)
+* hsd raw/fex counters so james can alarm on low raw rates (weaver)
 * calibconst for lcls1 for ami2 (e.g. jungfrau)
 * saxs/waxs data reduction (stefano)
 * uniform (epics?) interface to detector config registers for config scans
 * fluctuation saxs/waxs data reduction (stefano)
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
+* ami roiarch with 3D (mikhail)
 * improve destination callback (mona)
 * event counts in logbook for phil
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
 * small VDS "link files" seem to have absolute path to partN files. should be relative path.
-* running daq with missing bld (ric claus)
+* running daq with missing (high-rate?) bld (ric claus)
+* check for differing types in smd.sum (gives "ndarray not contiguous" err) (mona)
+* separate (decouple) daq/ana envs (valerio)
+* detnames with wrong syntax produces incorrect output
+  (e.g. the ";" here: "detnames exp=rixc00121;run=81") (mikhail, mona)
 * running daq with damaging pvadet (ric claus)
 * fix daq timeout behavior where we sometimes get damage from many nodes  (ric claus)
 * multi camlink cameras in a node (ric claus)
@@ -147,6 +177,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
 * eliminate psana1 calibdir in favor of database (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
+* better error when running psana with small data but not setting PS_SRV_NODES  and when number of cores are incorrect (mona, mikhail)
 * didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona, ric)
 * event counts in elog for phil. jira ecs-3843 (chris ford, mikhail)
 * calibration constant provenance (mikhail)
@@ -158,6 +189,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * utility to put lcls2 h5 files in time-order (mona? mikhail? caf? riccardo?)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
 * only 4 bits for xpm number in xpm remote link id (matt)
+* support libfabric newer "tcp" provider (old one was "sockets") (ric)
 * more hsd's for simultaneous cookiebox/dream running (14+16 channels)
   but maybe not more hsd's if tixel works (weaver)
 * not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
@@ -191,7 +223,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * crystfel to psana geom (mikhail)
 * ami mypy daemon is long-lived: can cross release boundaries
 * configdb management for changing fex/teb decisions
-* run lcls1 jungfrau at 120Hz (ddamiani, dan)
 * timetool slowupdate background handling in psana (mona)
 * procmgr performance with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
@@ -449,24 +480,20 @@ timing issues:
 
 **********************************************************************
 
-cov normalized to stddev of gmd np.cov(30 events)/np.std(gmd (30 events)) threshold and sum
+yee preemption proposal:
 
-fzp trace: threshold and sum over pixels (1 number) per event
-gmd: 1 number per event, gmd.perpulseenergy
+only preemptable jobs: one "floating partition" called "shared"
 
-record 100 shots (two arrays of 100 numbers)
-np.cov(fzp,gmd)/np.mean(gmd)
+have a floating partition for all facilities: "lcls", "suncat" is a facility
+  - lcls float partition would be called lcls-float
+  - suncat float partition would be called suncat-float
+  - float partitions can have pre-emptable and non-preemptable jobs and higher priority jobs
+  - floating partition: not locked down to specific hosts (can mix clusters)
+  - the resources for the facility-float partition can be capped (only use 80%)
 
-ami (pythoneditor?) script
+lcls real-time jobs would preempt jobs in "shared" partition first and
+then other lower-priority lcls jobs
 
-trigger rate 100Hz (1MHz+destination 4 (mask 0x10))
+problem: lcls jobs are not preemptable
 
-friday night, or saturday night
-run without intensifier (time separately)
-
-for ATM: time the laser to the x-ray, then time the cameras to the laser
-saturday night: timed in laser on the diode
-monday/tuesday afternoon: time cameras to the laser
-acr feedback: not needed until xtcav (few weeks)
-
-took tmoc00221 run 38 as a test scan with fzp/atm piranhas (atm piranha is a standin for gmd)
+look into suspend-preemption again?
