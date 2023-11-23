@@ -1,14 +1,4 @@
-* yiping, revisit hsd buffer size (131kB), fdr, dan review, 13us fim difference, rix hsd2/3, s3df h5 jupyter, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
-
-fdr:
-- slides on meeting requirements in table 3 (online analysis)
-- table 6 get hsd info from matt
-- table 8
-- table 9
-- table 10
-- table 11
-- table 12
-table 13 and table 4: wilko
+* saxs/waxs parallelizable mpeg, kcu-xpm in fee, update camlink devices, xpm loopback failures, outage message, yiping, revisit hsd buffer size (131kB), fdr, dan review, 13us fim difference, rix hsd2/3, s3df h5 jupyter, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
 
 dan projects:
 - delay line detector
@@ -16,6 +6,10 @@ dan projects:
 - vincent filter box
 - jungfrau 16M
 - mec varex, xpp orca quest? depending on priorities
+- clean up ami tmo/rix errors
+
+caf projects:
+- configdb order
 
 matt projects:
 switch to official BLD data-description server
@@ -36,6 +30,7 @@ ric projects:
 - multicamlink drp
 
 riccardo proj:
+- xpm loopback failure
 - gmd/xgmd running in rix
 - epixuhr
 - finishing uproot
@@ -45,12 +40,14 @@ riccardo proj:
 
 mona proj:
 - more timing fibers for ric epixhr emulation
+- better error messages
 - vds with missing h5 data in some files?
 - high rate encoder
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
 - h5 time sort
 
 s3df issues:
+- cong folding jobs
 - default jupyter to batch and add note
 - adding users to slurm accounts
 - how does slurm gather cores for mpi?
@@ -74,7 +71,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 - superconducting phase-cavity (close) and ebeam BLD for lcls2
 - small txi epixHR (beginning of 2025)
 - rix high-rate mono-encoder
-- mfx jungfrau16M
+- mfx jungfrau16M (a year)
 - tmo tixel (running standalone in february?)
   - magnetic bottle expts could use existing detector
   - would be nice to replace a dream delay-line-detector
@@ -497,3 +494,14 @@ then other lower-priority lcls jobs
 problem: lcls jobs are not preemptable
 
 look into suspend-preemption again?
+
+**********************************************************************
+
+brainstorm with ric about epixm issues:
+
+summary:
+(1) we'll try to filter out [] () in dgram.cc
+- can't translate square brackets to xtc2. leave them in configdb so yaml goes along for the ride, take them out 
+- current method: remove square brackets in xtc, put in for rogue python, remove for xtc2
+(2) "no detname" error from PythonConfigScanner.
+(3) matt has educated us about how he handle the yaml files
