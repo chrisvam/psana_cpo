@@ -1,4 +1,42 @@
-* saxs/waxs parallelizable mpeg, kcu-xpm in fee, update camlink devices, xpm loopback failures, outage message, yiping, revisit hsd buffer size (131kB), fdr, dan review, 13us fim difference, rix hsd2/3, s3df h5 jupyter, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
+psana2 analysis affected by db?
+* mikhail scons, saxs/waxs parallelizable mpeg, kcu-xpm in fee, update camlink devices, xpm loopback failures, outage message, revisit hsd buffer size (131kB), 13us fim difference, rix hsd2/3, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
+
+power outage projects:
+- slurm (caf, ric)
+- configdb old-object removal (caf)
+- ami filter box (dan)
+- jump to timestamp (mona)
+- papers (everyone)
+- grafana-to-epics (ric)
+- psana1 build/test in s3df (mikhail)
+- hdf5 jupyter in s3df
+- accelerator patterns for rix and opal dropped shots (matt)
+- keras for juhao (riccardo)
+- poor psana1 jungfrau-calib scaling
+- fifo-reset fix for bucket-hopping timestamps (matt)
+- vds with missing h5 data in some files (riccardo, mona, anyone)
+- h5 timestamp sort with dask (mona)
+- s3df hiprioq proposal for 1000's of cores (yee with others)
+- lcls2 daq after-the-fact aliases
+- more data reduction libsz testing
+- check for differing types in smd.sum
+- separate daq/ana envs
+- psana2 detnames with wrong syntax produces incorrect output
+  (e.g. the ";" here: "detnames exp=rixc00121;run=81") (mikhail, mona)
+- better error when running psana with small data but not setting PS_SRV_NODES  and when number of cores are incorrect (mona, mikhail)
+- ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
+- lcls2 inline and web documentation? (mikhail)
+- only 4-bits for xpm number in remote link id (matt)
+- not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
+- ami 3D angular integration (mikhail)
+- "exposure time" integrating detector (mona)
+- SZ-gpu (stefano)
+- simple mpeg-style saxs/waxs (stefano)
+- psana test to verify that all detector interfaces follow the rules
+- swmr with small h5
+- support damage in psana2 (mona)
+- gpu detector corrections
+- syslog print throttling (caf)
 
 dan projects:
 - delay line detector
@@ -7,35 +45,30 @@ dan projects:
 - jungfrau 16M
 - mec varex, xpp orca quest? depending on priorities
 - clean up ami tmo/rix errors
+- in psana SRV callback only persist some fields to h5?
 
 caf projects:
-- configdb order
+- configdb remove/hide unused detectors
+- syslog print throttling (caf)
 
 matt projects:
 switch to official BLD data-description server
 schedule acr/rix accelerator burst-pattern mtg
 hsd repair
 tmo-to-acr feedback without gateways (bld or epics or both)
-test all detectors in tmo/rix
 robustness of timing links (install new tdet firmware everywhere?)
-long ami 11s latency seen in both tmo/rix under some conditions
-add sp1k4 gige to tmo.cnf
-add mono04 gige to rix.cnf
 
 ric projects:
 - psana grafana
-- acr mcast feedback
 - libsz to roi switch (and easily change roi config params)
 - epixhremu to 20 nodes
 - multicamlink drp
 
 riccardo proj:
 - xpm loopback failure
-- gmd/xgmd running in rix
 - epixuhr
 - finishing uproot
-- batchtest in s3df (requires openmpi with pmi2, not pmix)
-- juhao work
+- juhao work (keras)
 - reproduce timing problems in fee teststand
 
 mona proj:
@@ -159,7 +192,6 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * event counts in logbook for phil
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
-* small VDS "link files" seem to have absolute path to partN files. should be relative path.
 * running daq with missing (high-rate?) bld (ric claus)
 * check for differing types in smd.sum (gives "ndarray not contiguous" err) (mona)
 * separate (decouple) daq/ana envs (valerio)
@@ -167,10 +199,9 @@ meeting with sebastien/james/georgi on nov. 20, 2023
   (e.g. the ";" here: "detnames exp=rixc00121;run=81") (mikhail, mona)
 * running daq with damaging pvadet (ric claus)
 * fix daq timeout behavior where we sometimes get damage from many nodes  (ric claus)
-* multi camlink cameras in a node (ric claus)
 * converting grafana values into epics alarms
 * configuration management/control for calibration/fexA/fexB
-psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
+* psana conflict between normalized integrating detectors and cube with destination callback? perhaps not a problem since integrating detector requires stable pump-probe time
 * sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
 * eliminate psana1 calibdir in favor of database (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
@@ -178,7 +209,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona, ric)
 * event counts in elog for phil. jira ecs-3843 (chris ford, mikhail)
 * calibration constant provenance (mikhail)
-* h5 full-pathname issue in part0 files
 * resurrect psana1 unit tests ("scons test") (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * when rix piranha had small number of dma buffers (like opal) we often, but not always, got 100% deadtime and BEB timeouts.  feels like buffers not configurerd correctly when deadtime happens (ric, matt, mona, riccardo)
@@ -192,9 +222,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
 * andor pedestal subtraction (mikhail)
 * managing sharing: readout groups, drp nodes, cnf files, bos connections
- - Chris Ford is working on a shared-DAQ resource allocation manager
- - Matt Weaver has this big-optical-switch ("BOS") which is principle allows more flexible use of the shared DAQ nodes
- - right now we have rix/tmo "official" setups.  we should probably create another one for acr, and then another one for one-off setups (like what Bill Schlotter is doing tomorrow).
  - make drp nodes more uniform?
 * mask editor (mikhail)
 * when detector list is long in control-gui, can't hit "apply" button  (mikhail)
@@ -215,7 +242,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * raise exception instead of crashing when idx/smd files are missing in psana1
 * broadcasting non-epics slowupdate data (e.g. ttool bkdg)
 * control_gui not showing up on right screen in tmo (ami, procstat do) (mikhail)
-* test psana2 live mode (mona)
 * move encoder to tcp (caf)
 * crystfel to psana geom (mikhail)
 * ami mypy daemon is long-lived: can cross release boundaries
@@ -223,8 +249,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * timetool slowupdate background handling in psana (mona)
 * procmgr performance with hundreds of nodes (caf)
 * explore object stores for psana like ceph (mona)
-* alias not in xtc file so more flexible
-* select monitoring destination for particular events (ric)
+* select daq meb monitoring destination for particular events (ric)
 * avoid missing 1 second of epicsarch data at beginning of run
 * small daq teststand for automated continuous-integration tests?
 * multisegment epicsinfo in pvadetector
@@ -251,8 +276,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * make swmr work with small-h5
 ** for phil: configdb_readxtc and compare configs (ro, caf)
 * lcls2 common-mode for panels in different gain ranges (mikhail)
-* plims for lcls2 (mikhail)
-* mpi jobs not exiting if one core crashes
 * address psana/daq prometheus issues described on confluence (mona/ric)
 * managing prometheus files in promdir
 * put procstat in prometheus (or hard to duplicate all functionality?)
@@ -261,7 +284,7 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * support damage in psana, including counting (mona)
 * protect against use of keywords as epics aliases, consider using namespacing. write a sanitizer for epicsarch files (use "import keywords"?)
 * send clearreadout to pvadetectors
-* eliminate opal lcls1->lcls2 timing toggling (larry, ben)
+* eliminate opal lcls1->lcls2 timing toggling (julian, matt)
 * multiseg epics (kwargs or collection segids?) (mona)
 * jungfrau/epix dark shot pedestals
 * psana1: implement idx using smd
@@ -269,8 +292,6 @@ psana conflict between normalized integrating detectors and cube with destinatio
 * psana2 idx mode
 * psana1: add epix firmware id in epix id's for phil
 * upgrade jupyterhub or use on-demand?
-* general test that all public detector attributes are method taking event with return type (ro)
-** support multiple cameras on one drp node
 ** one exe writing multiple files to improve performance
 ** xtcdata duplicate names throw
 * move away from afs (mv pdsdata/psalg repo)
@@ -278,67 +299,37 @@ psana conflict between normalized integrating detectors and cube with destinatio
 ** make everything work with Debug instead of RelWithDebInfo (valerio, ric)
 * move readout group config info from segment levels to ts
 ** optionally don't record selected detectors to disk
-* mikhail: roentdek with quadanode
 * fix camlink converter box with opal where only one strip works (requires camlink powercycle)
 * daq window auto placement
 * parallelized calibrations (mikhail)
-* state machine confusing (ric email) lower priority?
 * monitor deadtime per-lane (matt)
-* improved grafana (like ganglia)
 * move other hutches to lcls2
-* allocation of readout groups and devices, lanes
-* LCLS2 drop shots (bykiks evtcode 161)
 * MHz with real tmo analysis including pre/post processing partitioning (mona)
 * create more platforms for procmgr, perhaps with offsets for each hutch based on xpm? (caf)
-* procmgr don't complain about undefined platform when all ports are specified (e.g. neh-base.cnf)
-* practice power outage
 * parallel jupyterhub with visualization (copy euxfel?) (riccardo/mona/wilko/valerio)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
 * fix failing new-style psana1 tests (valerio)
-* shifter mounting permissions (mona, johannes)
 * send multiple copy of events to shmem like lcls1
 ** small h5 ebeam/gasdet automatic storage (ro)
-* small h5 ragged arrays
 * meb (or later layer) broadcasts events to all clients (ami, python) (ric)
-* read-while-write smallh5
-* test daq sequences (caf)
-* psana1 MTRX:V2 geometry (mikhail)
 * update procServ (caf)
-* slow updates need to obey deadtime (matt)
-* setting msgdelay in timing system? (matt)
 ** syslog print throttling (caf)
-* off-by-one (psana1/2) (ro)
 * off-by-one support for low-rate devices
 * units support in det xface
 * put psana2 (and psana1?) on conda-forge
-* calibdb dns issue (in travis macos build)
 * in psana SRV callback only persist some fields to h5?
 * once we have real data, work more on timetool calc in firmware
-* dlopen for reduction alg
-* scalable calib-fetch solution for shmem/drp
-* sdf/nersc calib-dir sync (wilko)
+* scalable calib-fetch solution for shmem (have it for drp)
+* sdf/nersc psana1 calib-dir sync (wilko)
 * psana1: continuous integration of py3 (jenkins)
 * lcls2 configdb tools: history, delete (into "trash" folder for recovery?) (ro)
 * algorithms (drp/ana, e.g. beam-center finding)
 * singularity at slac
 * support more python versions
-* S3DF support including ARP
-* automatic users add to sdf lcls queue (wilko, valerio)
-* python DRP? (valerio, ric)
 * fiber power readings from timing system kcu's (matt)
-* peaknet
-* ami:
-  - josh: nanosecond xpcs: 2 pulse acqiris.  ratio of peak areas, correlation
-    export results to ACR
-  - josh: xpcs photon counting, working with chuck: accumulate statistics
-    and then fit, number of photons per shot in histogram (talk to chuck
-    and silke sxrm23). nicholas burdet (shared postdoc)
 * timetool (ben): tag to front end, fiber power, toggle xpmini->lcls2 timing, clear readout
-* simpler interface for controlling teb/meb?
-* xtcav daq recording epics variables as well (and also bld values?)
-* xtcav/psocake py3 compatible
 
 **********************************************************************
 
