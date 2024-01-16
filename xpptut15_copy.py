@@ -6,7 +6,7 @@ import stat
 import numpy as np
 import os
 
-rootdir = '/reg/d/psdm'
+rootdir = os.environ['SIT_PSDM_DATA']
 
 class Dgram:
     def __init__(self,f):
@@ -46,20 +46,20 @@ def fixRunNumber(fname):
     #check
     f.seek(beginrunoffset)
     newbeginrundg = Dgram(f)
-    #print beginrundg.data()
-    #print newbeginrundg.data()
+    #print(beginrundg.data())
+    #print(newbeginrundg.data())
     assert newbeginrundg.env()==newrun, 'Read incorrect run number %d %d'%(newrun,newbeginrundg.env())
     f.close()
     os.chmod(fname, fstat)
 
 def safecopy(inf,outf):
     if not os.path.isfile(inf):
-        print '*** Input file',inf,'does not exist. Not copied'
+        print('*** Input file',inf,'does not exist. Not copied')
         return
     if os.path.isfile(outf):
-        print '*** Output file',outf,'exists. Not copied'
+        print('*** Output file',outf,'exists. Not copied')
         return
-    print 'cp',inf,outf
+    print('cp',inf,outf)
     shutil.copyfile(inf,outf)
     return
 
@@ -79,12 +79,12 @@ def copyconstants(hutch,expt,inruns,outruns):
                 type = os.path.basename(typedir)
                 cff = CalibFileFinder(cdir, group, pbits=0)
                 inf = cff.findCalibFile(src, type, inruns[0])
-                if inf is '':
-                    print '*** No',type,'calibration constants found for exp=%s:run=%d. Constants not copied'%(expt,inruns[0])
+                if inf == '':
+                    print('*** No',type,'calibration constants found for exp=%s:run=%d. Constants not copied'%(expt,inruns[0]))
                     continue
                 outcdir = os.path.join(outtopdir,'calib',group,src,type)
                 if not os.path.isdir(outcdir):
-                    print '*** Creating directory',outcdir
+                    print('*** Creating directory',outcdir)
                     os.makedirs(outcdir)
                 outf = os.path.join(outcdir,'%d-%d.data'%(outruns[0],outruns[-1]))
                 safecopy(inf,outf)
@@ -163,7 +163,7 @@ for e in exptlist:
         for rin,rout in zip(inruns,outruns):
             infs = glob.glob(os.path.join(rootdir,hutch,expt,dd,'*r%4.4d*'%rin))
             if len(infs)==0:
-                print '*** No input files found for exp=%s:run=%d'%(expt,rin),'in directory',dd
+                print('*** No input files found for exp=%s:run=%d'%(expt,rin),'in directory',dd)
             for inf in infs:
                 _,outf = os.path.split(inf)
                 end = outf.split('-')
