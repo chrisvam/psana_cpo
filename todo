@@ -1,8 +1,7 @@
-psana2 analysis affected by db?
-* mikhail scons, saxs/waxs parallelizable mpeg, kcu-xpm in fee, update camlink devices, xpm loopback failures, outage message, revisit hsd buffer size (131kB), 13us fim difference, rix hsd2/3, kirian psana1 docs, atm ok with lcls2 event codes, handling on-call 0x8623, grafana-to-epics, intg_det slowupdate/l1 prio, cassettes, tmoc00221 run 50 scan hang, lcls2 damage stats (and event counters?), cxix1000021:run5 det.image, acr feedback, txi kpp (grp7 grafana), cmp041, 156 subnet jira, matt tdet firmware everywhere, more timing cables emu
+* cmp032 bios, xpm6 eq study, compression conda, sachsm epix xy, ctl002 network, OIPs, kernel panic, kirian, grafana to epics, fim 13us, xpp droplet code, julian timing fix, kcu-xpm in fee, xpm loopback failues, revisit hsd buffer size (131kB), rix hsd2/3, atm ok with lcls2 event codes, handling on-call 0x8623, intg_det slowupdate/l1 prio, cassettes, lcls2 damage stats (and event counters?), acr feedback, txi kpp (grp7 grafana), cmp041 and similar timing failures, more timing cables emu
 
 power outage projects:
-- slurm (caf, ric)
+- slurm for daq processes (caf, ric)
 - configdb old-object removal (caf)
 - ami filter box (dan)
 - jump to timestamp (mona)
@@ -38,7 +37,14 @@ power outage projects:
 - gpu detector corrections
 - syslog print throttling (caf)
 
+chris ford projects:
+- cabling
+  o new hsd's epixhremu with kcu1500 timing fanout in srcf
+- and also running the epixhremu?
+  o work in configdb for SZ compression configuration bits?
+
 dan projects:
+- ami2 tests for lcls1
 - delay line detector
 - alice green ami graph for lcls1
 - vincent filter box
@@ -52,11 +58,13 @@ caf projects:
 - syslog print throttling (caf)
 
 matt projects:
-switch to official BLD data-description server
-schedule acr/rix accelerator burst-pattern mtg
-hsd repair
-tmo-to-acr feedback without gateways (bld or epics or both)
-robustness of timing links (install new tdet firmware everywhere?)
+lcls2 self-test failure
+hsd repair for tmo (riccardo and I can help with the physical work)
+continue to help riccardo with tmo/fee hsd installation
+new firmware with julian timing link fix
+hsd robustness using teststand (e.g. fiber unplugs, power cycles)
+help ric with epixm when ric needs it
+kernel panic
 
 ric projects:
 - psana grafana
@@ -65,6 +73,7 @@ ric projects:
 - multicamlink drp
 
 riccardo proj:
+- psana2 conda package
 - xpm loopback failure
 - epixuhr
 - finishing uproot
@@ -72,19 +81,26 @@ riccardo proj:
 - reproduce timing problems in fee teststand
 
 mona proj:
+- psplot_live debugging
 - more timing fibers for ric epixhr emulation
+- (daq) two threshold droplet alg for xpp-he
+- (daq) cube pattern
+- (daq) epixuhr
 - better error messages
 - vds with missing h5 data in some files?
-- high rate encoder
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
 - h5 time sort
 
 s3df issues:
-- cong folding jobs
+- job preemption with external users like rubin
+- kubernetes ACLs
+- scontrol-down nodes reopen after some minutes
+- mikhail cpu results
+- is ampere limit of 4 nodes enforced? (reply to linjia)
+- ipmi access to reboot? (wilko)
+- public_html for psreldev
 - default jupyter to batch and add note
-- adding users to slurm accounts
 - how does slurm gather cores for mpi?
-- hierarchy of shares (waiting on procurements, this week): will set to number of "purchased" cores: cryoem: 33, fermi 33, lcls 111, rubin 1?, ad 13, simes 1?
 - "perazzo" sharing (needs a scalable way of calling the "delta" function)
   o delta-function (allocated vs. used) takes a long time to compute: can create a denial-of-service of slurm since it's slow
   o "forcing" people into preemptable when they exceed their allocation
@@ -99,11 +115,13 @@ Detectors to be ready in June: 2X FIMs (2 on KB1), ATM opal&piranha for IP1, FZP
 Detectors to be added by the end of calendar year 2023: two more FIMs on KB2 and IM6K4, ATM opal&piranha for IP2, another Laser wav8 for IP2
 
 detector requests priority update:
+(new: UED 1080px epix10ka)
 meeting with sebastien/james/georgi on nov. 20, 2023
 - (mostly done) rixccd
 - superconducting phase-cavity (close) and ebeam BLD for lcls2
 - small txi epixHR (beginning of 2025)
 - rix high-rate mono-encoder
+- UED 1080Hz epix
 - mfx jungfrau16M (a year)
 - tmo tixel (running standalone in february?)
   - magnetic bottle expts could use existing detector
@@ -172,7 +190,8 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 - (tid, det) small epixUHR (200x200): (emulator available end of feb. 2023) beam-test with daq april 2023 (35kHz).
   not identical to epixHR.
   - daq integration with firmware emulator in jan 2023?  prototype 1 asic in april 2023? beam time soon after
-- andor iXon for UED, alex reid (flexible, June/July 2023?)
+- andor iXon for UED, alex reid (flexible, June/July 2023?) a.k.a. EMCCD
+  - slow (1s to 30s) and integrates
 - axis-sxr-60-std 36MPx 26Hz camera request from Kristjan in RIX
   https://www.axis-photon.com/streak-camera/axis-sxr-60-36mpix-soft-x-ray-scmos-camera/
 
@@ -308,6 +327,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * create more platforms for procmgr, perhaps with offsets for each hutch based on xpm? (caf)
 * parallel jupyterhub with visualization (copy euxfel?) (riccardo/mona/wilko/valerio)
 * portable gpu detector corrections (kokkos/hip/openmp/opencl?)
+* drp gpu
 * deploy releases everywhere, containers? (valerio) (nersc, sdf, new/old psana1)
 * unified/integrated timetool calibration
 * fix failing new-style psana1 tests (valerio)
@@ -486,6 +506,93 @@ problem: lcls jobs are not preemptable
 
 look into suspend-preemption again?
 
+goal:
+- guarantee 3000 core jobs start in <1 minute. need a solution by january
+  or february
+options:
+- reservations (like a partition)
+- use current system
+  o helps to not demand exclusive node (but can have noisy-neighbor)
+  o no guarantee
+- "island" milan partition with suspend/kill preemption with lcls jobs? (what we did previously)
+  o two sub-partitions of milan: prioq, normq
+  o would need to set this up with suncat
+  o breaks "sharing" model of s3df
+
+for (2):
+suppose lcls only has milan 88 nodes
+suppose offline jobs have filled up milan 88 nodes with norm qos jobs offline
+- 88 purchased (lcls milan nodes)
+- 40 purchased (milan nodes from others)
+yee solution: realtime jobs have higher qos that could preempt norm qos ("compute requirement" set different for different repos)
+this qos only affect queue position, but can also set to preempt
+
+jan. 12 discussion
+
+- force things that are preemptable (like suncat) to be together?
+- amedeo's accounting approach has long time-constant, but guaranteed
+  1 minute to execution needs short time constant
+- can automatically requeue or suspend
+- yee's concrete proposal: a slurm plug-in to manage preemption
+  (using default qos plug-in).  each job is assigned a qos
+  serves three function (1) set priority within the queue
+  (2) set resource limits a group of jobs can use (also
+  constrainted by coact, to try to limit the number of non-preemptable
+  jobs by a facility) (3) define what other jobs the job in question
+  can preempt
+  o yee's group is trying to write a custom plug-in to manage qos:
+    e.g. lcls:on-shift can preempt lcls:normal
+  o regarding (2) number of jobs is limited a group TRES
+
+jan 19
+
+yee's two points:
+(1) need to limit the number of non-preemptable jobs, in particular the
+    single-core jobs which can scatter across nodes
+(2) how do we preempt the jobs and limit the resources used by preemptable
+    jobs
+yee's proposal:
+(1) limit every facilities use of non-preemptable jobs to what
+    they have purchased (e.g. LCLS is limited to 88 nodes of
+    non-preemptable jobs, or half of 176 nodes)
+    - coact can help with this
+    - is this a hard limit, or does it have a long time-constant?
+      o a hard limit for a repo (enforced by slurm), but not at the
+        multiple-repo level
+        (multi-repo is not enforced by slurm, but coact so a long
+	 time-constant to see if we've crossed the 88 node
+	 threshold)
+(2) LCLS defines the order of preemption of experiment repos
+(add-on) could extend this to support cross-facility preemption
+
+concrete example of yee's proposal:
+4 expts: exp1 (on-shift), exp2 (off-shift), exp3 (normal), exp4 (normal)
+- set exp1 to have high-priority for queue-placement
+  o implemented by setting QOS=on-shift for exp1
+- have a sequence of job-QOS's: preemptable, normal, off-shift, on-shift
+  o could have "normal" jobs be preemptable, although could create
+    issues with sharing with others like rubin
+  o reuse murali's stuff to automatically get on-shift/off-shift settings
+    - uses the experiment runs within calendar URAWI start/end time
+    - can this handle last-minute changes?  could add some buffer at
+      the edges or manually override (sub-czars could do this?)
+  o setting "on-shift" setting for a repo is a permission, the
+    on-shift expts could specify on-shift or normal QOS in
+    job submission script
+    - there can be a default QOS
+    - if a job is set to a non-permissible QOS job will
+      currently fail (Silke would like it to switch to lower QOS
+      automatically)
+- we will try suspend preemption within the milan partition
+  o ****** memory ****** is a worrisome issue, but nodes will get larger
+    SSDs in 3 months (several TB)
+    - expect 2-10GB/s maybe limited by kernel, so 512GB would take 1.5min
+      but happens in parallel, so hopefully OK
+- each experiment repo would set an allocation (a hard limit!) that
+  would limit the number of cores (enables multiple on-shift expts)
+- beamline staff could tweak repo allocations?  may need sub-czar
+  (operator) privileges
+
 **********************************************************************
 
 brainstorm with ric about epixm issues:
@@ -496,3 +603,108 @@ summary:
 - current method: remove square brackets in xtc, put in for rogue python, remove for xtc2
 (2) "no detname" error from PythonConfigScanner.
 (3) matt has educated us about how he handle the yaml files
+
+**********************************************************************
+
+weka options:
+
+"posix write hole"
+
+- * range file locks: perfect, but doesn't work easily bbcp
+  o people use acls as locks as a hack
+- * mount flag:
+  o currently allow clients to go faster than the rest of the cluster
+  o turn this off.  performance will decrease.  sometimes drop to 1GB/s
+  o atomic-write: serializes write threads mount option
+  o a new mount option on the writer
+- mpi i/o with collective hints. would currently still work
+- * use similar tricks to mpi i/o (like romeo)
+  - dentry_max_age_positive=0 (mount option)
+- 4k writes? decreases probability
+
+https://docs.weka.io/fs/mounting-filesystems#for-all-clients-types
+
+**********************************************************************
+
+need: timing fw fixes, rogue6, updated rogue packages
+- high priority rogue: camlink, wave8
+- high priority non-rogue: hsd, xpm, ts
+- maybe lcls2-pgp-pcie-apps (only write to this for epixhr at the moment?)
+- low priority: epix*, high-rate-encoder, tixel
+
+if we update wave8, does controls also need to move to new rogue?
+
+need julian (currently ill) to sign-off on wave8 timing changes
+
+could move one hutch at a time to make it easier
+
+deploy new kcusim
+
+**********************************************************************
+
+fim1 bucket-skipping
+fim0 missing phase2 of config (fixed itself?)
+hsd's had wrong group (and hence wrong l0delay) but fixed itself?
+cmp002/010 timing link not locked (power cycle)
+opal/piranha: hanging on startup (fixed by rebooting)
+timing crate unplugged
+powercycle camlink nodes 012 027 with filesystem hangs?
+no ami client window (reboot cmp029)
+mono_trig crash (new tpr.ko)
+
+**********************************************************************
+
+ued 1080hz epix10ka:
+- two opportunities: march or july
+
+- still switching between daq's?
+- how many fibers?
+- andor ixon/emccd
+
+ixon/emccd:
+- run epix or ixon/emccd, not both
+- ideally want shot-to-shot data e.g. shot-by-shot timetool
+- 30second integration times are long. can we trigger that slowly?
+- dan thinks it is sdk2 which means it should be easier (like newton?)
+
+650-926-2398
+rujjira kong
+
+**********************************************************************
+
+- production experience with incremental steps
+- good to demonstrate that the lab can be successful with the detectors with the incremental step
+- also include cost estimates with current technology
+
+**********************************************************************
+
+epixm:
+- xtc2 format
+- descramble in software (using _dataDebug.py or untested C code)
+- what scans det group needs (pedestal? charge injection?)
+  o pedestals: 5 steps for HR, fewer for M (maybe none?)
+  o charge injection
+- management of run triggers vs. daq triggers (hopefully
+  reuse what matt already has)
+- ask matt about the beb timeout value
+
+**********************************************************************
+
+o julian reset fixes
+  - have hsd build, but needs to be programmed (jtag)
+    o riccardo will fix tmo (two new ones and one old one, test fex
+      mode then do all of them)
+    o riccardo try to move cam01/03 up one rack space
+    o matt will give mcs file to riccardo
+  - camlink fixed (mona)
+  - timing-system mcs in progress by matt.
+  - xpm's running 3.7.0 probably have the fix.  3.9.0 definitely does
+    and also has the new keep-raw flag
+  - wave8: controls devices moved to rogue6. Julian will try.
+o matt bucket-fix:
+  - no solution yet (old idea was already there)
+o equalizer settings
+  - xpm6 not talking to mona's wave8 in txi
+
+production: camlink, ts, wave8, xpm, hsd
+development: epixhr, epixm, epixuhr, tixel, dld
