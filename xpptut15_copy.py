@@ -146,7 +146,8 @@ exptlist = []
 # xpptut15 run 640 unreported?
 #exptlist.append(exptruns('xpplv9818',[127],650))
 #exptlist.append(exptruns('mfxc00118',[239],660))
-exptlist.append(exptruns('mfxx49820',list(range(15,20)),670))
+#exptlist.append(exptruns('mfxx49820',list(range(15,20)),670))
+exptlist.append(exptruns('meclw5919',[160,161,177],680))
 
 datadirs = ['xtc/index','xtc/smalldata','xtc']
 outtopdir = os.path.join(rootdir,'xpp/xpptut15')
