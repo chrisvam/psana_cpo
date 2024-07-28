@@ -1,47 +1,79 @@
-* cmp032 bios, xpm6 eq study, compression conda, sachsm epix xy, ctl002 network, OIPs, kernel panic, kirian, grafana to epics, fim 13us, xpp droplet code, julian timing fix, kcu-xpm in fee, xpm loopback failues, revisit hsd buffer size (131kB), rix hsd2/3, atm ok with lcls2 event codes, handling on-call 0x8623, intg_det slowupdate/l1 prio, cassettes, lcls2 damage stats (and event counters?), acr feedback, txi kpp (grp7 grafana), cmp041 and similar timing failures, more timing cables emu
+mfx+txi node count
 
-power outage projects:
-- slurm for daq processes (caf, ric)
-- configdb old-object removal (caf)
-- ami filter box (dan)
-- jump to timestamp (mona)
-- papers (everyone)
-- grafana-to-epics (ric)
-- psana1 build/test in s3df (mikhail)
-- hdf5 jupyter in s3df
-- accelerator patterns for rix and opal dropped shots (matt)
-- keras for juhao (riccardo)
-- poor psana1 jungfrau-calib scaling
-- fifo-reset fix for bucket-hopping timestamps (matt)
-- vds with missing h5 data in some files (riccardo, mona, anyone)
-- h5 timestamp sort with dask (mona)
-- s3df hiprioq proposal for 1000's of cores (yee with others)
-- lcls2 daq after-the-fact aliases
-- more data reduction libsz testing
-- check for differing types in smd.sum
-- separate daq/ana envs
-- psana2 detnames with wrong syntax produces incorrect output
-  (e.g. the ";" here: "detnames exp=rixc00121;run=81") (mikhail, mona)
-- better error when running psana with small data but not setting PS_SRV_NODES  and when number of cores are incorrect (mona, mikhail)
-- ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
-- lcls2 inline and web documentation? (mikhail)
-- only 4-bits for xpm number in remote link id (matt)
-- not all errors show up in ami gui, e.g. missing attribute error (ddamiani)
-- ami 3D angular integration (mikhail)
-- "exposure time" integrating detector (mona)
-- SZ-gpu (stefano)
-- simple mpeg-style saxs/waxs (stefano)
-- psana test to verify that all detector interfaces follow the rules
-- swmr with small h5
-- support damage in psana2 (mona)
-- gpu detector corrections
-- syslog print throttling (caf)
+* mudit access, rix issues, erik data fetch, 4U servers, mfx+txi node count, cassettes, slurm daq, spack daq, hxr xtcav fiber, mfx fibers, fix teb->control timeouts, epixM charge injection, phil per-run grafana link, timestamps for unaligned, tmol1030922 crashes (daq_crash), hsd b2:a, psmon error on non-default port, one copy of devgui tools, tmo daq restarts morning of jun20, loaner fmc134 hsd (no carrier), xcsl1018322 slow jobs (run table and arp around run 240, june 15), atca crates, order hsd's/camlink, mfx epix100, rittal, fix rix hsd's, test cmp006 jira with camlink, ebeam/pcav BLD (pcav timing charlie shu should time it in, ebeam unclear), archon calib, ctl002 network, intg_det slowupdate/l1 prio, txi kpp (grp7 grafana)
+
+erik:
+- default ps_smd_n_event
+- datasource batch_size 200
+- tmox1009422 run 26
+
+epix100 issues: config-scan, deadtime, calibration, configuration
+
+archon:
+- *** pixel gain 3.65eV/ADU
+- calib shape should be like raw (i.e. include fake pixels)
+- image excludes the fake pixels
+- *** common mode should be optional with a kwarg
+- *** x,y,z (fake pixels return x,y,z NaN?)
+  o it is a dense 2D array (no gaps)
+- *** standard bad-pixel-mask where fake pixels are masked
+- *** user-mask-bit bit saying "fake pixel"
+- *** mask out the timestamp pixels or mark as bad so they don't get used in
+  common mode (talk to Dan D to figure out which are timestamp pixels)
+- dan needs to update hutch firmware for pixel timestamps
+- triggering at 0.5Hz synced to beam is tough. do scientists really need
+  this or is binning OK?
+
+gabriel projects:
+- validating rix daq
+- txi beamtime
+- adding wave8 to teststand
+- archon calibration
+
+julian projects:
+- kcu pcie problem
+- timing link lock failures
+- bucket hopping
+- eye scan
+- rix hsd repair
+- programming hsd firmware over pcie
+
+dan projects:
+- lcls2 jungfrau
+- ami2 caproto.server export
+- archon timestamp
+- xinxin ami2
+- vincent kwargs
 
 chris ford projects:
+- new tpr in daq-det-evr01 (all in the same rack) furthest rack from door
+  (timing in first rack, both xpm and lcls1)
+- triggerDelay errors to gui (maybe grafana (bigger job))
+- sysctl.conf management
+- epix logbook prec issue raised by silke
+- qrixs camlink boxes
+- epixm server
+- install spark arrestors
+- kcu in drp-srcf-gpu*
+- spack testing
+- slurm testing
+- test ipmi everywhere
+- cmp15,16 (or 14,15) bad kcu or ib
+- fiber optics inventory/order
+- camlink box inventory/order
+- check bios settings
 - cabling
   o new hsd's epixhremu with kcu1500 timing fanout in srcf
 - and also running the epixhremu?
   o work in configdb for SZ compression configuration bits?
+
+pressio gpu projects:
+- robert: lc compression interface
+- stefano: pipeline automation, GPU performance, post SAXS/WAXS results
+- jiannan: commit improved encoding code, 
+- batching?
+  o pressio: set Flush=true returns data object
+  o 
 
 dan projects:
 - ami2 tests for lcls1
@@ -53,50 +85,112 @@ dan projects:
 - clean up ami tmo/rix errors
 - in psana SRV callback only persist some fields to h5?
 
+mikhail projects:
+- calibrun alvium support (including only 1)
+- only show cnf configs in control_gui editor
+- psana2 det kwargs to instantiation
+- daq configdb editor doesn't save properly when hex value specified
+- psana1 det.image kwargs to det.calib
+- lcls2 jungfrau det.calib performance (do it "perfectly")
+- improve psana1 calib const fetch scaling
+- new psana1 release (pick up kludge fix)
+- why doesn't psana mpi crash when a live-mode file read error happens?
+- mask-generator gui to set per-asic gain modes for epixHR/epixM?
+  (silke says per-pixel gain modes typically done in python)
+
 caf projects:
-- configdb remove/hide unused detectors
-- syslog print throttling (caf)
+- go through all drp-srcf-cmp*, eb*, mon* and see which ones have broken IPMI
+  web interfaces
+- fix daqstate?
+- put platform number in elog (along with other daq values) for grafana
+  damage url construction
+- learn how to use the the supermicro bios command-line tool and make
+  sure that all nodes have correct bios settings
+- "configdb history" printing local time instead of UTC
+- inventory nodes with bad ipmi web interface
+- fix hyperthreading
+- syslog print throttling
+- setup spare drp nodes (onsite)
+- help repair fee alcove cooling (onsite)
+- mpo12 to mpo8 (onsite)
+- kcu for drp-gpu (onsite)
+- kcu-xpm in fee (onsite)
 
 matt projects:
-lcls2 self-test failure
-hsd repair for tmo (riccardo and I can help with the physical work)
-continue to help riccardo with tmo/fee hsd installation
-new firmware with julian timing link fix
-hsd robustness using teststand (e.g. fiber unplugs, power cycles)
-help ric with epixm when ric needs it
-kernel panic
+txi run
+run julian's eye scan for all steps in hsd chain xpm->hsd->kcu including jesd
+  - official software changes in july
+  - can we kludge something so we can debug broken tmo/rix hsd's
+    without interfering with running?
+rog0 idea
+pcav/ebeam bld
+gpu
 
 ric projects:
+- epixm: config scans, run trigger, pixel gain cfg
+- pvadetector calib support (user specified serial number, dettype, etc.)
+- drp gpu
 - psana grafana
 - libsz to roi switch (and easily change roi config params)
 - epixhremu to 20 nodes
 - multicamlink drp
 
 riccardo proj:
-- psana2 conda package
-- xpm loopback failure
 - epixuhr
-- finishing uproot
-- juhao work (keras)
-- reproduce timing problems in fee teststand
+- test the whole hsd chain for hsd_2/hsd_5 with eye-scan
+  o move a loopback along the steps in the fiber path until eye-scan
+  o could also swap hsd fibers in the bos to see if it's a kcu/hsd problem
+    o set up a dedicated loopback channel in the bos
+- one copy of devgui tools
+- update peppex hsd's
+- mfx fee spec test
+- repair tmo/rix hsd's
+- spare drp nodes (timing, wave8, camlink, hsd)
+- mpo12 to mpo8
+- teststand piranha
 
 mona proj:
-- psplot_live debugging
-- more timing fibers for ric epixhr emulation
+- rix continuous beam integ detector offset
+- poor tmo scaling
+- 
+- unaligned detectors timestamp and timesort
+- slurm instead of procmgr
+  o multiple cnf "inheritance"
+- psana2 scaling issue
+- archon calibration
+- psana sz/lz decompress with pressio?
+- integrating detector offset (e.g. n-3 to n+2 to rix andor)
 - (daq) two threshold droplet alg for xpp-he
 - (daq) cube pattern
 - (daq) epixuhr
-- better error messages
-- vds with missing h5 data in some files?
+- daq spack
 - destination callback (conflicts with integrating detector?). work with silke,andy@txi
-- h5 time sort
 
-s3df issues:
-- job preemption with external users like rubin
+s3df projects:
+- smd0 exclusive node
+- lcls:default account vs scavenger?
+- tom grant: 400Gbit/s network limit (can be less) compatible with LCLS2 20GB/s. when? half of milan's are on "unreliable" srcf2 network (haven't brought it back).  hardware is flakey.  switches are not behaving well. 60 new milan nodes (most are rubin's)
+- kill large memory on interactive nodes (victor elmir working on it w/email)
+- heterogeneous jobs too slow: require backfill, constraints slow things down, "immediate flag helps"
+- will x7333 be published anywhere?
+- gpu direct storage
+- when do we enable preemption? (june or july, needs disk)
+- ssh failures (OOM)
+- 24/7-support via xHELP: have a s3df-specific new number (x7333)
+- jupyter memory usage:
+  o default approach: use Yee's one-liner?
+  o fix load-balancing (currently get iana 07/08 move to maybe 6 nodes?)
+    psana is 01/02
+  o kill idle sessions? 
+  o memory limit 50GB?
+    - can we get message to user automatically?
+  o limit cores (someone took 16 cores, only 24 total). suggest limit of 8
+  o limit CPU usage of a particular process.  suggest limit of 1 hour
+    realtime 8 hours CPU time (running on 8 cores)
+  o reduce weka cores on interactive nodes?
+- AMD tuning guide
+- ptychography gpu reservation (and workshop)
 - kubernetes ACLs
-- scontrol-down nodes reopen after some minutes
-- mikhail cpu results
-- is ampere limit of 4 nodes enforced? (reply to linjia)
 - ipmi access to reboot? (wilko)
 - public_html for psreldev
 - default jupyter to batch and add note
@@ -200,6 +294,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * share simple python code between ami2/psana1/psana2 (amityping, psmon, "HPolar")
 * datasource kwarg to suppress fetching of calib constants for mikhail's mask editor (mona)
 * split daq/ana conda envs (valerio)
+* better error when exposure time > trigger rate.
 * hsd raw/fex counters so james can alarm on low raw rates (weaver)
 * calibconst for lcls1 for ami2 (e.g. jungfrau)
 * saxs/waxs data reduction (stefano)
@@ -208,6 +303,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * manage running-condition dependent calibration constants (e.g. rate dependent) (tweak serial id?) (mikhail)
 * ami roiarch with 3D (mikhail)
 * improve destination callback (mona)
+* psana-gpu (mona)
 * event counts in logbook for phil
 * monitoring new serial numbers for LCLS2 (mikhail)
 * release DMA buffers earlier? currently released at same time as pebble (ric)
@@ -224,6 +320,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * sphinx-like (read-the-docs?, makedocs, github?, confluence) auto-generated documentation (zach, ken, tom caswell) (mikhail)
 * eliminate psana1 calibdir in favor of database (mikhail)
 * eliminate intermediate "panel" files on disk and put in database (for epix10k/jungfrau) (mikhail)
+* use only one of nlohmann_json/rapidjson
 * better error when running psana with small data but not setting PS_SRV_NODES  and when number of cores are incorrect (mona, mikhail)
 * didn't get obvious error when writing to unwriteable wave8 pv register (MasterEnable) (riccardo, mona, ric)
 * event counts in elog for phil. jira ecs-3843 (chris ford, mikhail)
@@ -231,6 +328,7 @@ meeting with sebastien/james/georgi on nov. 20, 2023
 * resurrect psana1 unit tests ("scons test") (mikhail)
 * ami python editor returning array with one element into ScalarPlot generates no visible error (but see error in logs)
 * when rix piranha had small number of dma buffers (like opal) we often, but not always, got 100% deadtime and BEB timeouts.  feels like buffers not configurerd correctly when deadtime happens (ric, matt, mona, riccardo)
+* why doesn't psana mpi crash when a live-mode file read error happens? (mikhail)
 * force inclusion of all necessary TREX data for xtcav
 * utility to put lcls2 h5 files in time-order (mona? mikhail? caf? riccardo?)
 * understand/fix "384" intermittent libfabric ib completion queue issue (ric) (currently "fixed" by running eblf_pingpong)
@@ -667,9 +765,6 @@ ixon/emccd:
 - 30second integration times are long. can we trigger that slowly?
 - dan thinks it is sdk2 which means it should be easier (like newton?)
 
-650-926-2398
-rujjira kong
-
 **********************************************************************
 
 - production experience with incremental steps
@@ -690,21 +785,96 @@ epixm:
 
 **********************************************************************
 
-o julian reset fixes
-  - have hsd build, but needs to be programmed (jtag)
-    o riccardo will fix tmo (two new ones and one old one, test fex
-      mode then do all of them)
-    o riccardo try to move cam01/03 up one rack space
-    o matt will give mcs file to riccardo
-  - camlink fixed (mona)
-  - timing-system mcs in progress by matt.
-  - xpm's running 3.7.0 probably have the fix.  3.9.0 definitely does
-    and also has the new keep-raw flag
-  - wave8: controls devices moved to rogue6. Julian will try.
-o matt bucket-fix:
-  - no solution yet (old idea was already there)
-o equalizer settings
-  - xpm6 not talking to mona's wave8 in txi
+variants of kcu1500 firmware (also c1100 in future, u200 avelo, ):
+6/10/15/25Gbps
+pgp2/pgp4/next-gen (next-gen won't fit in the same fpga)
+all have pause sent to front-end (could be ignored by the feb)
+beb/nobeb
+cameralink (cpo thinks we did this "wrong": avoid in future
+            no timing links should go directly to kcu1500
+	    except for coaxpress-over-optical)
+one build for all speeds
+  o except for next-gen >pgp4 25Gbps?
+  o could be a project for julian
 
-production: camlink, ts, wave8, xpm, hsd
-development: epixhr, epixm, epixuhr, tixel, dld
+**********************************************************************
+
+rittal
+
+192.168.0.190
+setup smtp for email communications
+set laptop to (for example) 192.168.0.195
+work with jim runner at slac on these things
+X4 on the back
+v3.17.30.2 is latest version will come with new unit
+will include power unit as well
+modbus 4 units:
+ - unit1: cmc cpu (software to control lcp)
+ - unit2: lcp (needs lcp4 software) .tar (over ethernet)
+mark meyer acct mgr, steven engineering
+fans, flowmeters, cmc, front display
+
+found instructions here:
+https://www.rittal.de/downloads/rimatrix5/security/CMCIII/Update_manual_V4_en.txt
+
+on this page:
+https://www.rittal.com/de_de/rimatrix-downloads/index.asp?kat=security&subk=70
+
+used en7 on mac with Valerio's usbc->enet board
+
+beeps obnoxiously for about 1 minute
+
+**********************************************************************
+
+can/should we remove the cpu from the l1accept path
+batching, and keep events in time-order
+clarify which lines involve cpu/gpu/kcu
+do we "throw the switch"?
+test payloads of user-defined size trigger by l1
+multi kcu to one gpu
+root complex
+
+can we use unified memory?
+
+line 96 talks to kcu: puts gpu memory addr into kcu. a gpu addr, which is good!
+rdsrv415 has a pcie chassis that we could consider
+iommu allows to do stuff with wide-open security settings
+line 123 is for GPU, ryan says "permissions"
+line 132 and 137 are for specific registers
+line 152 is a gpu register
+line 159 is the gpu writing to the kcu
+line 164 gpu polling
+line 173 transfers data back to kcu from gpu
+line 159 tells the kcu we are done with the buffer
+
+hwWritePtr is a GPU pointer
+hwWriteStart is a KCU pointer
+
+gpu gen4 16lane 50GB/s
+gen4 c1100 bifurcated 8+8 matches the GPU, 25GB/s for 8 lanes
+
+cuda_graphs branch has test_dma.cu with loop and measurements
+not sure if "cuda graphs" is working
+
+**********************************************************************
+
+rix c_atmopal dropped disable problem
+
+swapped these two connections:
+
+5.1.5-1.3.7 cmp027 sfp1-1 to xpm5_amc0_sfp6
+4.8.4-5.8.6 cmp012 sfp1-1 to xpm5_amc0_sfp3
+
+**********************************************************************
+
+tmo atmpiranha drop problem
+
+5.1.1-5.8.1 cmp026 sfp1-1 to xpm6_amc0_sfp4 (atmopal)
+5.4.4-1.3.3 cmp007 sfp1-1 to xpm6_amc0_sfp6 (atmpiranha)
+
+x2150
+
+**********************************************************************
+
+sudo launchctl disable system/com.apple.icloud.searchpartyd
+sudo kill -STOP 5753
