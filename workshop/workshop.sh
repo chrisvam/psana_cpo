@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --partition=psanaq
+#SBATCH --partition=milano
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=2
 #SBATCH --output=%j.log
